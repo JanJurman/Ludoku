@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 var achievementEarnedSchema = new Schema
 (
 	{
-		dataEarned: Date
+		dateEarned: Date
 	}
 );
 
-mongoose.model('achievements', achievementEarnedSchema);
+mongoose.model('achievementsEarned', achievementEarnedSchema);

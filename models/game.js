@@ -10,4 +10,4 @@ var gameSchema = new Schema
 	}
 );
 
-mongoose.model('achievements', gameSchema);
+mongoose.model('game', gameSchema);
