@@ -16,7 +16,7 @@ router.get('/', function(req, res, next)
 
 router.get('/login', function(req, res, next)
 {
-	res.render('login');
+	res.render('login');	
 });
 
 router.get('/krajnJeCigan', function(req, res, next)
@@ -25,6 +25,12 @@ router.get('/krajnJeCigan', function(req, res, next)
 	{
 		res.send(users);
 	});
+});
+
+// Tjaž testing
+router.get('/tjaz', function(req, res, next)
+{
+	res.render('tjaz');
 });
 
 module.exports = router;

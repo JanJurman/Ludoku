@@ -5,7 +5,8 @@ module.exports =
 	entry:
 	{
 		LoginPage: "./src/LoginPage/entry.js",
-		MainPage: "./src/MainPage/entry.js"
+		MainPage: "./src/MainPage/entry.js",
+		TjazPage: "./src/TjazPage/entry.js"
 	},
 	output:
 	{
