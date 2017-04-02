@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2627,7 +2627,7 @@ module.exports = g;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(17);
+var content = __webpack_require__(14);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2648,8 +2648,7 @@ if(false) {
 
 /***/ }),
 /* 11 */,
-/* 12 */,
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 function LoginPage()
@@ -2664,10 +2663,8 @@ module.exports = new LoginPage();
 
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -2675,18 +2672,17 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#app {\n  padding-top: 60px; }\n\n.form {\n  font-size: 25px;\n  margin: 0 auto;\n  width: 25em;\n  background: #3D3737;\n  padding: 1.4em;\n  border-top: 8px solid #882413;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px; }\n\n.form > .switch > ul {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n  margin: 0 0 30px 0; }\n\n.form > .switch > ul > li {\n  display: inline-block;\n  width: 50%;\n  text-align: center;\n  background: #555555;\n  color: #FFFFFF;\n  padding: 7px 0 7px 0;\n  cursor: pointer; }\n\n.form > .switch > ul > li.selected {\n  background: #882413; }\n\n.form > .switch > ul > li:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #a53927; }\n\n.form > .title {\n  color: #FFFFFF;\n  font-size: 2em;\n  text-align: center;\n  padding: 15px;\n  margin-bottom: 15px;\n  background-color: #6C6C6C; }\n\n.form .inputFields .inputField input, select {\n  width: calc(100% - 20px);\n  font-size: 1em;\n  padding: 10px;\n  border: 0;\n  display: block; }\n\n.form .inputFields .inputField input {\n  width: calc(100% - 20px); }\n\n.form .inputFields .inputField select {\n  width: 100%; }\n\n.form .inputFields .inputField select:focus, input:focus {\n  outline: none; }\n\n.form .inputFields .inputField {\n  margin: 0 0 15px 0; }\n\n.form .inputFields .checkMarkContainer {\n  height: 100%; }\n\n.form > .submitButton {\n  width: 100%;\n  height: 2em;\n  border: none;\n  font-size: 2em;\n  padding: 0;\n  background: #882413;\n  color: #FFFFFF;\n  font-weight: 600; }\n\n.form > .submitButton.pressed {\n  background: #a53927; }\n\n.form > .submitButton:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #a53927;\n  cursor: pointer; }\n\n.submitButton a:visited {\n  color: #FFFFFF;\n  underline: none; }\n\n.submitButton a {\n  display: block;\n  text-decoration: none;\n  color: #FFFFFF;\n  width: 100%;\n  height: 100%;\n  line-height: 2em; }\n\n.info {\n  font-size: 35px;\n  width: 18.66em;\n  text-align: center;\n  margin: 0 auto 0 auto;\n  padding: 0.6em;\n  background: #3D3737;\n  border-top: 8px solid #882413;\n  color: #FFFFFF;\n  opacity: 0; }\n", ""]);
+exports.push([module.i, "#app {\n  padding-top: 60px; }\n\n.form {\n  font-size: 25px;\n  margin: 0 auto;\n  width: 25em;\n  background: #474747;\n  padding: 1.4em;\n  border-top: 8px solid #2B5F8B;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px; }\n\n.form > .switch > ul {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n  margin: 0 0 30px 0; }\n\n.form > .switch > ul > li {\n  display: inline-block;\n  width: 50%;\n  text-align: center;\n  background: #626262;\n  color: #FFFFFF;\n  padding: 7px 0 7px 0;\n  cursor: pointer; }\n\n.form > .switch > ul > li.selected {\n  background: #2B5F8B; }\n\n.form > .switch > ul > li:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1; }\n\n.form > .title {\n  color: #FFFFFF;\n  font-size: 2em;\n  text-align: center;\n  padding: 15px;\n  margin-bottom: 15px;\n  background-color: #6C6C6C; }\n\n.form .inputFields .inputField input, select {\n  width: calc(100% - 20px);\n  font-size: 1em;\n  padding: 10px;\n  border: 0;\n  display: block; }\n\n.form .inputFields .inputField input {\n  width: calc(100% - 20px); }\n\n.form .inputFields .inputField select {\n  width: 100%; }\n\n.form .inputFields .inputField select:focus, input:focus {\n  outline: none; }\n\n.form .inputFields .inputField {\n  margin: 0 0 15px 0; }\n\n.form .inputFields .checkMarkContainer {\n  height: 100%; }\n\n.form > .submitButton {\n  width: 100%;\n  height: 2em;\n  border: none;\n  font-size: 2em;\n  padding: 0;\n  background: #2B5F8B;\n  color: #FFFFFF;\n  font-weight: 600; }\n\n.form > .submitButton.pressed {\n  background: #4677a1; }\n\n.form > .submitButton:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1;\n  cursor: pointer; }\n\n.submitButton a:visited {\n  color: #FFFFFF;\n  underline: none; }\n\n.submitButton a {\n  display: block;\n  text-decoration: none;\n  color: #FFFFFF;\n  width: 100%;\n  height: 100%;\n  line-height: 2em; }\n\n.info {\n  font-size: 35px;\n  width: 18.66em;\n  text-align: center;\n  margin: 0 auto 0 auto;\n  padding: 0.6em;\n  background: #474747;\n  border-top: 8px solid #2B5F8B;\n  color: #FFFFFF;\n  opacity: 0; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 18 */,
-/* 19 */,
-/* 20 */
+/* 15 */,
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var LoginPage = __webpack_require__(13);
+var LoginPage = __webpack_require__(12);
 __webpack_require__(10);
 __webpack_require__(2);
 

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2628,7 +2628,7 @@ module.exports = g;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(18);
+var content = __webpack_require__(15);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2649,8 +2649,7 @@ if(false) {
 
 /***/ }),
 /* 12 */,
-/* 13 */,
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 function MainPage()
@@ -2665,10 +2664,8 @@ module.exports = new MainPage();
 
 
 /***/ }),
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
+/* 14 */,
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(undefined);
@@ -2676,18 +2673,17 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 1000; }\n\n.NavBar > ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  background: #3d3737; }\n\n.NavBar > ul > li {\n  padding: 0;\n  margin: 0;\n  height: 50px;\n  -webkit-transition: background-color .25s;\n  -moz-transition: background-color .25s;\n  -ms-transition: background-color .25s;\n  -o-transition: background-color .25s;\n  transition: background-color .25s; }\n\n.NavBar > ul > li.floatLeft {\n  float: left; }\n\n.NavBar > ul > li.floatRight {\n  float: right; }\n\n.NavBar > ul > li > a {\n  text-align: center;\n  vertical-align: middle;\n  line-height: 50px;\n  color: #FFFFFF;\n  text-decoration: none;\n  display: block;\n  height: 100%;\n  font-weight: 800;\n  text-transform: uppercase;\n  font-size: 1.5rem;\n  padding-left: 10px;\n  padding-right: 10px;\n  box-sizing: border-box;\n  cursor: pointer; }\n\n.NavBar > ul > li:hover, .NavBar > ul > li.selected:hover {\n  background-color: #a53927; }\n\n.NavBar > ul > li.selected {\n  background-color: #882413; }\n", ""]);
+exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 1000; }\n\n.NavBar > ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  background: #474747; }\n\n.NavBar > ul > li {\n  padding: 0;\n  margin: 0;\n  height: 50px;\n  -webkit-transition: background-color .25s;\n  -moz-transition: background-color .25s;\n  -ms-transition: background-color .25s;\n  -o-transition: background-color .25s;\n  transition: background-color .25s; }\n\n.NavBar > ul > li.floatLeft {\n  float: left; }\n\n.NavBar > ul > li.floatRight {\n  float: right; }\n\n.NavBar > ul > li > a {\n  text-align: center;\n  vertical-align: middle;\n  line-height: 50px;\n  color: #FFFFFF;\n  text-decoration: none;\n  display: block;\n  height: 100%;\n  font-weight: 800;\n  text-transform: uppercase;\n  font-size: 1.5rem;\n  padding-left: 10px;\n  padding-right: 10px;\n  box-sizing: border-box;\n  cursor: pointer; }\n\n.NavBar > ul > li:hover, .NavBar > ul > li.selected:hover {\n  background-color: #4677a1; }\n\n.NavBar > ul > li.selected {\n  background-color: #2B5F8B; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 19 */,
-/* 20 */,
-/* 21 */
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var MainPage = __webpack_require__(14);
+var MainPage = __webpack_require__(13);
 __webpack_require__(11);
 __webpack_require__(2);
 

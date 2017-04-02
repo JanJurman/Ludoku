@@ -27,10 +27,5 @@ router.get('/krajnJeCigan', function(req, res, next)
 	});
 });
 
-// Tjaž testing
-router.get('/tjaz', function(req, res, next)
-{
-	res.render('tjaz');
-});
 
 module.exports = router;

@@ -4,8 +4,8 @@ $bodyColor: #D6D6D6;
 
 $white: #FFFFFF;
 
-$color: #3D3737;
-$color1: #882413;
+$color1: #2B5F8B;
+$color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 
 #app
 {
