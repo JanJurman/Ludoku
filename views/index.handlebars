@@ -18,4 +18,9 @@ var socket = io.connect('http://localhost:3000');
   socket.on('hello', function (data) {
     console.log(data);
   });
+function test(name){
+	socket.emit('testEmit', name , function (data) {
+  		console.log(data);
+	});
+}
 </script>
