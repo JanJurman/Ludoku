@@ -8,4 +8,4 @@ var achievementEarnedSchema = new Schema
 	}
 );
 
-mongoose.model('achievements', achievementEarnedSchema);
+mongoose.model('achievementEarned', achievementEarnedSchema);
