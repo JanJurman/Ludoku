@@ -6,7 +6,7 @@ var achievementsSchema = new Schema
 	{
 		name: String,
 		description: String,
-		points: String,
+		points: Number,
 		condition: String
 	}
 );

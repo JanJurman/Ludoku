@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var achievementEarnedSchema = new Schema
 (
 	{
-		dataEarned: Date
+		dateEarned: Date
 	}
 );
 
