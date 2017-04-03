@@ -107,15 +107,28 @@ function LoginPage()
 		return html;
 	}
 
+	this.init =  function()
+	{
+		if (location.hash == "#/signUp")
+		{
+			document.querySelector(".form").innerHTML = this.toHtml(this.signUpState);
+		}
+		else
+		{
+			location.hash = "#/login";
+		}
+	}
 
 	this.switchLogin = function()
 	{
 		document.querySelector(".form").innerHTML = this.toHtml(this.loginState);
+		location.hash = "/login";
 	}
 
 	this.switchToSignUp = function()
 	{
 		document.querySelector(".form").innerHTML = this.toHtml(this.signUpState);
+		location.hash = "/signUp";
 	}
 }
 

@@ -2760,15 +2760,28 @@ function LoginPage()
 		return html;
 	}
 
+	this.init =  function()
+	{
+		if (location.hash == "#/signUp")
+		{
+			document.querySelector(".form").innerHTML = this.toHtml(this.signUpState);
+		}
+		else
+		{
+			location.hash = "#/login";
+		}
+	}
 
 	this.switchLogin = function()
 	{
 		document.querySelector(".form").innerHTML = this.toHtml(this.loginState);
+		location.hash = "/login";
 	}
 
 	this.switchToSignUp = function()
 	{
 		document.querySelector(".form").innerHTML = this.toHtml(this.signUpState);
+		location.hash = "/signUp";
 	}
 }
 
@@ -2798,6 +2811,8 @@ exports.push([module.i, "#app {\n  padding-top: 60px; }\n\n.form {\n  font-size:
 window.LoginPage = __webpack_require__(12);
 __webpack_require__(10);
 __webpack_require__(2);
+
+window.LoginPage.init();
 
 /***/ })
 /******/ ]);
