@@ -14,9 +14,4 @@ router.get('/', function(req, res, next)
 	res.render('index');
 });
 
-router.get('/entry', function(req, res, next)
-{
-	res.render('login');	
-});
-
 module.exports = router;

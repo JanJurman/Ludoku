@@ -1,9 +1,6 @@
-$color: #2B5F8B;
-
+@import '../colors';
 $menuItemInnerHeight: 50px;
 $menuItemFontSize: $menuItemInnerHeight - 30;
-
-$color1: darken(desaturate(adjust-hue($color, -8.7179), 70.3115), 7.6471);
 
 .NavBar
 {

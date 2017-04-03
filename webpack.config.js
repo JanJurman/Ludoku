@@ -4,8 +4,7 @@ module.exports =
 {
 	entry:
 	{
-		LoginPage: "./src/LoginPage/entry.js",
-		MainPage: "./src/MainPage/entry.js"
+		Common: "./src/entry.js"
 	},
 	output:
 	{
