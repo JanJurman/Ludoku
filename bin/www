@@ -95,3 +95,18 @@ function onListening() {
 var socketApi = require('../socketApi');
 var io = socketApi.io;
 io.attach(server);
+
+/**
+ * Redis server start
+ */
+var redis_port = '5555'
+const RedisServer = require('redis-server');
+const serverR = new RedisServer(redis_port);
+serverR.open((err) => {
+  if (err === null) {
+    console.log("[Redis server] Redis server started!")
+  }
+  else{
+    console.log("[Redis server] Redis server start error: " + err)
+  }
+});
