@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) // npr http://127.0.0.1:3000/user?login
 		var userLoginHash = req.query['loginHash'];
 		if(userLoginHash != "") //DODAJ INJECTION PROTECTION: al check za type string al pa require('mongo-sanitize');
 		{
-			mongoose.model('users').find({ loginHash : userLoginHash },function(err, user)
+			mongoose.model('user').find({ loginHash : userLoginHash },function(err, user)
 			{
 				if(user != "")
 				{

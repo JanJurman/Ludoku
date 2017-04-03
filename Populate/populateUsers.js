@@ -16,7 +16,7 @@ module.exports = function(mongoose, Schema) {
 		}
 	);
 
-	var User = mongoose.model('users', userSchema);
+	var User = mongoose.model('user', userSchema);
 
 	//array of update objects
 	var insertions = [
