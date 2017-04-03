@@ -5,12 +5,15 @@ var userSchema = new Schema
 (
 	{
 		eMail: String,
-		password: String,
+		passwordHash: String,
 		firstName: String,
 		lastName: String,
 		dateOfBirth: String,
 		sex: String,
-		loginHash: String
+		games: Number,
+		tournamentGames: Number,
+		gamesWon: Number,
+		tournamentsWon: Number
 	}
 );
 

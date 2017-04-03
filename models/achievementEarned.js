@@ -9,3 +9,6 @@ var achievementEarnedSchema = new Schema
 );
 
 mongoose.model('achievementEarned', achievementEarnedSchema);
+
+
+//verjetno bo removed
