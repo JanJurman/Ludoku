@@ -1,3 +1,5 @@
+require("./MainPage.scss");
+
 function MainPage()
 {
 	this.navBar = 
@@ -56,7 +58,6 @@ function MainPage()
 	this.init = function()
 	{
 		document.querySelector("#app").innerHTML = this.toHtml(this.navBar);
-		// location.hash = "/signUp";
 	}
 }
 

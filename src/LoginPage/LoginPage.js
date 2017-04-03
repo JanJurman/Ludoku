@@ -1,3 +1,5 @@
+require("./LoginPage.scss");
+
 function LoginPage()
 {
 	this.signUpState = 
@@ -131,14 +133,12 @@ function LoginPage()
 
 	this.init =  function()
 	{
-		if (location.hash == "#/signUp")
-		{
-			this.switchToSignUp();
-		}
-		else
-		{
-			this.switchLogin();
-		}
+		this.switchToSignUp();
+	}
+
+	this.init1 = function()
+	{
+		this.switchLogin();
 	}
 
 	this.switchLogin = function()
