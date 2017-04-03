@@ -1,11 +1,8 @@
-// @import './variables/colors';
+@import '../colors';
 $verticalElementMargin: 30px;
 $bodyColor: #D6D6D6;
 
 $white: #FFFFFF;
-
-$color1: #2B5F8B;
-$color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 
 #app
 {
@@ -17,9 +14,9 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 	font-size: 25px;//To definira velikost celega forma
 	margin: 0 auto;
 	width: 25em;
-	background: $color;
+	background: $color1;
 	padding: 1.4em;
-	border-top: 8px solid $color1;
+	border-top: 8px solid $color;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 
@@ -38,7 +35,7 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 	display: inline-block;
 	width: 50%;
 	text-align: center;
-	background: lighten(desaturate(adjust-hue($color, 0.0405), 8.8525), 10.3922);
+	background: lighten(desaturate(adjust-hue($color1, 0.0405), 8.8525), 10.3922);
 	color: #FFFFFF;
 	padding: 7px 0 7px 0;
 	cursor: pointer;
@@ -47,14 +44,14 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 
 .form > .switch > ul > li.selected
 {
-	background: $color1;
+	background: $color;
 }
 
 .form > .switch > ul > li:hover
 {
 	-webkit-transition: background 0.4s; /* Safari */
     transition: background 0.4s;
-	background: lighten(desaturate(adjust-hue($color1, 0.0000), 13.6475), 9.6078);
+	background: lighten(desaturate(adjust-hue($color, 0.0000), 13.6475), 9.6078);
 }
 
 .form > .title
@@ -109,7 +106,7 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 	border: none;
 	font-size: 2em;
 	padding: 0;
-	background: $color1;
+	background: $color;
 	color: #FFFFFF;
 	font-weight: 600;
 
@@ -117,14 +114,14 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 
 .form > .submitButton.pressed
 {
-	background: lighten(desaturate(adjust-hue($color1, 0.0000), 13.6475), 9.6078);
+	background: lighten(desaturate(adjust-hue($color, 0.0000), 13.6475), 9.6078);
 }
 
 .form > .submitButton:hover
 {
 	-webkit-transition: background 0.4s; /* Safari */
     transition: background 0.4s;
-	background: lighten(desaturate(adjust-hue($color1, 0.0000), 13.6475), 9.6078);
+	background: lighten(desaturate(adjust-hue($color, 0.0000), 13.6475), 9.6078);
 	cursor: pointer;
 
 }
@@ -152,8 +149,8 @@ $color: darken(desaturate(adjust-hue($color1, -8.7179), 70.3115), 7.6471);;
 	text-align: center;
 	margin: 0 auto 0 auto;
 	padding: 0.6em;
-	background: $color;
-	border-top: 8px solid $color1;
+	background: $color1;
+	border-top: 8px solid $color;
 	color: #FFFFFF;
 	opacity: 0;
 }
