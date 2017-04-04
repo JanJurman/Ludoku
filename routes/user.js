@@ -25,7 +25,7 @@ var router = express.Router();
 router.get('/forcelog', function (req, res)
 {
 	var User = mongoose.model('user');
-	User.findOne({ eMail: "janez.novak@gmail.com",}, function(err, user)
+	User.findOne({ eMail: "janez.novak@gmail.com",}, function(err,user)
 	{
 		if(user == null)
 		{
@@ -84,7 +84,7 @@ router.get('/isLoggedIn', function(req, res)
 	{
 		res.sendStatus(401); // auth issue
 	}
-	else(req.session.userId)
+	else
 	{
 		res.send(req.session.userId); // ok
 	}

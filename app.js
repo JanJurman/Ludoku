@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var socketApi = require('./routes/socketApi');
 
 var app = express();
 
@@ -24,7 +25,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({resave: true, saveUninitialized: true, secret: 'LucianoKafeTouchesMySoul', cookie: { maxAge: 86400*1000 }}));
+
+sess = session({resave: true, saveUninitialized: true, secret: 'LucianoKafeTouchesMySoul', cookie: { maxAge: 86400*1000 }})
+app.use(sess);
+
+//share session with socket server
+var sharedsession = require("express-socket.io-session");
+socketApi.io.use(sharedsession(sess))
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 

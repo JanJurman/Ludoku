@@ -92,7 +92,7 @@ function onListening() {
 /**
  * Socket.io
  */
-var socketApi = require('../socketApi');
+var socketApi = require('../routes/socketApi');
 var io = socketApi.io;
 io.attach(server);
 
