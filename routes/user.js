@@ -121,7 +121,6 @@ router.post('/register', function(req, res, next) // {firstName: , lastName:, da
 				User.create(user, function(err, newUser) {
 					if(err) return next(err);
 					req.session.userId = newUser.id;
-					// console.log("i think it works: " + req.session.userId); 
 					return res.send(req.session.userId);
 				});
 			}
@@ -156,10 +155,10 @@ router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 });
 
 // GET podatke drugega uporabnika
-router.get('/:userEmail', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/janez.novak@gmail.com
+router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/janez.novak@gmail.com
 {
-	var userEmail = req.params.userEmail;
-	mongoose.model('user').find({ eMail : userEmail },function(err, user) //DODAJ injection check...
+	var userId = req.params.userId;
+	mongoose.model('user').find({ _id : userId },function(err, user) //DODAJ injection check...
 	{
 		if(user.length > 0)
 		{
@@ -174,5 +173,39 @@ router.get('/:userEmail', checkAuth, function(req, res, next) // npr http://127.
 		}
 	});
 });
+
+//GET igre od usera sorted by date
+router.get('/games/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/games/58e391ebb94baf9df05efacd
+{
+	var userId = req.params.userId;
+	mongoose.model('game').find({ players: userId }).sort('-finish').exec(function(err, games) //DODAJ injection check...
+	{
+		if(games.length > 0)
+		{			
+			res.send(games);
+		}
+		else
+		{
+			res.send(404); //no games found with this userId	
+		}
+	});
+});
+
+// router.get('/leaderboards/games', checkAuth, function(req, res, next)
+// {
+	
+// 	mongoose.model('users').find({ players: userId }).sort('-finish').exec(function(err, games) //DODAJ injection check...
+// 	{
+// 		if(games.length > 0)
+// 		{			
+// 			res.send(games);
+// 		}
+// 		else
+// 		{
+// 			res.send(404);	
+// 		}
+// 	});
+// });
+
 
 module.exports = router;

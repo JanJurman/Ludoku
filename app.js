@@ -33,7 +33,6 @@ app.use(sess);
 var sharedsession = require("express-socket.io-session");
 socketApi.io.use(sharedsession(sess))
 
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 //mongoose connect
