@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-var sess = session({resave: true, saveUninitialized: true, secret: 'LucianoKafeTouchesMySoul', cookie: { maxAge: 86400*1000 }})
+sess = session({resave: true, saveUninitialized: true, secret: 'LucianoKafeTouchesMySoul', cookie: { maxAge: 60 * 60 * 2* 1000 }})
 app.use(sess);
 
 //share session with socket server
