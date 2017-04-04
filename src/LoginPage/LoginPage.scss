@@ -37,9 +37,13 @@ $white: #FFFFFF;
 	text-align: center;
 	background: lighten(desaturate(adjust-hue($color1, 0.0405), 8.8525), 10.3922);
 	color: #FFFFFF;
-	padding: 7px 0 7px 0;
-	cursor: pointer;
+}
 
+.form > .switch > ul > li > a
+{
+	display: block;
+	width: 100%;
+	padding: 7px 0 7px 0;
 }
 
 .form > .switch > ul > li.selected

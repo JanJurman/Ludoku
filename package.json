@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "./node_modules/.bin/nodemon ./bin/www",
-    "webpack": "./node_modules/.bin/webpack"
+    "webpack": "./node_modules/.bin/webpack",
+    "webpackWatch": "./node_modules/.bin/webpack --watch"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
