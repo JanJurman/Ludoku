@@ -11,4 +11,4 @@ var achievementsSchema = new Schema
 	}
 );
 
-mongoose.model('achievements', achievementsSchema);
+mongoose.model('achievement', achievementsSchema);

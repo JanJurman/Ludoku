@@ -2,7 +2,7 @@ Skripta za polnjenje baze s testnimi podatki.
 
 Uporaba:
 
-node populate.js
+node populate
 
 zaenkrat moreš zaključit s control + C
 
