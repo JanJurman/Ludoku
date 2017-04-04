@@ -72,7 +72,7 @@ module.exports = function(mongoose, Schema) {
 	{
 		dmitry = user.id;
 	});
-	User.findOne({ eMail: "ashley.barret@gmail.com"}, function(err,user)
+	User.findOne({ eMail: "ashley.barrett@gmail.com"}, function(err,user)
 	{
 		ashley = user.id;
 	});	

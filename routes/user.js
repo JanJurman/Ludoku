@@ -86,7 +86,7 @@ router.get('/isLoggedIn', function(req, res)
 	}
 	else
 	{
-		res.sendStatus(req.session.userId); // ok
+		res.send(req.session.userId); // ok
 	}
 });
 
