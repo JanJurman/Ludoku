@@ -688,11 +688,29 @@ module.exports = new MainPage();
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+Ajax = __webpack_require__(18);
 
 function Router()
 {
 	this.routesData = {};
+	this.homeLocation = "#/";
+	this.loginLocation = "#/login";
+	this.currentLoaction = "";
+
+
+	this.routeToHome = function(location, HTML, SETTINGS, CALLBACK)
+	{
+		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.homeLocation = "#" + location;
+	}
+
+	this.routeToLogin = function(location, HTML, SETTINGS, CALLBACK)
+	{
+		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.loginLocation = "#" + location;
+	}
 
 	this.routeTo = function(location, HTML, SETTINGS, CALLBACK)
 	{
@@ -701,10 +719,63 @@ function Router()
 
 	this.logic = function()
 	{
-		if (this.routesData[location.hash]) 
+		var route = location.hash;
+		var toti = this;
+
+		
+		if (this.routesData[route])
 		{
-			this.routesData[location.hash].callback();
+			console.log("PLES");
+			if (this.currentLoaction != route)
+			{	
+				if (this.routesData[route].settings.require == "login")
+				{
+					Ajax.GET("user/isLoggedIn", function(data)
+					{
+						if (data != "false")
+						{
+							toti.currentLoaction = route;
+							toti.routesData[route].callback();
+						}
+						else
+						{
+							route = toti.loginLocation;
+							toti.currentLoaction = route;
+							toti.routesData[toti.loginLocation].callback();
+							location.hash = route;
+
+						}
+					});
+
+				}
+				else if (this.routesData[route].settings.require == "logout")
+				{
+					Ajax.GET("user/isLoggedIn", function(data)
+					{
+						if (data == "false")
+						{
+							toti.currentLoaction = route;
+							toti.routesData[route].callback();
+
+						}
+						else
+						{
+							route = toti.homeLocation;
+							toti.currentLoaction = route;
+							toti.routesData[toti.homeLocation].callback();
+							location.hash = route;
+						}
+					});
+				}
+				location.hash = route;
+			}
 		}
+		else
+		{
+			document.querySelector("#app").innerHTML = "404 BITCH";
+			this.currentLoaction = location.hash;
+		}
+		
 	}
 
 	this.init = function()
@@ -2968,22 +3039,88 @@ __webpack_require__(2);
 
 Router = __webpack_require__(5);
 
-Router.routeTo("/", "", { require: "login" }, function()
+// ------------Very important--Must be defined--------------
+
+Router.routeToHome("/", "", { require: "login" }, function()
 {
 	window.MainPage.init();
 });
+
+Router.routeToLogin("/login", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveLoginState();
+});
+
+// ----------------------------------------------------------
 
 Router.routeTo("/signUp", "", { require: "logout" }, function()
 {
 	window.LoginPage.giveSignUpState();
 });
 
-Router.routeTo("/login", "", { require: "logout" }, function()
+Router.routeTo("/ples", "", { require: "login" }, function()
 {
-	window.LoginPage.giveLoginState();
+	console.log("nekaj");
 });
 
+
 Router.init();
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+// POST(url, data, callback)
+// {
+
+// 	var xhttp = new XMLHttpRequest();
+// 	if (callback != undefined)
+// 	{
+// 		xhttp.onreadystatechange = function()
+// 		{
+// 			if (this.readyState == 4 && this.status == 200)
+// 			{
+// 				callback(this.responseText);
+// 			}
+// 		};
+// 	}
+
+// 	xhttp.open("POST", url);
+
+// 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+// 	xhttp.send(data);
+// }
+function Ajax()
+{
+	this.GET = function(url, callback)
+	{
+		var xhttp = new XMLHttpRequest();
+		if (callback != undefined)
+		{
+			xhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					callback(this.responseText);
+				}
+			};
+		}
+
+
+		// if (data != undefined)
+		// {
+		// 	xhttp.open('GET', url + "?" + data, true);
+		// 	xhttp.send();
+		// }
+		// else
+		// {
+			xhttp.open('GET', url, true);
+			xhttp.send();
+		// }
+	}
+}
+
+module.exports = new Ajax();
 
 /***/ })
 /******/ ]);

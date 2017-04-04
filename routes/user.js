@@ -82,7 +82,7 @@ router.get('/isLoggedIn', function(req, res)
 {
 	if(!req.session.userId)
 	{
-		res.sendStatus(401); // auth issue
+		res.send(false);
 	}
 	else
 	{

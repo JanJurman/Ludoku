@@ -4,19 +4,29 @@ require("./master.scss");
 
 Router = require('./Router.js');
 
-Router.routeTo("/", "", { require: "login" }, function()
+// ------------Very important--Must be defined--------------
+
+Router.routeToHome("/", "", { require: "login" }, function()
 {
 	window.MainPage.init();
 });
+
+Router.routeToLogin("/login", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveLoginState();
+});
+
+// ----------------------------------------------------------
 
 Router.routeTo("/signUp", "", { require: "logout" }, function()
 {
 	window.LoginPage.giveSignUpState();
 });
 
-Router.routeTo("/login", "", { require: "logout" }, function()
+Router.routeTo("/ples", "", { require: "login" }, function()
 {
-	window.LoginPage.giveLoginState();
+	console.log("nekaj");
 });
+
 
 Router.init();
