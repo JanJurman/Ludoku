@@ -1,4 +1,32 @@
 0 info it worked if it ends with ok
+<<<<<<< HEAD
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'webpackWath' ]
+2 info using npm@4.1.2
+3 info using node@v7.6.0
+4 verbose stack Error: missing script: webpackWath
+4 verbose stack     at run (/usr/local/lib/node_modules/npm/lib/run-script.js:151:19)
+4 verbose stack     at /usr/local/lib/node_modules/npm/lib/run-script.js:61:5
+4 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:356:5
+4 verbose stack     at checkBinReferences_ (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:320:45)
+4 verbose stack     at final (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:354:3)
+4 verbose stack     at then (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:124:5)
+4 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:311:12
+4 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:78:16
+4 verbose stack     at tryToString (fs.js:447:3)
+4 verbose stack     at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:434:12)
+5 verbose cwd /home/hencic00/Dropbox/Documents/3#Letnik/2#Semester/SPV/Ludoku
+6 error Linux 4.8.0-45-generic
+7 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "webpackWath"
+8 error node v7.6.0
+9 error npm  v4.1.2
+10 error missing script: webpackWath
+11 error If you need help, you may report this error at:
+11 error     <https://github.com/npm/npm/issues>
+12 verbose exit [ 1, true ]
+=======
 1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
 2 info using npm@4.1.2
 3 info using node@v7.6.0
@@ -43,3 +71,4 @@
 23 error     npm owner ls ludoku
 23 error There is likely additional logging output above.
 24 verbose exit [ 1, true ]
+>>>>>>> 778cceffa618e621a8ff7dd3dbf904c93415b68f

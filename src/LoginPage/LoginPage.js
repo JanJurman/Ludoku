@@ -18,7 +18,7 @@ function LoginPage()
 								tag: "ul",
 								nest:
 								[
-									{tag:"li", attributes:[["class", "login"], ["onclick", "window.LoginPage.switchLogin()"]], text:"Login"},{tag:"li", attributes:[["class", "register selected"], ["onclick", "window.LoginPage.switchToSignUp()"]], text: "Sign up"}
+									{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register selected"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
 								]
 							}
 						]
@@ -70,7 +70,7 @@ function LoginPage()
 							tag: "ul",
 							nest:
 							[
-								{tag:"li", attributes:[["class", "login selected"], ["onclick", "window.LoginPage.switchLogin()"]], text:"Login"},{tag:"li", attributes:[["class", "register"], ["onclick", "window.LoginPage.switchToSignUp()"]], text: "Sign up"}
+								{tag:"li", attributes:[["class", "login selected"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
 							]
 						}
 					]
@@ -131,26 +131,14 @@ function LoginPage()
 		return html;
 	}
 
-	this.init =  function()
-	{
-		this.switchToSignUp();
-	}
-
-	this.init1 = function()
-	{
-		this.switchLogin();
-	}
-
-	this.switchLogin = function()
+	this.giveLoginState = function()
 	{
 		document.querySelector("#app").innerHTML = this.toHtml(this.loginState);
-		location.hash = "/login";
 	}
 
-	this.switchToSignUp = function()
+	this.giveSignUpState = function()
 	{
 		document.querySelector("#app").innerHTML = this.toHtml(this.signUpState);
-		location.hash = "/signUp";
 	}
 }
 

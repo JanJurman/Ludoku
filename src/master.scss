@@ -15,3 +15,9 @@ body, html
 	height: 100%;
 	width: 100%;
 }
+
+a //Vsem linkom na page-u removam defult style. Ker who d-fak hoče to lol.
+{
+	text-decoration: none;
+	color: inherit;
+}

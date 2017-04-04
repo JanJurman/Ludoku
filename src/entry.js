@@ -2,31 +2,21 @@ window.LoginPage = require('./LoginPage/LoginPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
 require("./master.scss");
 
-if (location.hash == "#/")
+Router = require('./Router.js');
+
+Router.routeTo("/", "", { require: "login" }, function()
 {
 	window.MainPage.init();
-}
-else if (location.hash == "#/signUp")
-{
-	window.LoginPage.init();
-}
-else if (location.hash == "#/login")
-{
-	window.LoginPage.init1();
-}
+});
 
-window.onhashchange = function()
+Router.routeTo("/signUp", "", { require: "logout" }, function()
 {
-	if (location.hash == "#/")
-	{
-		window.MainPage.init();
-	}
-	else if (location.hash == "#/signUp")
-	{
-		window.LoginPage.init();
-	}
-	else if (location.hash == "#/login")
-	{
-		window.LoginPage.init1();
-	}
-}
+	window.LoginPage.giveSignUpState();
+});
+
+Router.routeTo("/login", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveLoginState();
+});
+
+Router.init();
