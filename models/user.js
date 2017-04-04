@@ -17,4 +17,28 @@ var userSchema = new Schema
 	}
 );
 
+userSchema.methods.maskData = function maskData()
+{
+	this.eMail = undefined;
+	this.passwordHash = undefined;
+	return this;
+};
+
+userSchema.methods.leaderboardGames = function leaderboardGames()
+{
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games};
+};
+userSchema.methods.leaderboardTournamentGames = function leaderboardTournamentGames()
+{
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "tournamentGames": this.tournamentGames};
+};
+userSchema.methods.leaderboardGamesWon = function leaderboardGamesWon()
+{
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "gamesWon": this.gamesWon};
+};
+userSchema.methods.leaderboardTournamentsWon = function leaderboardTournamentsWon()
+{
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "tournamentsWon": this.tournamentsWon};
+};
+
 mongoose.model('user', userSchema);

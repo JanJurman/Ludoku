@@ -10,6 +10,8 @@ var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var leaderboard = require('./routes/leaderboard')
+
 var socketApi = require('./routes/socketApi');
 
 var app = express();
@@ -40,6 +42,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/Ludoku');
 
 app.use('/', index);
 app.use('/user', user);
+app.use('/leaderboard', leaderboard);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

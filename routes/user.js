@@ -1,18 +1,18 @@
+var express = require('express');
+var mongoose = require('mongoose');
+var router = express.Router();
+
 function checkAuth(req, res, next)
 {
 	if (!req.session.userId)
 	{
 		res.sendStatus(401); // auth issue
- 	}
- 	else
- 	{
-    	next();
+	}
+	else
+	{
+		next();
 	}
 }
-
-var express = require('express');
-var mongoose = require('mongoose');
-var router = express.Router();
 
 /////////////////////////////////
 ///////////////////////////////
@@ -140,7 +140,6 @@ router.post('/register', function(req, res, next) // {firstName: , lastName:, da
 // GET svoje podatke
 router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 {
-	console.log(req.session.userId);
 	mongoose.model('user').find({ _id : req.session.userId },function(err, user)
 	{
 		if(user.length > 0 )
@@ -149,7 +148,7 @@ router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 		}
 		else
 		{
-			res.sendStatus(401); // authorisaton issue
+			res.sendStatus(404); // user ne obstaja
 		}
 	});
 });
@@ -164,7 +163,8 @@ router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0
 		{
 			user[0]['_id'] = undefined;
 			user[0]['passwordHash'] = undefined;
-			
+
+			//user[0]maskData();
 			res.send(user);
 		}
 		else
@@ -191,21 +191,21 @@ router.get('/games/:userId', checkAuth, function(req, res, next) // npr http://1
 	});
 });
 
-// router.get('/leaderboards/games', checkAuth, function(req, res, next)
-// {
-	
-// 	mongoose.model('users').find({ players: userId }).sort('-finish').exec(function(err, games) //DODAJ injection check...
-// 	{
-// 		if(games.length > 0)
-// 		{			
-// 			res.send(games);
-// 		}
-// 		else
-// 		{
-// 			res.send(404);	
-// 		}
-// 	});
-// });
-
+//get last 3 games of user
+router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/lastGames/58e391ebb94baf9df05efacd
+{
+	var userId = req.params.userId;
+	mongoose.model('game').find({ players: userId }).sort('-finish').limit(3).exec(function(err, games) //DODAJ injection check...
+	{
+		if(games.length > 0)
+		{			
+			res.send(games);
+		}
+		else
+		{
+			res.send(404); //no games found with this userId
+		}
+	});
+});
 
 module.exports = router;
