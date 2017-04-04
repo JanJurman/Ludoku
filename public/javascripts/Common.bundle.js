@@ -2954,5 +2954,21 @@ else if (location.hash == "#/login")
 	window.LoginPage.init1();
 }
 
+window.onhashchange = function()
+{
+	if (location.hash == "#/")
+	{
+		window.MainPage.init();
+	}
+	else if (location.hash == "#/signUp")
+	{
+		window.LoginPage.init();
+	}
+	else if (location.hash == "#/login")
+	{
+		window.LoginPage.init1();
+	}
+}
+
 /***/ })
 /******/ ]);
