@@ -60,19 +60,19 @@ module.exports = function(mongoose, Schema) {
 
 	var janez, nina, dmitry, ashley;
 	var User = mongoose.model('user');
-	User.findOne({ eMail: "janez.novak@gmail.com"}, function(err,user)
+	User.findOne({ 'local.eMail': "janez.novak@gmail.com"}, function(err,user)
 	{
 		janez = user.id;
 	});
-	User.findOne({ eMail: "nina.novak@gmail.com"}, function(err,user)
+	User.findOne({ 'local.eMail': "nina.novak@gmail.com"}, function(err,user)
 	{
 		nina = user.id;
 	});
-	User.findOne({ eMail: "dmitry.glukhovsky@gmail.com"}, function(err,user)
+	User.findOne({ 'local.eMail': "dmitry.glukhovsky@gmail.com"}, function(err,user)
 	{
 		dmitry = user.id;
 	});
-	User.findOne({ eMail: "ashley.barrett@gmail.com"}, function(err,user)
+	User.findOne({ 'local.eMail': "ashley.barrett@gmail.com"}, function(err,user)
 	{
 		ashley = user.id;
 	});	

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -690,7 +690,7 @@ module.exports = new MainPage();
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-Ajax = __webpack_require__(18);
+Ajax = __webpack_require__(17);
 
 function Router()
 {
@@ -3031,43 +3031,6 @@ module.exports = g;
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-window.LoginPage = __webpack_require__(3);
-window.MainPage = __webpack_require__(4);
-__webpack_require__(2);
-
-Router = __webpack_require__(5);
-
-// ------------Very important--Must be defined--------------
-
-Router.routeToHome("/", "", { require: "login" }, function()
-{
-	window.MainPage.init();
-});
-
-Router.routeToLogin("/login", "", { require: "logout" }, function()
-{
-	window.LoginPage.giveLoginState();
-});
-
-// ----------------------------------------------------------
-
-Router.routeTo("/signUp", "", { require: "logout" }, function()
-{
-	window.LoginPage.giveSignUpState();
-});
-
-Router.routeTo("/ples", "", { require: "login" }, function()
-{
-	console.log("nekaj");
-});
-
-
-Router.init();
-
-/***/ }),
-/* 18 */
 /***/ (function(module, exports) {
 
 // POST(url, data, callback)
@@ -3121,6 +3084,43 @@ function Ajax()
 }
 
 module.exports = new Ajax();
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+window.LoginPage = __webpack_require__(3);
+window.MainPage = __webpack_require__(4);
+__webpack_require__(2);
+
+Router = __webpack_require__(5);
+
+// ------------Very important--Must be defined--------------
+
+Router.routeToHome("/", "", { require: "login" }, function()
+{
+	window.MainPage.init();
+});
+
+Router.routeToLogin("/login", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveLoginState();
+});
+
+// ----------------------------------------------------------
+
+Router.routeTo("/signUp", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveSignUpState();
+});
+
+Router.routeTo("/ples", "", { require: "login" }, function()
+{
+	console.log("nekaj");
+});
+
+
+Router.init();
 
 /***/ })
 /******/ ]);
