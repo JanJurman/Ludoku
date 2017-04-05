@@ -232,4 +232,10 @@ router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http
 	});
 });
 
+router.post('/nekaj', function(req, res, next)
+{
+	console.log(req.body);
+	res.send(req.body['eMail']);
+})
+
 module.exports = router;

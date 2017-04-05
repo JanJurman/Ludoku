@@ -46,6 +46,27 @@ function Ajax()
 			xhttp.send();
 		// }
 	}
+
+	this.POST = function(url, data, callback)
+	{
+		var xhttp = new XMLHttpRequest();
+		if (callback != undefined)
+		{
+			xhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					callback(this.responseText);
+				}
+			};
+		}
+
+		xhttp.open("POST", url);
+		xhttp.setRequestHeader("Content-type", "application/json");
+
+
+		xhttp.send(JSON.stringify(data));
+	}
 }
 
 module.exports = new Ajax();

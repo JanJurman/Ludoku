@@ -1,4 +1,2 @@
 /node_modules
-/public/javascripts/LoginPage.bundle.js
-/public/javascripts/MainPage.bundle.js
-/npm-debug.log
+/public/javascripts/Common.bundle.js

@@ -31,7 +31,7 @@ router.post('/loginFacebook', function(req, res, next)
 
 		User.findOne({ 'facebook.id': req.body['id']}, function(err,user)
 		{
-			if(user == null)
+			if(user === null)
 			{
 				//registriraj ga
 
@@ -75,7 +75,7 @@ router.post('/loginFacebook', function(req, res, next)
 			{
 				req.session.userId = user.id;
 				console.log(user + " has logged in from fb.");
-				res.sendStatus(req.session.userId); //OK
+				res.send(req.session.userId); //OK
 			}
 		});
 	}

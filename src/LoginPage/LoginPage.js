@@ -1,4 +1,5 @@
 require("./LoginPage.scss");
+var Ajax = require("../Utils/Ajax.js");
 
 function LoginPage()
 {
@@ -90,7 +91,7 @@ function LoginPage()
 				},
 				{
 					tag:"button",
-					attributes:[["class", "submitButton"]],
+					attributes:[["class", "submitButton"], ["onclick", "window.LoginPage.logMeIn()"]],
 					text:"Login"
 				}
 			]
@@ -129,6 +130,21 @@ function LoginPage()
 			html += "</" + data[i].tag + ">";
 		}
 		return html;
+	}
+
+	this.logMeIn = function(data)
+	{
+		// console.log(document.querySelector("#app .form .inputField:nth-child(2n) input").value);
+		// console.log(document.querySelector("#app .form .inputField:nth-child(2n + 1) input").value);
+
+		var send = {eMail: document.querySelector("#app .form .inputField:nth-child(2n + 1) input").value ,password: document.querySelector("#app .form .inputField:nth-child(2n) input").value};
+		console.log(send);
+
+
+		Ajax.POST("/user/login", send, function(data)
+		{
+			location.hash = "#/";
+		});
 	}
 
 	this.giveLoginState = function()
