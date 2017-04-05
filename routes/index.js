@@ -70,12 +70,12 @@ router.post('/loginFacebook', function(req, res, next)
 					return res.send(req.session.userId);
 				});
 
-							}
+			}
 			else
 			{
 				req.session.userId = user.id;
 				console.log(user + " has logged in from fb.");
-				res.sendStatus(req.session.userId); //OK
+				res.send(req.session.userId); //OK
 			}
 		});
 	}
