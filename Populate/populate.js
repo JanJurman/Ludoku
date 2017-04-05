@@ -24,6 +24,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/Ludoku');
 require("./populateAchievements.js")(mongoose,Schema);
 require("./populateUsers.js")(mongoose,Schema);
 
+//izvedi vse time dependant insertione po vrsti po arrayu
 var timeDependantInsertions = ["./populateGames.js"];
 var index = 0;
 setTimeout(populate.bind(null, timeDependantInsertions, index), 500);

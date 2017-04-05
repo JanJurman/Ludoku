@@ -14,6 +14,18 @@ function checkAuth(req, res, next)
 	}
 }
 
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+        {
+        	console.log(prop);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 /////////////////////////////////
 ///////////////////////////////
 //////////////////////////////
@@ -25,7 +37,7 @@ function checkAuth(req, res, next)
 router.get('/forcelog', function (req, res)
 {
 	var User = mongoose.model('user');
-	User.findOne({ eMail: "janez.novak@gmail.com",}, function(err,user)
+	User.findOne({ 'local.eMail': "janez.novak@gmail.com",}, function(err,user)
 	{
 		if(user == null)
 		{
@@ -39,7 +51,7 @@ router.get('/forcelog', function (req, res)
 	});
 });
 
-// POST login
+// POST login local
 router.post('/login', function(req, res) // v post moreš dat noter { eMail : ... , pasword: ...}
 {
 	if(req.body['eMail'] && req.body['password'])
@@ -50,7 +62,7 @@ router.post('/login', function(req, res) // v post moreš dat noter { eMail : ..
 
 		var User = mongoose.model('user');
 
-		User.findOne({ eMail: eMailR, passwordHash: passwordR }, function(err,user)
+		User.findOne({ 'local.eMail': eMailR, 'local.passwordHash': passwordR }, function(err,user)
 		{
 			if(user == null)
 			{
@@ -59,7 +71,7 @@ router.post('/login', function(req, res) // v post moreš dat noter { eMail : ..
 			else
 			{
 				req.session.userId = user.id;
-				console.log(user + " has logged in.");
+				console.log(user + " has logged in localy.");
 				res.sendStatus(200); //OK
 			}
 		});
@@ -105,17 +117,23 @@ router.post('/register', function(req, res, next) // {firstName: , lastName:, da
 
 		var User = mongoose.model('user');
 
-		User.findOne({ eMail: eMailR }, function(err, user)
+		User.findOne({ 'local.eMail': eMailR }, function(err, user)
 		{
 			if(user == null)
 			{
 				var user = {
 					firstName: firstNameR,
 					lastName: lastNameR,
-					dateOfBirth: dateOfBirthR,
-					sex: sexR,
-					eMail: eMailR,
-					passwordHash: passwordR //DODAJ HASH
+					local:{
+						eMail: eMailR,
+						passwordHash: passwordR, //DODAJ HASH
+						dateOfBirth: dateOfBirthR,
+						sex: sexR
+					},
+					games: 0,
+					tournamentGames: 0,
+					gamesWon: 0,
+					tournamentsWon: 0
 				};
 
 				User.create(user, function(err, newUser) {
@@ -144,7 +162,7 @@ router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 	{
 		if(user.length > 0 )
 		{
-			res.send(user);					
+			res.send(user.maskData()); //skrije user local.eMail, local.password, facebook.id
 		}
 		else
 		{
@@ -154,18 +172,24 @@ router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 });
 
 // GET podatke drugega uporabnika
-router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/janez.novak@gmail.com
+router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/892173817238zhe8123
 {
 	var userId = req.params.userId;
 	mongoose.model('user').find({ _id : userId },function(err, user) //DODAJ injection check...
 	{
 		if(user.length > 0)
 		{
-			user[0]['_id'] = undefined;
-			user[0]['passwordHash'] = undefined;
+			user = user[0];
+			if(user['facebook'].id == undefined)
+			{
+				console.log("user je local");
+			}
+			else
+			{
+				console.log("user je iz fb");
+			}
 
-			//user[0]maskData();
-			res.send(user);
+			res.send(user.maskData()); //skrije user local.eMail, local.password, facebook.id
 		}
 		else
 		{

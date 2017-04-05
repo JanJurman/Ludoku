@@ -4,12 +4,18 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema
 (
 	{
-		eMail: String,
-		passwordHash: String,
+		local: {
+			eMail: String,
+			passwordHash: String,
+			dateOfBirth: String,
+			sex: String
+		},
+		facebook: {
+			id: String,
+		},
+
 		firstName: String,
 		lastName: String,
-		dateOfBirth: String,
-		sex: String,
 		games: Number,
 		tournamentGames: Number,
 		gamesWon: Number,
@@ -19,8 +25,9 @@ var userSchema = new Schema
 
 userSchema.methods.maskData = function maskData()
 {
-	this.eMail = undefined;
-	this.passwordHash = undefined;
+	this.local.eMail = undefined;
+	this.local.passwordHash = undefined;
+	this.facebook.id = undefined;
 	return this;
 };
 
