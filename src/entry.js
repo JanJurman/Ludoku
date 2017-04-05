@@ -6,7 +6,7 @@ Router = require('./Router.js');
 
 // ------------Very important--Must be defined--------------
 
-Router.routeToHome("/", "", { require: "login" }, function()
+Router.routeToHome("/", "", { require: "logout" }, function()
 {
 	window.MainPage.init();
 });
