@@ -16,15 +16,15 @@ function checkAuth(req, res, next)
 
 router.get('/games', checkAuth, function(req, res, next)
 {
-	mongoose.model('user').find().sort('-games').exec(function(err, user) //DODAJ injection check...
+	mongoose.model('user').find().sort('-games').exec(function(err, users) //DODAJ injection check...
 	{
-		if(user.length > 0)
+		if(users.length > 0)
 		{
-			for(var i = 0; i < user.length; ++i)
+			for(var i = 0; i < users.length; ++i)
 			{
-				user[i] = user[i].leaderboardGames();
+				users[i] = users[i].leaderboardGames();
 			}
-			res.send(user);
+			res.send(users);
 		}
 		else
 		{
@@ -35,15 +35,15 @@ router.get('/games', checkAuth, function(req, res, next)
 
 router.get('/tournamentGames', checkAuth, function(req, res, next)
 {
-	mongoose.model('user').find().sort('-tournamentGames').exec(function(err, user) //DODAJ injection check...
+	mongoose.model('user').find().sort('-tournamentGames').exec(function(err, users) //DODAJ injection check...
 	{
-		if(user.length > 0)
+		if(users.length > 0)
 		{
-			for(var i = 0; i < user.length; ++i)
+			for(var i = 0; i < users.length; ++i)
 			{
-				user[i] = user[i].leaderboardTournamentGames();
+				users[i] = users[i].leaderboardTournamentGames();
 			}
-			res.send(user);
+			res.send(users);
 		}
 		else
 		{
@@ -54,15 +54,15 @@ router.get('/tournamentGames', checkAuth, function(req, res, next)
 
 router.get('/gamesWon', checkAuth, function(req, res, next)
 {
-	mongoose.model('user').find().sort('-gamesWon').exec(function(err, user) //DODAJ injection check...
+	mongoose.model('user').find().sort('-gamesWon').exec(function(err, users) //DODAJ injection check...
 	{
-		if(user.length > 0)
+		if(users.length > 0)
 		{			
-			for(var i = 0; i < user.length; ++i)
+			for(var i = 0; i < users.length; ++i)
 			{
-				user[i] = user[i].leaderboardGamesWon();
+				users[i] = users[i].leaderboardGamesWon();
 			}
-			res.send(user);
+			res.send(users);
 		}
 		else
 		{
@@ -73,15 +73,15 @@ router.get('/gamesWon', checkAuth, function(req, res, next)
 
 router.get('/tournamentsWon', checkAuth, function(req, res, next)
 {
-	mongoose.model('user').find().sort('-tournamentsWon').exec(function(err, user) //DODAJ injection check...
+	mongoose.model('user').find().sort('-tournamentsWon').exec(function(err, users) //DODAJ injection check...
 	{
-		if(user.length > 0)
+		if(users.length > 0)
 		{
-			for(var i = 0; i < user.length; ++i)
+			for(var i = 0; i < users.length; ++i)
 			{
-				user[i] = user[i].leaderboardTournamentsWon();
+				users[i] = users[i].leaderboardTournamentsWon();
 			}		
-			res.send(user);
+			res.send(users);
 		}
 		else
 		{
