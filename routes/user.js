@@ -66,7 +66,7 @@ router.post('/login', function(req, res) // v post moreš dat noter { eMail : ..
 		{
 			if(user == null)
 			{
-				res.sendStatus(401); // auth issue				
+				res.sendStatus(401); // auth issue
 			}
 			else
 			{

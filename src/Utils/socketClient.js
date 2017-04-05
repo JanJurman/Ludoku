@@ -7,9 +7,17 @@ function socketClient()
 		console.log("CONECTAM SE! SOCKETI")
 		instance.socket = instance.io.connect('localhost:3000');
 
-		//tu pošamo vse socket evente, emt, send, on, ...
+		//primer socket eventa
+		//server pošle "hello", dobimo data
 		instance.socket.on('hello', function (data) {
 			console.log(data);
+		});
+
+		//tu pocamo vse socket evente, emit, send, on, ...
+		instance.socket.on('notification', function (data){
+			//server ti reče da morš si it po stuff preko routov
+			console.log(data);
+
 		});
 
 	}
