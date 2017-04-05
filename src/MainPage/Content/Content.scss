@@ -1,0 +1,59 @@
+@import '../../colors';
+
+.Content
+{
+	width: 100%;
+	height: calc(100% - 50px);
+	padding-top: 50px;
+}
+
+.Profile
+{
+	margin: 5em auto 0 auto;
+	height: 45em;
+	width: 40em;
+	padding: 4em;
+	background: #C0C0C0;
+}
+
+.Profile > img 
+{
+	display: block;
+	height: 18em;
+	width: 20em;
+
+	margin: 0 auto 0 auto;
+}
+
+.Profile > .info
+{
+	list-style-type: none;
+	margin: 0 auto 0 auto;
+	margin-top: 3em;
+	display: block;
+	width: 30em;
+	padding: 0;
+	
+	text-align: center;
+	font-family: 'Anton', sans-serif;
+}
+
+.Profile > .info > li
+{
+	font-size: 2em;
+	list-style-type: none;
+	background-color: #E5E5E5;
+}
+
+.Profile > .info > .name
+{
+	padding: 0.2em;
+	font-size: 3em;
+	background-color: #405589;
+	color: #FFFFFF;
+}
+
+.Profile > .info > li:nth-child(2n)
+{
+	background-color: #B8B8B8;
+}

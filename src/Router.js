@@ -33,7 +33,6 @@ function Router()
 		
 		if (this.routesData[route])
 		{
-			console.log("PLES");
 			if (this.currentLoaction != route)
 			{	
 				if (this.routesData[route].settings.require == "login")

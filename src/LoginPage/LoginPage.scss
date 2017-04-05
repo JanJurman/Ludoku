@@ -4,15 +4,10 @@ $bodyColor: #D6D6D6;
 
 $white: #FFFFFF;
 
-#app
-{
-	padding-top: 60px;
-}
-
 .form
 {
 	font-size: 25px;//To definira velikost celega forma
-	margin: 0 auto;
+	margin: 4em auto 0 auto;
 	width: 25em;
 	background: $color1;
 	padding: 1.4em;
@@ -146,7 +141,7 @@ $white: #FFFFFF;
 	line-height: 2em;
 }
 
-.info 
+.form .info 
 {
 	font-size: 35px;
 	width: 18.66em;

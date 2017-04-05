@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -181,7 +181,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(13);
+	fixUrls = __webpack_require__(15);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -446,7 +446,7 @@ function updateLink(linkElement, options, obj) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(12);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -469,7 +469,7 @@ if(false) {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(14);
+__webpack_require__(16);
 
 function LoginPage()
 {
@@ -620,32 +620,19 @@ module.exports = new LoginPage();
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(15);
+__webpack_require__(18);
 
 function MainPage()
 {
-	this.navBar = 
+	this.NavBar = __webpack_require__(22);
+	this.Content = __webpack_require__(21);
+
+	this.data = 
 	[
-		{
-			tag: "div",
-			attributes: [["class", "NavBar"]],
-			nest: 
-			[
-				{
-					tag: "ul",
-					nest: 
-					[
-						{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
-						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
-						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
-					]
-				}
-			]
-		}
+		this.NavBar.data,
+		this.Content.data
 	];
+
 
 	this.toHtml = function(data)
 	{
@@ -679,7 +666,7 @@ function MainPage()
 
 	this.init = function()
 	{
-		document.querySelector("#app").innerHTML = this.toHtml(this.navBar);
+		document.querySelector("#app").innerHTML = this.toHtml(this.data);
 	}
 }
 
@@ -690,7 +677,7 @@ module.exports = new MainPage();
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-Ajax = __webpack_require__(18);
+Ajax = __webpack_require__(23);
 
 function Router()
 {
@@ -725,7 +712,6 @@ function Router()
 		
 		if (this.routesData[route])
 		{
-			console.log("PLES");
 			if (this.currentLoaction != route)
 			{	
 				if (this.routesData[route].settings.require == "login")
@@ -931,8 +917,8 @@ function fromByteArray (uint8) {
 
 
 var base64 = __webpack_require__(6)
-var ieee754 = __webpack_require__(11)
-var isArray = __webpack_require__(12)
+var ieee754 = __webpack_require__(13)
+var isArray = __webpack_require__(14)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -2710,7 +2696,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
 
 /***/ }),
 /* 8 */
@@ -2721,7 +2707,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#app {\n  padding-top: 60px; }\n\n.form {\n  font-size: 25px;\n  margin: 0 auto;\n  width: 25em;\n  background: #474747;\n  padding: 1.4em;\n  border-top: 8px solid #2B5F8B;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px; }\n\n.form > .switch > ul {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n  margin: 0 0 30px 0; }\n\n.form > .switch > ul > li {\n  display: inline-block;\n  width: 50%;\n  text-align: center;\n  background: #626262;\n  color: #FFFFFF; }\n\n.form > .switch > ul > li > a {\n  display: block;\n  width: 100%;\n  padding: 7px 0 7px 0; }\n\n.form > .switch > ul > li.selected {\n  background: #2B5F8B; }\n\n.form > .switch > ul > li:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1; }\n\n.form > .title {\n  color: #FFFFFF;\n  font-size: 2em;\n  text-align: center;\n  padding: 15px;\n  margin-bottom: 15px;\n  background-color: #6C6C6C; }\n\n.form .inputFields .inputField input, select {\n  width: calc(100% - 20px);\n  font-size: 1em;\n  padding: 10px;\n  border: 0;\n  display: block; }\n\n.form .inputFields .inputField input {\n  width: calc(100% - 20px); }\n\n.form .inputFields .inputField select {\n  width: 100%; }\n\n.form .inputFields .inputField select:focus, input:focus {\n  outline: none; }\n\n.form .inputFields .inputField {\n  margin: 0 0 15px 0; }\n\n.form .inputFields .checkMarkContainer {\n  height: 100%; }\n\n.form > .submitButton {\n  width: 100%;\n  height: 2em;\n  border: none;\n  font-size: 2em;\n  padding: 0;\n  background: #2B5F8B;\n  color: #FFFFFF;\n  font-weight: 600; }\n\n.form > .submitButton.pressed {\n  background: #4677a1; }\n\n.form > .submitButton:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1;\n  cursor: pointer; }\n\n.submitButton a:visited {\n  color: #FFFFFF;\n  underline: none; }\n\n.submitButton a {\n  display: block;\n  text-decoration: none;\n  color: #FFFFFF;\n  width: 100%;\n  height: 100%;\n  line-height: 2em; }\n\n.info {\n  font-size: 35px;\n  width: 18.66em;\n  text-align: center;\n  margin: 0 auto 0 auto;\n  padding: 0.6em;\n  background: #474747;\n  border-top: 8px solid #2B5F8B;\n  color: #FFFFFF;\n  opacity: 0; }\n", ""]);
+exports.push([module.i, ".form {\n  font-size: 25px;\n  margin: 4em auto 0 auto;\n  width: 25em;\n  background: #474747;\n  padding: 1.4em;\n  border-top: 8px solid #2B5F8B;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px; }\n\n.form > .switch > ul {\n  padding: 0;\n  margin: 0;\n  list-style-type: none;\n  margin: 0 0 30px 0; }\n\n.form > .switch > ul > li {\n  display: inline-block;\n  width: 50%;\n  text-align: center;\n  background: #626262;\n  color: #FFFFFF; }\n\n.form > .switch > ul > li > a {\n  display: block;\n  width: 100%;\n  padding: 7px 0 7px 0; }\n\n.form > .switch > ul > li.selected {\n  background: #2B5F8B; }\n\n.form > .switch > ul > li:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1; }\n\n.form > .title {\n  color: #FFFFFF;\n  font-size: 2em;\n  text-align: center;\n  padding: 15px;\n  margin-bottom: 15px;\n  background-color: #6C6C6C; }\n\n.form .inputFields .inputField input, select {\n  width: calc(100% - 20px);\n  font-size: 1em;\n  padding: 10px;\n  border: 0;\n  display: block; }\n\n.form .inputFields .inputField input {\n  width: calc(100% - 20px); }\n\n.form .inputFields .inputField select {\n  width: 100%; }\n\n.form .inputFields .inputField select:focus, input:focus {\n  outline: none; }\n\n.form .inputFields .inputField {\n  margin: 0 0 15px 0; }\n\n.form .inputFields .checkMarkContainer {\n  height: 100%; }\n\n.form > .submitButton {\n  width: 100%;\n  height: 2em;\n  border: none;\n  font-size: 2em;\n  padding: 0;\n  background: #2B5F8B;\n  color: #FFFFFF;\n  font-weight: 600; }\n\n.form > .submitButton.pressed {\n  background: #4677a1; }\n\n.form > .submitButton:hover {\n  -webkit-transition: background 0.4s;\n  /* Safari */\n  transition: background 0.4s;\n  background: #4677a1;\n  cursor: pointer; }\n\n.submitButton a:visited {\n  color: #FFFFFF;\n  underline: none; }\n\n.submitButton a {\n  display: block;\n  text-decoration: none;\n  color: #FFFFFF;\n  width: 100%;\n  height: 100%;\n  line-height: 2em; }\n\n.form .info {\n  font-size: 35px;\n  width: 18.66em;\n  text-align: center;\n  margin: 0 auto 0 auto;\n  padding: 0.6em;\n  background: #474747;\n  border-top: 8px solid #2B5F8B;\n  color: #FFFFFF;\n  opacity: 0; }\n", ""]);
 
 // exports
 
@@ -2735,7 +2721,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 1000; }\n\n.NavBar > ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  background: #474747; }\n\n.NavBar > ul > li {\n  padding: 0;\n  margin: 0;\n  height: 50px;\n  -webkit-transition: background-color .25s;\n  -moz-transition: background-color .25s;\n  -ms-transition: background-color .25s;\n  -o-transition: background-color .25s;\n  transition: background-color .25s; }\n\n.NavBar > ul > li.floatLeft {\n  float: left; }\n\n.NavBar > ul > li.floatRight {\n  float: right; }\n\n.NavBar > ul > li > a {\n  text-align: center;\n  vertical-align: middle;\n  line-height: 50px;\n  color: #FFFFFF;\n  text-decoration: none;\n  display: block;\n  height: 100%;\n  font-weight: 800;\n  text-transform: uppercase;\n  font-size: 1.5rem;\n  padding-left: 10px;\n  padding-right: 10px;\n  box-sizing: border-box;\n  cursor: pointer; }\n\n.NavBar > ul > li:hover, .NavBar > ul > li.selected:hover {\n  background-color: #4677a1; }\n\n.NavBar > ul > li.selected {\n  background-color: #2B5F8B; }\n", ""]);
+exports.push([module.i, ".Content {\n  width: 100%;\n  height: calc(100% - 50px);\n  padding-top: 50px; }\n\n.Profile {\n  margin: 5em auto 0 auto;\n  height: 45em;\n  width: 40em;\n  padding: 4em;\n  background: #C0C0C0; }\n\n.Profile > img {\n  display: block;\n  height: 18em;\n  width: 20em;\n  margin: 0 auto 0 auto; }\n\n.Profile > .info {\n  list-style-type: none;\n  margin: 0 auto 0 auto;\n  margin-top: 3em;\n  display: block;\n  width: 30em;\n  padding: 0;\n  text-align: center;\n  font-family: 'Anton', sans-serif; }\n\n.Profile > .info > li {\n  font-size: 2em;\n  list-style-type: none;\n  background-color: #E5E5E5; }\n\n.Profile > .info > .name {\n  padding: 0.2em;\n  font-size: 3em;\n  background-color: #405589;\n  color: #FFFFFF; }\n\n.Profile > .info > li:nth-child(2n) {\n  background-color: #B8B8B8; }\n", ""]);
 
 // exports
 
@@ -2749,13 +2735,41 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "body, html {\n  margin: 0;\n  font-family: 'Montserrat', sans-serif;\n  background: #D6D6D6;\n  font-size: 15px;\n  height: 100%;\n  width: 100%; }\n\n#app {\n  height: 100%;\n  width: 100%; }\n\na {\n  text-decoration: none;\n  color: inherit; }\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 1000; }\n\n.NavBar > ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  background: #474747; }\n\n.NavBar > ul > li {\n  padding: 0;\n  margin: 0;\n  height: 50px;\n  -webkit-transition: background-color .25s;\n  -moz-transition: background-color .25s;\n  -ms-transition: background-color .25s;\n  -o-transition: background-color .25s;\n  transition: background-color .25s; }\n\n.NavBar > ul > li.floatLeft {\n  float: left; }\n\n.NavBar > ul > li.floatRight {\n  float: right; }\n\n.NavBar > ul > li > a {\n  text-align: center;\n  vertical-align: middle;\n  line-height: 50px;\n  color: #FFFFFF;\n  text-decoration: none;\n  display: block;\n  height: 100%;\n  font-weight: 800;\n  text-transform: uppercase;\n  font-size: 1.5rem;\n  padding-left: 10px;\n  padding-right: 10px;\n  box-sizing: border-box;\n  cursor: pointer; }\n\n.NavBar > ul > li:hover, .NavBar > ul > li.selected:hover {\n  background-color: #4677a1; }\n\n.NavBar > ul > li.selected {\n  background-color: #2B5F8B; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "body, html {\n  margin: 0;\n  font-family: 'Montserrat', sans-serif;\n  background: #D6D6D6;\n  font-size: 15px;\n  height: 100%;\n  width: 100%; }\n\n#app {\n  height: 100%;\n  width: 100%; }\n\na {\n  text-decoration: none;\n  color: inherit; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -2845,7 +2859,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -2856,7 +2870,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 
@@ -2951,7 +2965,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2977,13 +2991,39 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(10);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3003,7 +3043,33 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(11);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./NavBar.scss", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./NavBar.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports) {
 
 var g;
@@ -3030,44 +3096,81 @@ module.exports = g;
 
 
 /***/ }),
-/* 17 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window.LoginPage = __webpack_require__(3);
-window.MainPage = __webpack_require__(4);
-__webpack_require__(2);
+__webpack_require__(17);
 
-Router = __webpack_require__(5);
-
-// ------------Very important--Must be defined--------------
-
-Router.routeToHome("/", "", { require: "login" }, function()
+function Content()
 {
-	window.MainPage.init();
-});
+	this.data = 
+	{
+		tag: "div",
+		attributes: [["class", "Content"]],
+		nest: 
+		[
+			{
+				tag: "div",
+				attributes: [["class", "Profile"]],
+				nest: 
+				[
+					{tag: "img", attributes: [["src", "svg/userMale.svg"]]},
+					{
+						tag: "ul", 
+						attributes: [["class", "info"]], 
+						nest: 
+						[
+							{tag: "li", attributes: [["class", "name"]] , text: "Janez Novak"},
+							{tag: "li", text: "Born - 12.12.1994"},
+							{tag: "li", text: "Male"},
+							{tag: "li", text: "Played 12 normal games"},
+							{tag: "li", text: "Won 6"},
+							{tag: "li", text: "Played 5 tournament games"},
+							{tag: "li", text: "Won 3"}
+						]
+					}
+				]
+			}
+		]
+	};
+}
 
-Router.routeToLogin("/login", "", { require: "logout" }, function()
-{
-	window.LoginPage.giveLoginState();
-});
-
-// ----------------------------------------------------------
-
-Router.routeTo("/signUp", "", { require: "logout" }, function()
-{
-	window.LoginPage.giveSignUpState();
-});
-
-Router.routeTo("/ples", "", { require: "login" }, function()
-{
-	console.log("nekaj");
-});
-
-
-Router.init();
+module.exports = new Content();
 
 /***/ }),
-/* 18 */
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(19);
+
+function NavBar()
+{
+	this.data = 
+	{
+		tag: "div",
+		attributes: [["class", "NavBar"]],
+		nest: 
+		[
+			{
+				tag: "ul",
+				nest: 
+				[
+					{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
+					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
+					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
+				]
+			}
+		]
+	};
+}
+
+module.exports = new NavBar();
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports) {
 
 // POST(url, data, callback)
@@ -3121,6 +3224,43 @@ function Ajax()
 }
 
 module.exports = new Ajax();
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+window.LoginPage = __webpack_require__(3);
+window.MainPage = __webpack_require__(4);
+__webpack_require__(2);
+
+Router = __webpack_require__(5);
+
+// ------------Very important--Must be defined--------------
+
+Router.routeToHome("/", "", { require: "logout" }, function()
+{
+	window.MainPage.init();
+});
+
+Router.routeToLogin("/login", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveLoginState();
+});
+
+// ----------------------------------------------------------
+
+Router.routeTo("/signUp", "", { require: "logout" }, function()
+{
+	window.LoginPage.giveSignUpState();
+});
+
+Router.routeTo("/ples", "", { require: "login" }, function()
+{
+	console.log("nekaj");
+});
+
+
+Router.init();
 
 /***/ })
 /******/ ]);

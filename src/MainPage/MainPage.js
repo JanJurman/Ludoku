@@ -2,28 +2,15 @@ require("./MainPage.scss");
 
 function MainPage()
 {
-	this.navBar = 
+	this.NavBar = require('./NavBar/NavBar.js');
+	this.Content = require('./Content/Content.js');
+
+	this.data = 
 	[
-		{
-			tag: "div",
-			attributes: [["class", "NavBar"]],
-			nest: 
-			[
-				{
-					tag: "ul",
-					nest: 
-					[
-						{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
-						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
-						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
-						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
-					]
-				}
-			]
-		}
+		this.NavBar.data,
+		this.Content.data
 	];
+
 
 	this.toHtml = function(data)
 	{
@@ -57,7 +44,7 @@ function MainPage()
 
 	this.init = function()
 	{
-		document.querySelector("#app").innerHTML = this.toHtml(this.navBar);
+		document.querySelector("#app").innerHTML = this.toHtml(this.data);
 	}
 }
 
