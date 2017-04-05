@@ -160,7 +160,7 @@ router.get('', function(req, res, next) // http://127.0.0.1:3000/user
 {
 	mongoose.model('user').findOne({ _id: req.session.userId}, function(err,user)
 	{
-		if(user != null )
+		if(user != null)
 		{
 			res.send(user.maskData()); //skrije user local.eMail, local.password, facebook.id
 		}
@@ -175,11 +175,10 @@ router.get('', function(req, res, next) // http://127.0.0.1:3000/user
 router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0.1:3000/user/892173817238zhe8123
 {
 	var userId = req.params.userId;
-	mongoose.model('user').find({ _id : userId },function(err, user) //DODAJ injection check...
+	mongoose.model('user').findOne({ _id : userId },function(err, user) //DODAJ injection check...
 	{
-		if(user.length > 0)
+		if(user != null )
 		{
-			user = user[0];
 			if(user['facebook'].id == undefined)
 			{
 				console.log("user je local");
@@ -231,11 +230,5 @@ router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http
 		}
 	});
 });
-
-router.post('/nekaj', function(req, res, next)
-{
-	console.log(req.body);
-	res.send(req.body['eMail']);
-})
 
 module.exports = router;
