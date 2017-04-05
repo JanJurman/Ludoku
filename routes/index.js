@@ -70,7 +70,7 @@ router.post('/loginFacebook', function(req, res, next)
 					return res.send(req.session.userId);
 				});
 
-							}
+			}
 			else
 			{
 				req.session.userId = user.id;

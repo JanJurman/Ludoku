@@ -20,7 +20,10 @@ redisClient.on('error',function() {
 //on connect
 io.on('connection', function(socket){
 	sess = socket.handshake.session
-	if(!sess.userId) return;	//če nisi logged in do nothing
+	if(!sess.userId){ 
+		console.log("REFUSED, nisi logged in!")
+		return;	//če nisi logged in do nothing
+	}
 	//trenutno samo izpis, ampak takole checkaš lahk če je logged in / kdo je on actualy
 
 	//console.log('[Socket Server] User connected');
@@ -50,7 +53,7 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('disconnect', function(){
-		console.log('[Socket Server] User disconnected');
+		//console.log('[Socket Server] User disconnected');
 		
 		//remove from redis, isto pazi na key
 		redisClient.get(sess.userId+".socketsOpen", function(err,reply) {

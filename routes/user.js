@@ -156,11 +156,11 @@ router.post('/register', function(req, res, next) // {firstName: , lastName:, da
 });
 
 // GET svoje podatke
-router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
+router.get('', function(req, res, next) // http://127.0.0.1:3000/user
 {
-	mongoose.model('user').find({ _id : req.session.userId },function(err, user)
+	mongoose.model('user').findOne({ _id: req.session.userId}, function(err,user)
 	{
-		if(user.length > 0 )
+		if(user != null )
 		{
 			res.send(user.maskData()); //skrije user local.eMail, local.password, facebook.id
 		}

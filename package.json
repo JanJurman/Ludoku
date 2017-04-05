@@ -24,6 +24,7 @@
     "redis-server": "^1.1.0",
     "serve-favicon": "~2.3.2",
     "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3",
     "style-loader": "^0.15.0",
     "webpack": "^2.2.1"
   },
