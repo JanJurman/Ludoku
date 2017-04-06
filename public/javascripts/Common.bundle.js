@@ -12039,6 +12039,7 @@ module.exports = new NavBar();
 
 window.LoginPage = __webpack_require__(29);
 window.MainPage = __webpack_require__(30);
+window.LeaderBoard = __webpack_require__(80);
 __webpack_require__(28);
 Router = __webpack_require__(31);
 socketClient = __webpack_require__(32);
@@ -12068,9 +12069,10 @@ Router.routeTo("/ples", "", { require: "login" }, function()
 	console.log("nekaj");
 });
 
-Router.routeTo("/socketTest", "", "", function()
+Router.routeTo("/LeaderBoard", "", { require: "logout" }, function()
 {
-	console.log("socketTest");
+	console.log("Dela route.");
+	window.LeaderBoard.init();
 });
 
 
@@ -12081,6 +12083,209 @@ Router.init();
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(82);
+
+function LeaderBoard()
+{
+	this.navBar = 
+	[
+		{
+			tag: "div",
+			attributes: [["class", "NavBar"]],
+			nest: 
+			[
+				{
+					tag: "ul",
+					nest: 
+					[
+						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
+						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
+						{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", "localhost:3000/#/Leaderboard"]], text: "Leaderboard" }]},
+						{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
+						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
+						{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
+					]
+				}
+			]
+		},
+
+		
+
+	];
+
+	this.Naslov = 
+	[
+		{
+			/*tag: "p",
+			attributes: [["class", "Naslov"]],
+			text: "LeaderBoard"	*/
+
+			tag: "p",
+			attributes: [["class", "podNaslov"]],
+			text: "LeaderBoard"
+		}		
+	];
+
+//nest: [{tag: "p", attributes: [["class", "podNaslov"]], text: "Games" }]
+	this.Tabela =
+	[
+{
+			tag: "table",
+			attributes: [["class", "tabela"]],
+			nest:
+			[
+				{
+					tag: "tr",
+					nest:
+					[
+						{tag: "th", text: "Player"},
+						{tag: "th", text: "Games"},
+						{tag: "th", text: "GamesWon" },
+						{tag: "th", text: "TournamentGames" },
+						{tag: "th", text: "TournamentGamesWon" },
+						{tag: "th", text: "isLoggedIn" }
+					]
+				},
+
+				{
+					tag: "tr",
+					nest:
+					[
+						{tag: "td", text: "Damjan"},
+						{tag: "td", text: "15"},
+						{tag: "td", text: "14" },
+						{tag: "td", text: "3" },
+						{tag: "td", text: "2" },
+						{tag: "td", text: "Yes" }
+					]
+				},
+
+				{
+					tag: "tr",
+					nest:
+					[
+						{tag: "td", text: "Henčič"},
+						{tag: "td", text: "15"},
+						{tag: "td", text: "14" },
+						{tag: "td", text: "3" },
+						{tag: "td", text: "2" },
+						{tag: "td", text: "No" }
+					]
+				},
+
+				{
+					tag: "tr",
+					nest:
+					[
+						{tag: "td", text: "Jurman"},
+						{tag: "td", text: "15"},
+						{tag: "td", text: "14" },
+						{tag: "td", text: "3" },
+						{tag: "td", text: "2" },
+						{tag: "td", text: "Yes" }
+					]
+				},
+
+				{
+					tag: "tr",
+					nest:
+					[
+						{tag: "td", text: "Vračko"},
+						{tag: "td", text: "15"},
+						{tag: "td", text: "14" },
+						{tag: "td", text: "3" },
+						{tag: "td", text: "2" },
+						{tag: "td", text: "No" }
+					]
+				}
+
+			]
+		}
+	]
+
+	this.toHtml = function(data)
+	{
+		var html = "";
+		for (var i = 0; i < data.length; ++i)
+		{
+			html += "<" + data[i].tag;
+			if (data[i].attributes) 
+			{
+				for (var j = 0; j < data[i].attributes.length; j++)
+				{
+					html +=  " " + data[i].attributes[j][0] + "='" + data[i].attributes[j][1] + "'";
+				}
+			}
+			html += ">";
+
+			if (data[i].text)
+			{
+				html += data[i].text;
+			}
+
+			if (data[i].nest != undefined)
+			{
+				html += this.toHtml(data[i].nest);
+			}
+
+			html += "</" + data[i].tag + ">";
+		}
+		return html;
+	}
+
+	this.init = function()
+	{
+		//document.querySelector("#app").innerHTML = this.toHtml(this.NavBar);
+		document.querySelector("#app").innerHTML = this.toHtml(this.navBar) + this.toHtml(this.Naslov) + this.toHtml(this.Tabela);
+	}
+}
+
+module.exports = new LeaderBoard();
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 1000; }\n\n.NavBar > ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  background: #474747; }\n\n.NavBar > ul > li {\n  padding: 0;\n  margin: 0;\n  height: 50px;\n  -webkit-transition: background-color .25s;\n  -moz-transition: background-color .25s;\n  -ms-transition: background-color .25s;\n  -o-transition: background-color .25s;\n  transition: background-color .25s; }\n\n.NavBar > ul > li.floatLeft {\n  float: left; }\n\n.NavBar > ul > li.floatRight {\n  float: right; }\n\n.NavBar > ul > li > a {\n  text-align: center;\n  vertical-align: middle;\n  line-height: 50px;\n  color: #FFFFFF;\n  text-decoration: none;\n  display: block;\n  height: 100%;\n  font-weight: 800;\n  text-transform: uppercase;\n  font-size: 1.5rem;\n  padding-left: 10px;\n  padding-right: 10px;\n  box-sizing: border-box;\n  cursor: pointer; }\n\n.NavBar > ul > li:hover, .NavBar > ul > li.selected:hover {\n  background-color: #4677a1; }\n\n.NavBar > ul > li.selected {\n  background-color: #2B5F8B; }\n\n.Naslov {\n  text-align: center;\n  font-size: 450%;\n  vertical-align: middle;\n  color: #3333ff;\n  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; }\n\n.podNaslov {\n  text-align: center;\n  font-size: 400%;\n  color: #2B5F8B;\n  text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff; }\n\n.tabela {\n  border-collapse: collapse;\n  width: 50%;\n  margin-left: auto;\n  margin-right: auto; }\n\nth, td {\n  text-align: left;\n  padding: 8px; }\n\ntr:nth-child(even) {\n  background-color: #f2f2f2; }\n\nth {\n  background-color: #2B5F8B;\n  color: white; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(81);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./LeaderBoard.scss", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./LeaderBoard.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);
