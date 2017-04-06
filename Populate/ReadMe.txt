@@ -4,8 +4,6 @@ Uporaba:
 
 node populate
 
-zaenkrat moreš zaključit s control + C
-
 
 
 

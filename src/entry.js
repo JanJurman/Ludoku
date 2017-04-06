@@ -1,5 +1,6 @@
 window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
+window.LeaderBoard = require('./MainPage/LeaderBoard/LeaderBoard.js');
 require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
@@ -95,6 +96,12 @@ Router.routeTo("/profile", { require: "login" }, function()
 	window.MainPage.Content.Profile.init(window.loggedUser)
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+});
+
+Router.routeTo("/LeaderBoard", "", { require: "logout" }, function()
+{
+	console.log("Dela route.");
+	window.LeaderBoard.init();
 });
 
 
