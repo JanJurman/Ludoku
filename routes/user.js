@@ -83,7 +83,7 @@ router.post('/login', function(req, res) // v post moreš dat noter { eMail : ..
 });
 
 // GET logout
-router.get('/logout', function (req, res)
+router.post('/logout', function (req, res)
 {
 	delete req.session.userId;
 	res.sendStatus(200);
@@ -156,11 +156,11 @@ router.post('/register', function(req, res, next) // {firstName: , lastName:, da
 });
 
 // GET svoje podatke
-router.get('', function(req, res, next) // http://127.0.0.1:3000/user
+router.get('', checkAuth, function(req, res, next) // http://127.0.0.1:3000/user
 {
 	mongoose.model('user').findOne({ _id: req.session.userId}, function(err,user)
 	{
-		if(user != null )
+		if(user != null)
 		{
 			res.send(user.maskData()); //skrije user local.eMail, local.password, facebook.id
 		}
@@ -231,11 +231,5 @@ router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http
 		}
 	});
 });
-
-router.post('/nekaj', function(req, res, next)
-{
-	console.log(req.body);
-	res.send(req.body['eMail']);
-})
 
 module.exports = router;

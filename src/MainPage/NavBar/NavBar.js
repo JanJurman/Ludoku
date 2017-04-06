@@ -2,11 +2,11 @@ require("./NavBar.scss");
 
 function NavBar()
 {
-	this.data = 
+	this.init = function()
 	{
-		tag: "div",
-		attributes: [["class", "NavBar"]],
-		nest: 
+		this.tag = "div";
+		this.attributes = [["class", "NavBar"]];
+		this.nest = 
 		[
 			{
 				tag: "ul",
@@ -16,12 +16,20 @@ function NavBar()
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
-					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
+					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", "#/login"], ["onclick", "window.MainPage.NavBar.logMeOut()"]], text: "Logout" }]},
 					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
 				]
 			}
-		]
-	};
+		];
+	}
+
+	this.logMeOut =  function()
+	{
+		Ajax.POST("/user/logout", null, function()
+		{
+			window.loggedUser = null;	
+		});
+	}
 }
 
 module.exports = new NavBar();

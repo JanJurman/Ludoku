@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 78);
+/******/ 	return __webpack_require__(__webpack_require__.s = 76);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -102,14 +102,14 @@ module.exports = g;
  */
 
 var keys = __webpack_require__(52);
-var hasBinary = __webpack_require__(15);
-var sliceBuffer = __webpack_require__(33);
-var after = __webpack_require__(32);
-var utf8 = __webpack_require__(74);
+var hasBinary = __webpack_require__(16);
+var sliceBuffer = __webpack_require__(34);
+var after = __webpack_require__(33);
+var utf8 = __webpack_require__(73);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(35);
+  base64encoder = __webpack_require__(36);
 }
 
 /**
@@ -167,7 +167,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(37);
+var Blob = __webpack_require__(38);
 
 /**
  * Encodes a packet.
@@ -711,6 +711,18 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+
+module.exports = function(a, b){
+  var fn = function(){};
+  fn.prototype = b.prototype;
+  a.prototype = new fn;
+  a.prototype.constructor = a;
+};
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/*
@@ -789,10 +801,378 @@ function toComment(sourceMap) {
   return '/*# ' + data + ' */';
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39).Buffer))
 
 /***/ }),
-/* 3 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {
+/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = __webpack_require__(51);
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  try {
+    return JSON.stringify(v);
+  } catch (err) {
+    return '[UnexpectedJSONParseError]: ' + err.message;
+  }
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return args;
+
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    return exports.storage.debug;
+  } catch(e) {}
+
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+  if (typeof process !== 'undefined' && 'env' in process) {
+    return process.env.DEBUG;
+  }
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {
+/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = __webpack_require__(61);
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  'lightseagreen',
+  'forestgreen',
+  'goldenrod',
+  'dodgerblue',
+  'darkorchid',
+  'crimson'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (window.console && (console.firebug || (console.exception && console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  try {
+    return JSON.stringify(v);
+  } catch (err) {
+    return '[UnexpectedJSONParseError]: ' + err.message;
+  }
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs() {
+  var args = arguments;
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return args;
+
+  var c = 'color: ' + this.color;
+  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+  return args;
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    return exports.storage.debug;
+  } catch(e) {}
+
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+  if (typeof process !== 'undefined' && 'env' in process) {
+    return process.env.DEBUG;
+  }
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage(){
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20)))
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1083,387 +1463,70 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
+function Ajax()
+{
+	this.GET = function(url, data, callback)
+	{
+		var xhttp = new XMLHttpRequest();
+		if (callback)
+		{
+			xhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					callback(this.responseText);
+				}
+			};
+		}
 
-module.exports = function(a, b){
-  var fn = function(){};
-  fn.prototype = b.prototype;
-  a.prototype = new fn;
-  a.prototype.constructor = a;
-};
+		xhttp.open('GET', url, true);
+
+		if (data)
+		{
+			xhttp.send(JSON.stringify(data));
+		}
+		else
+		{
+			xhttp.open('GET', url, true);
+			xhttp.send();
+		}
+	}
+
+	this.POST = function(url, data, callback)
+	{
+		var xhttp = new XMLHttpRequest();
+		if (callback)
+		{
+			xhttp.onreadystatechange = function()
+			{
+				if (this.readyState == 4 && this.status == 200)
+				{
+					callback(this.responseText);
+				}
+			};
+		}
+
+		xhttp.open("POST", url, true);
+		xhttp.setRequestHeader("Content-type", "application/json");
+
+		if (data)
+		{
+			xhttp.send(JSON.stringify(data));
+		}
+		else
+		{
+			xhttp.send();
+		}
+	}
+}
+
+module.exports = new Ajax();
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {
-/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(51);
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  'lightseagreen',
-  'forestgreen',
-  'goldenrod',
-  'dodgerblue',
-  'darkorchid',
-  'crimson'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (window.console && (console.firebug || (console.exception && console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs() {
-  var args = arguments;
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return args;
-
-  var c = 'color: ' + this.color;
-  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-  return args;
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    return exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (typeof process !== 'undefined' && 'env' in process) {
-    return process.env.DEBUG;
-  }
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage(){
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {
-/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(61);
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  'lightseagreen',
-  'forestgreen',
-  'goldenrod',
-  'dodgerblue',
-  'darkorchid',
-  'crimson'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (window.console && (console.firebug || (console.exception && console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs() {
-  var args = arguments;
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return args;
-
-  var c = 'color: ' + this.color;
-  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-  return args;
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    return exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (typeof process !== 'undefined' && 'env' in process) {
-    return process.env.DEBUG;
-  }
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage(){
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
-
-/***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -1471,7 +1534,7 @@ function localstorage(){
  */
 
 var parser = __webpack_require__(1);
-var Emitter = __webpack_require__(9);
+var Emitter = __webpack_require__(10);
 
 /**
  * Module exports.
@@ -1626,7 +1689,7 @@ Transport.prototype.onClose = function () {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
@@ -1670,7 +1733,7 @@ module.exports = function (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -1839,7 +1902,7 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /**
@@ -1882,7 +1945,7 @@ exports.decode = function(qs){
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -1892,9 +1955,9 @@ exports.decode = function(qs){
 
 var debug = __webpack_require__(63)('socket.io-parser');
 var json = __webpack_require__(57);
-var Emitter = __webpack_require__(39);
+var Emitter = __webpack_require__(40);
 var binary = __webpack_require__(62);
-var isBuf = __webpack_require__(24);
+var isBuf = __webpack_require__(25);
 
 /**
  * Protocol version.
@@ -2292,7 +2355,7 @@ function error(data){
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /**
@@ -2321,14 +2384,14 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies
  */
 
-var XMLHttpRequest = __webpack_require__(8);
+var XMLHttpRequest = __webpack_require__(9);
 var XHR = __webpack_require__(49);
 var JSONP = __webpack_require__(48);
 var websocket = __webpack_require__(50);
@@ -2381,19 +2444,19 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(7);
-var parseqs = __webpack_require__(10);
+var Transport = __webpack_require__(8);
+var parseqs = __webpack_require__(11);
 var parser = __webpack_require__(1);
-var inherit = __webpack_require__(4);
-var yeast = __webpack_require__(26);
-var debug = __webpack_require__(5)('engine.io-client:polling');
+var inherit = __webpack_require__(2);
+var yeast = __webpack_require__(27);
+var debug = __webpack_require__(4)('engine.io-client:polling');
 
 /**
  * Module exports.
@@ -2406,7 +2469,7 @@ module.exports = Polling;
  */
 
 var hasXHR2 = (function () {
-  var XMLHttpRequest = __webpack_require__(8);
+  var XMLHttpRequest = __webpack_require__(9);
   var xhr = new XMLHttpRequest({ xdomain: false });
   return null != xhr.responseType;
 })();
@@ -2632,7 +2695,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -2698,7 +2761,7 @@ function hasBinary(data) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 
@@ -2713,7 +2776,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /**
@@ -2868,7 +2931,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /**
@@ -2913,7 +2976,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3099,7 +3162,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3108,14 +3171,14 @@ process.umask = function() { return 0; };
  */
 
 var eio = __webpack_require__(45);
-var Socket = __webpack_require__(22);
-var Emitter = __webpack_require__(23);
-var parser = __webpack_require__(11);
-var on = __webpack_require__(21);
-var bind = __webpack_require__(12);
-var debug = __webpack_require__(6)('socket.io-client:manager');
-var indexOf = __webpack_require__(16);
-var Backoff = __webpack_require__(34);
+var Socket = __webpack_require__(23);
+var Emitter = __webpack_require__(24);
+var parser = __webpack_require__(12);
+var on = __webpack_require__(22);
+var bind = __webpack_require__(13);
+var debug = __webpack_require__(5)('socket.io-client:manager');
+var indexOf = __webpack_require__(17);
+var Backoff = __webpack_require__(35);
 
 /**
  * IE6+ hasOwnProperty
@@ -3665,7 +3728,7 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 
@@ -3695,7 +3758,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -3703,13 +3766,13 @@ function on (obj, ev, fn) {
  * Module dependencies.
  */
 
-var parser = __webpack_require__(11);
-var Emitter = __webpack_require__(23);
-var toArray = __webpack_require__(72);
-var on = __webpack_require__(21);
-var bind = __webpack_require__(12);
-var debug = __webpack_require__(6)('socket.io-client:socket');
-var hasBin = __webpack_require__(15);
+var parser = __webpack_require__(12);
+var Emitter = __webpack_require__(24);
+var toArray = __webpack_require__(71);
+var on = __webpack_require__(22);
+var bind = __webpack_require__(13);
+var debug = __webpack_require__(5)('socket.io-client:socket');
+var hasBin = __webpack_require__(16);
 
 /**
  * Module exports.
@@ -4120,7 +4183,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4289,7 +4352,7 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -4309,7 +4372,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -4337,7 +4400,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4412,7 +4475,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4421,7 +4484,7 @@ module.exports = yeast;
 var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -4438,71 +4501,19 @@ if(false) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(68);
+var Ajax = __webpack_require__(7);
 
-function LoginPage()
+function EntryPage()
 {
 	this.signUpState = 
-	[
-		{
-			tag: "div",
-			attributes: [["class", "form"]],
-			nest:
-				[
-					{
-						tag:"div",
-						attributes:[["class", "switch"]],
-						nest:
-						[
-							{
-								tag: "ul",
-								nest:
-								[
-									{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register selected"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
-								]
-							}
-						]
-					},
-					{
-						tag:"div",
-						attributes:[["class", "title"]],
-						text:"Sign up"
-					},
-					{
-						tag:"div",
-						attributes:[["class", "inputFields"]],
-						nest:[
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "E-mail"]]}] },
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Password"]]}] },
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Retype password"]]}] },
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "First name"]] }]},
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "Last name"]] }]},
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "date"], ["placeholder", "Date of birth"]] }]},
-							{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"select", nest: [{tag: "option" ,attributes:[["value", "M"]], text: "Male"}, {tag: "option", attributes:[["value", "F"]], text: "Female"}, {tag: "option", attributes:[["value", "X"]], text: "Other"}] }]}
-						]
-					},
-					{
-						tag:"button",
-						attributes:[["class", "submitButton"]],
-						text:"Submit"
-					}
-				]
-		},
-		{
-			tag: "div",
-			attributes: [["class", "info"]]
-		}
-	];
-
-	this.loginState = 
-	[
-		{
-			tag: "div",
-			attributes: [["class", "form"]],
-			nest:
+	[{
+		tag: "div",
+		attributes: [["class", "form"]],
+		nest:
 			[
 				{
 					tag:"div",
@@ -4513,7 +4524,7 @@ function LoginPage()
 							tag: "ul",
 							nest:
 							[
-								{tag:"li", attributes:[["class", "login selected"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
+								{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register selected"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
 							]
 						}
 					]
@@ -4521,124 +4532,124 @@ function LoginPage()
 				{
 					tag:"div",
 					attributes:[["class", "title"]],
-					text:"Welcome back"
+					text:"Sign up"
 				},
 				{
 					tag:"div",
 					attributes:[["class", "inputFields"]],
 					nest:[
 						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "E-mail"]]}] },
-						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Password"]]}] }
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Password"]]}] },
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Retype password"]]}] },
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "First name"]] }]},
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "Last name"]] }]},
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "date"], ["placeholder", "Date of birth"]] }]},
+						{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"select", nest: [{tag: "option" ,attributes:[["value", "M"]], text: "Male"}, {tag: "option", attributes:[["value", "F"]], text: "Female"}, {tag: "option", attributes:[["value", "X"]], text: "Other"}] }]}
 					]
 				},
 				{
 					tag:"button",
 					attributes:[["class", "submitButton"]],
-					text:"Login"
+					text:"Submit"
 				}
 			]
-		},
-		{
-			tag: "div",
-			attributes: [["class", "info"]]
-		}
-	];
-
-	this.toHtml = function(data)
+	},
 	{
-		var html = "";
-		for (var i = 0; i < data.length; ++i)
+		tag: "div",
+		attributes: [["class", "info"]]
+	}];
+
+	this.loginState = 
+	[{
+		tag: "div",
+		attributes: [["class", "form"]],
+		nest:
+		[
+			{
+				tag:"div",
+				attributes:[["class", "switch"]],
+				nest:
+				[
+					{
+						tag: "ul",
+						nest:
+						[
+							{tag:"li", attributes:[["class", "login selected"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
+						]
+					}
+				]
+			},
+			{
+				tag:"div",
+				attributes:[["class", "title"]],
+				text:"Welcome back"
+			},
+			{
+				tag:"div",
+				attributes:[["class", "inputFields"]],
+				nest:[
+					{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "text"], ["placeholder", "E-mail"]]}] },
+					{ tag:"div", attributes:[["class", "inputField"]], nest: [{ tag:"input", attributes:[["type", "password"], ["placeholder", "Password"]]}] }
+				]
+			},
+			{
+				tag:"button",
+				attributes:[["class", "submitButton"], ["onclick", "window.EntryPage.logMeIn()"]],
+				text:"Login"
+			}
+		]
+	},
+	{
+		tag: "div",
+		attributes: [["class", "info"]]
+	}];
+
+	this.logMeIn = function(data)
+	{
+		var send = {eMail: document.querySelector("#app .form .inputField:nth-child(2n + 1) input").value ,password: document.querySelector("#app .form .inputField:nth-child(2n) input").value};
+
+		Ajax.POST("user/login", send, function(data)
 		{
-			html += "<" + data[i].tag;
-			if (data[i].attributes) 
+			Ajax.GET("user/", null, function(data)
 			{
-				for (var j = 0; j < data[i].attributes.length; j++)
-				{
-					html +=  " " + data[i].attributes[j][0] + "='" + data[i].attributes[j][1] + "'";
-				}
-			}
-			html += ">";
-
-			if (data[i].text)
-			{
-				html += data[i].text;
-			}
-
-			if (data[i].nest != undefined)
-			{
-				html += this.toHtml(data[i].nest);
-			}
-
-			html += "</" + data[i].tag + ">";
-		}
-		return html;
+				window.loggedUser = JSON.parse(data); 
+				location.hash = "#/";
+			});
+		});
 	}
 
-	this.giveLoginState = function()
+	this.initLogin = function()
 	{
-		document.querySelector("#app").innerHTML = this.toHtml(this.loginState);
+		this.data = this.loginState;
 	}
 
-	this.giveSignUpState = function()
+	this.initSignUp = function()
 	{
-		document.querySelector("#app").innerHTML = this.toHtml(this.signUpState);
+		this.data = this.signUpState;
 	}
 }
 
-module.exports = new LoginPage();
+module.exports = new EntryPage();
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(70);
+__webpack_require__(69);
 
 function MainPage()
 {
-	this.NavBar = __webpack_require__(76);
-	this.Content = __webpack_require__(75);
-
-	this.data = 
-	[
-		this.NavBar.data,
-		this.Content.data
-	];
-
-
-	this.toHtml = function(data)
-	{
-		var html = "";
-		for (var i = 0; i < data.length; ++i)
-		{
-			html += "<" + data[i].tag;
-			if (data[i].attributes) 
-			{
-				for (var j = 0; j < data[i].attributes.length; j++)
-				{
-					html +=  " " + data[i].attributes[j][0] + "='" + data[i].attributes[j][1] + "'";
-				}
-			}
-			html += ">";
-
-			if (data[i].text)
-			{
-				html += data[i].text;
-			}
-
-			if (data[i].nest != undefined)
-			{
-				html += this.toHtml(data[i].nest);
-			}
-
-			html += "</" + data[i].tag + ">";
-		}
-		return html;
-	}
+	this.NavBar = __webpack_require__(75);
+	this.Content = __webpack_require__(74);
 
 	this.init = function()
 	{
-		document.querySelector("#app").innerHTML = this.toHtml(this.data);
+		this.data = 
+		[
+				this.NavBar,
+				this.Content
+		];
 	}
 }
 
@@ -4646,10 +4657,10 @@ module.exports = new MainPage();
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-Ajax = __webpack_require__(77);
+Ajax = __webpack_require__(7);
 
 function Router()
 {
@@ -4659,21 +4670,21 @@ function Router()
 	this.currentLoaction = "";
 
 
-	this.routeToHome = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeToHome = function(location, SETTINGS, CALLBACK)
 	{
-		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.routeTo(location, SETTINGS, CALLBACK);
 		this.homeLocation = "#" + location;
 	}
 
-	this.routeToLogin = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeToLogin = function(location, SETTINGS, CALLBACK)
 	{
-		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.routeTo(location, SETTINGS, CALLBACK);
 		this.loginLocation = "#" + location;
 	}
 
-	this.routeTo = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeTo = function(location, SETTINGS, CALLBACK)
 	{
-		this.routesData["#" + location] = {html: HTML, callback: CALLBACK, settings: SETTINGS};
+		this.routesData["#" + location] = {callback: CALLBACK, settings: SETTINGS};
 	}
 
 	this.logic = function()
@@ -4688,7 +4699,7 @@ function Router()
 			{	
 				if (this.routesData[route].settings.require == "login")
 				{
-					Ajax.GET("user/isLoggedIn", function(data)
+					Ajax.GET("user/isLoggedIn", null, function(data)
 					{
 						if (data != "false")
 						{
@@ -4708,7 +4719,7 @@ function Router()
 				}
 				else if (this.routesData[route].settings.require == "logout")
 				{
-					Ajax.GET("user/isLoggedIn", function(data)
+					Ajax.GET("user/isLoggedIn", null,  function(data)
 					{
 						if (data == "false")
 						{
@@ -4753,7 +4764,7 @@ function Router()
 module.exports = new Router();
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function socketClient()
@@ -4788,7 +4799,7 @@ module.exports = sc;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -4822,7 +4833,7 @@ function noop() {}
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /**
@@ -4857,7 +4868,7 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 
@@ -4948,7 +4959,7 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /*
@@ -5021,7 +5032,7 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5142,7 +5153,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -5245,7 +5256,7 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5259,7 +5270,7 @@ module.exports = (function() {
 
 
 
-var base64 = __webpack_require__(36)
+var base64 = __webpack_require__(37)
 var ieee754 = __webpack_require__(55)
 var isArray = __webpack_require__(56)
 
@@ -7042,7 +7053,7 @@ function isnan (val) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 
@@ -7212,10 +7223,10 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -7226,24 +7237,10 @@ exports.push([module.i, ".form {\n  font-size: 25px;\n  margin: 4em auto 0 auto;
 
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".Content {\n  width: 100%;\n  height: calc(100% - 50px);\n  padding-top: 50px; }\n\n.Profile {\n  margin: 5em auto 0 auto;\n  height: 45em;\n  width: 40em;\n  padding: 4em;\n  background: #C0C0C0; }\n\n.Profile > img {\n  display: block;\n  height: 18em;\n  width: 20em;\n  margin: 0 auto 0 auto; }\n\n.Profile > .info {\n  list-style-type: none;\n  margin: 0 auto 0 auto;\n  margin-top: 3em;\n  display: block;\n  width: 30em;\n  padding: 0;\n  text-align: center;\n  font-family: 'Anton', sans-serif; }\n\n.Profile > .info > li {\n  font-size: 2em;\n  list-style-type: none;\n  background-color: #E5E5E5; }\n\n.Profile > .info > .name {\n  padding: 0.2em;\n  font-size: 3em;\n  background-color: #405589;\n  color: #FFFFFF; }\n\n.Profile > .info > li:nth-child(2n) {\n  background-color: #B8B8B8; }\n", ""]);
-
-// exports
-
-
-/***/ }),
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -7257,7 +7254,7 @@ exports.push([module.i, "", ""]);
 /* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -7271,7 +7268,7 @@ exports.push([module.i, ".NavBar {\n  position: fixed;\n  top: 0;\n  left: 0;\n 
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -7313,14 +7310,14 @@ module.exports.parser = __webpack_require__(1);
  * Module dependencies.
  */
 
-var transports = __webpack_require__(13);
-var Emitter = __webpack_require__(9);
-var debug = __webpack_require__(5)('engine.io-client:socket');
-var index = __webpack_require__(16);
+var transports = __webpack_require__(14);
+var Emitter = __webpack_require__(10);
+var debug = __webpack_require__(4)('engine.io-client:socket');
+var index = __webpack_require__(17);
 var parser = __webpack_require__(1);
-var parseuri = __webpack_require__(18);
+var parseuri = __webpack_require__(19);
 var parsejson = __webpack_require__(58);
-var parseqs = __webpack_require__(10);
+var parseqs = __webpack_require__(11);
 
 /**
  * Module exports.
@@ -7452,8 +7449,8 @@ Socket.protocol = parser.protocol; // this is an int
  */
 
 Socket.Socket = Socket;
-Socket.Transport = __webpack_require__(7);
-Socket.transports = __webpack_require__(13);
+Socket.Transport = __webpack_require__(8);
+Socket.transports = __webpack_require__(14);
 Socket.parser = __webpack_require__(1);
 
 /**
@@ -8059,8 +8056,8 @@ Socket.prototype.filterUpgrades = function (upgrades) {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(14);
-var inherit = __webpack_require__(4);
+var Polling = __webpack_require__(15);
+var inherit = __webpack_require__(2);
 
 /**
  * Module exports.
@@ -8296,11 +8293,11 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
  * Module requirements.
  */
 
-var XMLHttpRequest = __webpack_require__(8);
-var Polling = __webpack_require__(14);
-var Emitter = __webpack_require__(9);
-var inherit = __webpack_require__(4);
-var debug = __webpack_require__(5)('engine.io-client:polling-xhr');
+var XMLHttpRequest = __webpack_require__(9);
+var Polling = __webpack_require__(15);
+var Emitter = __webpack_require__(10);
+var inherit = __webpack_require__(2);
+var debug = __webpack_require__(4)('engine.io-client:polling-xhr');
 
 /**
  * Module exports.
@@ -8727,17 +8724,17 @@ function unloadHandler () {
  * Module dependencies.
  */
 
-var Transport = __webpack_require__(7);
+var Transport = __webpack_require__(8);
 var parser = __webpack_require__(1);
-var parseqs = __webpack_require__(10);
-var inherit = __webpack_require__(4);
-var yeast = __webpack_require__(26);
-var debug = __webpack_require__(5)('engine.io-client:websocket');
+var parseqs = __webpack_require__(11);
+var inherit = __webpack_require__(2);
+var yeast = __webpack_require__(27);
+var debug = __webpack_require__(4)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(79);
+    NodeWebSocket = __webpack_require__(77);
   } catch (e) { }
 }
 
@@ -9028,7 +9025,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(17);
+exports.humanize = __webpack_require__(18);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -9383,7 +9380,7 @@ module.exports = Array.isArray || function (arr) {
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(73);
+  var isLoader = "function" === "function" && __webpack_require__(72);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -10283,7 +10280,7 @@ module.exports = Array.isArray || function (arr) {
   }
 }).call(this);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)(module), __webpack_require__(0)))
 
 /***/ }),
 /* 58 */
@@ -10333,9 +10330,9 @@ module.exports = function parsejson(data) {
  */
 
 var url = __webpack_require__(60);
-var parser = __webpack_require__(11);
-var Manager = __webpack_require__(20);
-var debug = __webpack_require__(6)('socket.io-client');
+var parser = __webpack_require__(12);
+var Manager = __webpack_require__(21);
+var debug = __webpack_require__(5)('socket.io-client');
 
 /**
  * Module exports.
@@ -10434,8 +10431,8 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(20);
-exports.Socket = __webpack_require__(22);
+exports.Manager = __webpack_require__(21);
+exports.Socket = __webpack_require__(23);
 
 
 /***/ }),
@@ -10447,8 +10444,8 @@ exports.Socket = __webpack_require__(22);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(18);
-var debug = __webpack_require__(6)('socket.io-client:url');
+var parseuri = __webpack_require__(19);
+var debug = __webpack_require__(5)('socket.io-client:url');
 
 /**
  * Module exports.
@@ -10537,7 +10534,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(17);
+exports.humanize = __webpack_require__(18);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -10737,7 +10734,7 @@ function coerce(val) {
  */
 
 var isArray = __webpack_require__(65);
-var isBuf = __webpack_require__(24);
+var isBuf = __webpack_require__(25);
 
 /**
  * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -11493,17 +11490,17 @@ module.exports = function (css) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./LoginPage.scss", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./LoginPage.scss");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./EntryPage.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./EntryPage.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -11519,36 +11516,10 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
 var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11565,7 +11536,7 @@ if(false) {
 }
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -11574,7 +11545,7 @@ if(false) {
 var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, {});
+var update = __webpack_require__(6)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11591,7 +11562,7 @@ if(false) {
 }
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -11610,7 +11581,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -11619,7 +11590,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -11856,63 +11827,44 @@ module.exports = __webpack_amd_options__;
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(25)(module), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(69);
+__webpack_require__(80);
 
 function Content()
 {
-	this.data = 
+	this.Profile = __webpack_require__(82);
+
+	this.init = function()
 	{
-		tag: "div",
-		attributes: [["class", "Content"]],
-		nest: 
+		this.tag = "div";
+		this.attributes = [["class", "Content"]];
+		this.nest = 
 		[
-			{
-				tag: "div",
-				attributes: [["class", "Profile"]],
-				nest: 
-				[
-					{tag: "img", attributes: [["src", "svg/userMale.svg"]]},
-					{
-						tag: "ul", 
-						attributes: [["class", "info"]], 
-						nest: 
-						[
-							{tag: "li", attributes: [["class", "name"]] , text: "Janez Novak"},
-							{tag: "li", text: "Born - 12.12.1994"},
-							{tag: "li", text: "Male"},
-							{tag: "li", text: "Played 12 normal games"},
-							{tag: "li", text: "Won 6"},
-							{tag: "li", text: "Played 5 tournament games"},
-							{tag: "li", text: "Won 3"}
-						]
-					}
-				]
-			}
-		]
-	};
+			this.Profile
+		];
+	}
 }
 
 module.exports = new Content();
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(71);
+__webpack_require__(70);
 
 function NavBar()
 {
-	this.data = 
+	this.init = function()
 	{
-		tag: "div",
-		attributes: [["class", "NavBar"]],
-		nest: 
+		this.tag = "div";
+		this.attributes = [["class", "NavBar"]];
+		this.nest = 
 		[
 			{
 				tag: "ul",
@@ -11922,115 +11874,265 @@ function NavBar()
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
-					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Logout" }]},
+					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", "#/login"], ["onclick", "window.MainPage.NavBar.logMeOut()"]], text: "Logout" }]},
 					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
 				]
 			}
-		]
-	};
+		];
+	}
+
+	this.logMeOut =  function()
+	{
+		Ajax.POST("/user/logout", null, function()
+		{
+			window.loggedUser = null;	
+		});
+	}
 }
 
 module.exports = new NavBar();
 
 /***/ }),
-/* 77 */
-/***/ (function(module, exports) {
-
-// POST(url, data, callback)
-// {
-
-// 	var xhttp = new XMLHttpRequest();
-// 	if (callback != undefined)
-// 	{
-// 		xhttp.onreadystatechange = function()
-// 		{
-// 			if (this.readyState == 4 && this.status == 200)
-// 			{
-// 				callback(this.responseText);
-// 			}
-// 		};
-// 	}
-
-// 	xhttp.open("POST", url);
-
-// 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-// 	xhttp.send(data);
-// }
-function Ajax()
-{
-	this.GET = function(url, callback)
-	{
-		var xhttp = new XMLHttpRequest();
-		if (callback != undefined)
-		{
-			xhttp.onreadystatechange = function()
-			{
-				if (this.readyState == 4 && this.status == 200)
-				{
-					callback(this.responseText);
-				}
-			};
-		}
-
-
-		// if (data != undefined)
-		// {
-		// 	xhttp.open('GET', url + "?" + data, true);
-		// 	xhttp.send();
-		// }
-		// else
-		// {
-			xhttp.open('GET', url, true);
-			xhttp.send();
-		// }
-	}
-}
-
-module.exports = new Ajax();
-
-/***/ }),
-/* 78 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window.LoginPage = __webpack_require__(28);
-window.MainPage = __webpack_require__(29);
-__webpack_require__(27);
-Router = __webpack_require__(30);
-socketClient = __webpack_require__(31);
+window.EntryPage = __webpack_require__(29);
+window.MainPage = __webpack_require__(30);
+__webpack_require__(28);
+Router = __webpack_require__(31);
+socketClient = __webpack_require__(32);
+var Ajax = __webpack_require__(7);
+
+
+// ------ Shranim logged usera, oziroma null če ni logged------
+Ajax.GET("user/isLoggedIn/", null, function(data)
+{
+	if(data != "false")
+	{
+		Ajax.GET("user/", null, function(data)
+		{
+			window.loggedUser = JSON.parse(data); 
+			location.hash = "#/";
+		});
+	}
+	else
+	{
+		window.loggedUser = null;
+	}
+});
+
+// ------------ Nea se ukvarjaj s tem -----------------------
+
+function toHtml(data)
+{
+	var html = "";
+	for (var i = 0; i < data.length; ++i)
+	{
+		if (data[i].tag)
+		{
+
+			html += "<" + data[i].tag;
+			if (data[i].attributes) 
+			{
+				for (var j = 0; j < data[i].attributes.length; j++)
+				{
+					html +=  " " + data[i].attributes[j][0] + "='" + data[i].attributes[j][1] + "'";
+				}
+			}
+			html += ">";
+
+			if (data[i].text)
+			{
+				html += data[i].text;
+			}
+
+			if (data[i].nest != undefined)
+			{
+				html += toHtml(data[i].nest);
+			}
+
+			html += "</" + data[i].tag + ">";
+		}
+	}
+	return html;
+}
 
 // ------------Very important--Must be defined--------------
 
-Router.routeToHome("/", "", { require: "logout" }, function()
+Router.routeToHome("/", { require: "login" }, function()
 {
-	socketClient.connect();
+	// socketClient.connect();
 	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+	window.MainPage.Content.Profile.cleanUp();
+
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
 
-Router.routeToLogin("/login", "", { require: "logout" }, function()
+Router.routeToLogin("/login", { require: "logout" }, function()
 {
-	window.LoginPage.giveLoginState();
+	window.EntryPage.initLogin();
+	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
 // ----------------------------------------------------------
 
-Router.routeTo("/signUp", "", { require: "logout" }, function()
+Router.routeTo("/signUp", { require: "logout" }, function()
 {
-	window.LoginPage.giveSignUpState();
+	window.EntryPage.initSignUp();
+	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
-Router.routeTo("/ples", "", { require: "login" }, function()
+Router.routeTo("/profile", { require: "login" }, function()
 {
-	console.log("nekaj");
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+	window.MainPage.Content.Profile.init(window.loggedUser)
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
 
 
 Router.init();
 
 /***/ }),
-/* 79 */
+/* 77 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".Content {\n  width: 100%;\n  height: calc(100% - 50px);\n  padding-top: 50px; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".Profile {\n  margin: 5em auto 0 auto;\n  height: 45em;\n  width: 40em;\n  padding: 4em;\n  background: #C0C0C0; }\n\n.Profile > img {\n  display: block;\n  height: 18em;\n  width: 20em;\n  margin: 0 auto 0 auto; }\n\n.Profile > .info {\n  list-style-type: none;\n  margin: 0 auto 0 auto;\n  margin-top: 3em;\n  display: block;\n  width: 30em;\n  padding: 0;\n  text-align: center;\n  font-family: 'Anton', sans-serif; }\n\n.Profile > .info > li {\n  font-size: 2em;\n  list-style-type: none;\n  background-color: #E5E5E5; }\n\n.Profile > .info > .name {\n  padding: 0.2em;\n  font-size: 3em;\n  background-color: #405589;\n  color: #FFFFFF; }\n\n.Profile > .info > li:nth-child(2n) {\n  background-color: #B8B8B8; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(78);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(6)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/sass-loader/lib/loader.js!./Content.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(79);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(6)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./Profile.scss", function() {
+			var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/sass-loader/lib/loader.js!./Profile.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(81);
+
+function Profile()
+{
+
+	this.setUser = function(user)
+	{
+		this.nest[1].nest[0].text = user.firstName + " " +  user.lastName;
+	}
+
+	this.init = function(user)
+	{
+	
+		this.tag = "div";
+		this.attributes = [["class", "Profile"]];
+		this.nest = 
+		[
+			{tag: "img", attributes: [["src", "svg/userMale.svg"]]},
+			{
+				tag: "ul", 
+				attributes: [["class", "info"]], 
+				nest: 
+				[
+					{tag: "li", attributes: [["class", "name"]] , text: "Cigan"},
+					{tag: "li", text: "Born - 12.12.1994"},
+					{tag: "li", text: "Male"},
+					{tag: "li", text: "Played 12 normal games"},
+					{tag: "li", text: "Won 6"},
+					{tag: "li", text: "Played 5 tournament games"},
+					{tag: "li", text: "Won 3"}
+				]
+			}
+		];
+		this.setUser(user);
+	}
+
+	this.cleanUp = function()
+	{
+		this.tag = null;
+		this.attributes = null;
+		this.nest = null;
+	}
+}
+
+module.exports = new Profile();
 
 /***/ })
 /******/ ]);
