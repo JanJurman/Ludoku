@@ -8,21 +8,21 @@ function Router()
 	this.currentLoaction = "";
 
 
-	this.routeToHome = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeToHome = function(location, SETTINGS, CALLBACK)
 	{
-		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.routeTo(location, SETTINGS, CALLBACK);
 		this.homeLocation = "#" + location;
 	}
 
-	this.routeToLogin = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeToLogin = function(location, SETTINGS, CALLBACK)
 	{
-		this.routeTo(location, HTML, SETTINGS, CALLBACK);
+		this.routeTo(location, SETTINGS, CALLBACK);
 		this.loginLocation = "#" + location;
 	}
 
-	this.routeTo = function(location, HTML, SETTINGS, CALLBACK)
+	this.routeTo = function(location, SETTINGS, CALLBACK)
 	{
-		this.routesData["#" + location] = {html: HTML, callback: CALLBACK, settings: SETTINGS};
+		this.routesData["#" + location] = {callback: CALLBACK, settings: SETTINGS};
 	}
 
 	this.logic = function()
@@ -37,7 +37,7 @@ function Router()
 			{	
 				if (this.routesData[route].settings.require == "login")
 				{
-					Ajax.GET("user/isLoggedIn", function(data)
+					Ajax.GET("user/isLoggedIn", null, function(data)
 					{
 						if (data != "false")
 						{
@@ -57,7 +57,7 @@ function Router()
 				}
 				else if (this.routesData[route].settings.require == "logout")
 				{
-					Ajax.GET("user/isLoggedIn", function(data)
+					Ajax.GET("user/isLoggedIn", null,  function(data)
 					{
 						if (data == "false")
 						{
