@@ -1,3 +1,5 @@
+var globals = require('../../globals.js')
+
 function socketClient()
 {
 	this.io = require('socket.io-client');
@@ -5,7 +7,7 @@ function socketClient()
 	var instance = this;
 	this.connect = function(){
 		console.log("CONECTAM SE! SOCKETI")
-		instance.socket = instance.io.connect('localhost:3000');
+		instance.socket = instance.io.connect(globals.ipAndPort);
 
 		//primer socket eventa
 		//server pošle "hello", dobimo data
@@ -13,9 +15,9 @@ function socketClient()
 			console.log(data);
 		});
 
-		//tu pocamo vse socket evente, emit, send, on, ...
+		//tu pocamo vse socket evente, emit, on, ...
 		instance.socket.on('notification', function (data){
-			//server ti reče da morš si it po stuff preko routov
+			//server ti reče da morš si it po stuff preko route
 			console.log(data);
 
 		});

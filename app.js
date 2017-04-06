@@ -11,8 +11,11 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var leaderboard = require('./routes/leaderboard')
+var game = require('./routes/game')
 
 var socketApi = require('./routes/socketApi');
+
+var globals = require('./globals.js')
 
 var app = express();
 
@@ -38,11 +41,12 @@ socketApi.io.use(sharedsession(sess))
 app.use(express.static(path.join(__dirname, 'public')));
 
 //mongoose connect
-mongoose.connect('mongodb://127.0.0.1:27017/Ludoku');
+mongoose.connect(globals.mongoURI);
 
 app.use('/', index);
 app.use('/user', user);
 app.use('/leaderboard', leaderboard);
+app.use('/game', game);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
