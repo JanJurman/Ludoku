@@ -58,7 +58,7 @@ io.on('connection', function(socket){
 			reply = JSON.parse(reply)
 			reply.numOfSockets--
 			if(reply.numOfSockets == 0){
-				redisClient.del(key);
+				redisClient.del(sess.userId+".socketsOpen");
 			}else{
 				var arr = reply.socketIds.split(",");
 				//izloči tegale IDja in zloži nazaj
@@ -104,9 +104,12 @@ socketApi.sendNotificationToAll = function(routeToGo, reqType, dataTosend) {
 
 // arrayu userjev (session IDjev)
 socketApi.sendNotificationToClients = function(sessionIdArray, routeToGo, reqType, dataTosend) {
-	sessionIdArray.forEach(function(item, index){
+	if(sessionIdArray != null && sessionIdArray.length != 0)
+	{
+		sessionIdArray.forEach(function(item, index){
 			socketApi.sendNotificationToClient(item, routeToGo, reqType, dataTosend);
 		});
+	}
 }
 
 module.exports = socketApi;

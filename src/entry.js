@@ -114,4 +114,22 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 });
 
 
+//TODO PAADREEEE FOOORGIIIVE ME
+Router.routeToHome("/lobbyTest", { require: "login" }, function()
+{
+	socketClient.connect();
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+
+	window.MainPage.Content.lobbyTest.init();
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+});
+
+
+
+
 Router.init();

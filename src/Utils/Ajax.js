@@ -1,5 +1,14 @@
 function Ajax()
 {
+	this.getAsUriParameters = function(data) {
+		var url = '?';
+		for (var prop in data)
+		{
+			url += encodeURIComponent(prop) + '=' + encodeURIComponent(data[prop]) + '&';
+		}
+		return url.substring(0, url.length - 1)
+	}
+
 	this.GET = function(url, data, callback)
 	{
 		var xhttp = new XMLHttpRequest();
@@ -14,17 +23,18 @@ function Ajax()
 			};
 		}
 
-		xhttp.open('GET', url, true);
+		if (data !== null)
+		{	
+			//TODO IZBOLJŠAJ DA POŠLEŠ VEČ PARAMETROV 
 
-		if (data)
-		{
-			xhttp.send(JSON.stringify(data));
+			xhttp.open('GET', url + "/" + data, true);
 		}
 		else
 		{
 			xhttp.open('GET', url, true);
-			xhttp.send();
 		}
+			//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhttp.send();
 	}
 
 	this.POST = function(url, data, callback)

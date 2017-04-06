@@ -1,4 +1,5 @@
 var globals = require('../../globals.js')
+var Ajax = require('./Ajax.js')
 
 function socketClient()
 {
@@ -19,7 +20,12 @@ function socketClient()
 		instance.socket.on('notification', function (data){
 			//server ti reče da morš si it po stuff preko route
 			console.log(data);
-
+			if(data.type == "GET")
+			{
+				Ajax.GET(data.route, null, function(data){
+					console.log(JSON.parse(data));
+				});
+			}
 		});
 
 	}

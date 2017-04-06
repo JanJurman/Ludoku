@@ -1,0 +1,87 @@
+<div>
+  <ul>
+
+    <li><button onclick="createLobby()">Create lobby</button></li>
+    <li><button onclick="removeLobby()">Remove lobby</button></li>
+    <li><button onclick="setLobbyParams()">Set lobby params</button></li>
+    <li><button onclick="getLobbyParams()">Get lobby params</button></li>
+
+  </ul>
+</div>
+
+
+<script src="javascripts/Common.bundle.js"></script>
+<script>
+
+
+function createLobby()
+{
+  console.log("clicked!");
+  ajax.GET("/game/createLobby",null, function(res)
+    {
+      console.log(res);
+      if(res.status == 200)
+      {
+        console.log("Lobby successfuly created.");
+      }
+    });
+}
+
+function Ajax()
+{
+  this.GET = function(url, data, callback)
+  {
+    var xhttp = new XMLHttpRequest();
+    if (callback)
+    {
+      xhttp.onreadystatechange = function()
+      {
+        if (this.readyState == 4 && this.status == 200)
+        {
+          callback(this.responseText);
+        }
+      };
+    }
+
+    xhttp.open('GET', url, true);
+
+    if (data)
+    {
+      xhttp.send(JSON.stringify(data));
+    }
+    else
+    {
+      xhttp.open('GET', url, true);
+      xhttp.send();
+    }
+  }
+
+  this.POST = function(url, data, callback)
+  {
+    var xhttp = new XMLHttpRequest();
+    if (callback)
+    {
+      xhttp.onreadystatechange = function()
+      {
+        if (this.readyState == 4 && this.status == 200)
+        {
+          callback(this.responseText);
+        }
+      };
+    }
+
+    xhttp.open("POST", url, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+
+    if (data)
+    {
+      xhttp.send(JSON.stringify(data));
+    }
+    else
+    {
+      xhttp.send();
+    }
+  }
+}
+var ajax = new Ajax()
+</script>

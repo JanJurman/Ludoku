@@ -27,8 +27,11 @@ function addLobby(lobbyId){
 			redisClient.set("lobbies", JSON.stringify(lobbyIds))
 		}else{
 			var lobbyIds = JSON.parse(reply)
-			lobbyIds.push(lobbyId)
-			redisClient.set("lobbies", JSON.stringify(lobbyIds))
+			if(lobbyIds.indexOf(lobbyId) < 0)
+			{
+				lobbyIds.push(lobbyId)
+				redisClient.set("lobbies", JSON.stringify(lobbyIds))
+			}
 		}
 	});
 }
@@ -51,7 +54,6 @@ router.get('/createLobby', function (req, res)
 	//dodaj lobby v redis bazo
 	//vrni neke podatke
 	//obvesti vse socket cliente naj si fetchajo novi data
-
 	var userId = req.session.userId;
 	var key = "lobby." + userId; //lobby.USERID je torej key za lobby v redis bazi
 	var value = {gameType: "", difficulty: "", host: userId, members: [] };
@@ -61,8 +63,9 @@ router.get('/createLobby', function (req, res)
 
 	//add to lobbies tracker
 	addLobby(key)
+	console.log("Lobby created. " +key +": "+ JSON.stringify(value));
 
-	socketApi.sendNotificationToAll('/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en poleg
+	socketApi.sendNotificationToAll('/game/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en poleg
 
 	//vrnemo OK
 	res.sendStatus(200);
@@ -80,53 +83,56 @@ router.get('/removeLobby', function (req, res)
 	//remove from lobbies tracker
 	removeLobby(key)
 
-	socketApi.sendNotificationToAll('/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en zginu
+	socketApi.sendNotificationToAll('/game/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en zginu
 
 	//vrnemo OK
 	res.sendStatus(200);
 
 });
 
-router.get('/setLobbyParams', function(req, res)
+router.post('/setLobbyParams', function(req, res)
 {
-	if(req.body['gameType'] && req.body['difficulty']){
+	if(req.body.gameType && req.body.difficulty){
 		var userId = req.session.userId;
 		var key = "lobby." + userId;
 		redisClient.get(key, function(err,reply) {
 			if(reply !== null){
-				var lobbyData = JSON.stringify(reply)
-				lobbyData.gameType = req.body['gameType']
-				lobbyData.difficulty = req.body['difficulty']
+				var lobbyData = JSON.parse(reply)
+				lobbyData.gameType = req.body.gameType
+				lobbyData.difficulty = req.body.difficulty
 
 				redisClient.set(key, JSON.stringify(lobbyData));
 
 				//povej vsem v lobbyju da je lobby data updated; pošlješ jim še lobby ID za ziher
-				socketApi.sendNotificationToClients(lobbyData.members, "/getLobbyParams", "GET", {lobbyId: key})
-
-				req.sendStatus(200) //OK
+				if(lobbyData.members != null && lobbyData.members.length != 0)
+				{
+					socketApi.sendNotificationToClients(lobbyData.members, "/game/getLobbyParams", "GET", {lobbyId: key})
+				}
+				res.sendStatus(200) //OK
 			}else{
-				req.sendStatus(404) // not found
+				res.sendStatus(404) // not found
 			}
 		});
 	}else{
-		req.sendStatus(422) // unprocesable entity
+		res.sendStatus(422) // unprocesable entity
 	}
 
 });
 
-router.get('/getLobbyParams', function(req, res)
+router.get('/getLobbyParams/:lobbyId', function(req, res)
 {
-	if(req.body['lobbyId']){
-		var key = req.body['lobbyId']
+	var lobbyId = req.params.lobbyId;
+	if(lobbyId){
+		var key = lobbyId
 		redisClient.get(key, function(err,reply) {
-			if(reply !== null){
+			if(reply != undefined){
 				res.send(reply) // celi json object
 			}else{
-				req.sendStatus(404) //not found
+				res.sendStatus(404) //not found
 			}
 		});
 	}else{
-		req.sendStatus(422) // unprocesable entity
+		res.sendStatus(422) // unprocesable entity
 	}
 
 });
@@ -135,16 +141,39 @@ router.get('/getLobbies', function(req, res)
 {
 	//pošlji mu vse lobbije
 	redisClient.get('lobbies', function(err,reply) {
-			var lobbyIds = JSON.parse(reply)
-			//foreach lobbyID get lobby data, add to array
-			var lobbiesData = []
-			
-			redisClient.mget(lobbyIds, function(err,reply) {
-				res.send(reply) //TODO: ALI TO DELA??? stringi v arrayu so JSON.stringyfied objekti, ki niso bli parsani
-			});
+		var lobbyIds = JSON.parse(reply)
+		//foreach lobbyID get lobby data, add to array
+		var lobbiesData = []
+		
+		redisClient.mget(lobbyIds, function(err,reply) {
+		if(reply != undefined){
+			reply.forEach(function(item, index){
+				reply[index] = JSON.parse(item);
+			})
+			res.send(reply) //TODO: ALI TO DELA??? stringi v arrayu so JSON.stringyfied objekti, ki niso bli parsani
+		}
+		else
+		{
+			res.send([]);
+		}
+		});
 
 	});
 
 });
+
+/*
+Dodaj:
+
+- joinLobby
+- leaveLobby
+- maybe razdelitev na /lobby & /game
+
+//  (\/)
+	(° )
+	/  \
+   / , |-<
+  / /\/
+*///
 
 module.exports = router;
