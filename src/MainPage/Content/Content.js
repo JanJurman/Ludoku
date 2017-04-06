@@ -3,6 +3,7 @@ require("./Content.scss");
 function Content()
 {
 	this.Profile = require('./Profile/Profile.js');
+	this.LeaderBoard = require('./LeaderBoard/LeaderBoard.js');
 
 	this.init = function()
 	{
@@ -10,7 +11,9 @@ function Content()
 		this.attributes = [["class", "Content"]];
 		this.nest = 
 		[
-			this.Profile
+			this.Profile,
+			this.LeaderBoard
+
 		];
 	}
 }

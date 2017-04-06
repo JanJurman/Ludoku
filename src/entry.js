@@ -1,6 +1,5 @@
 window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
-window.LeaderBoard = require('./MainPage/LeaderBoard/LeaderBoard.js');
 require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
@@ -69,6 +68,7 @@ Router.routeToHome("/", { require: "login" }, function()
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.cleanUp();
 
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
@@ -98,10 +98,19 @@ Router.routeTo("/profile", { require: "login" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
 
-Router.routeTo("/LeaderBoard", "", { require: "logout" }, function()
+Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
-	console.log("Dela route.");
-	window.LeaderBoard.init();
+	// console.log("Dela route.");
+	// window.LeaderBoard.init();
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.init();
+
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+
 });
 
 
