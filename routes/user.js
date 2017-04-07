@@ -51,6 +51,24 @@ router.get('/forcelog', function (req, res)
 	});
 });
 
+router.get('/forcelog/:userId', function (req, res)
+{
+	var User = mongoose.model('user');
+	User.findOne({ _id: userId}, function(err,user)
+	{
+		if(user == null)
+		{
+			res.sendStatus(404); // auth issue				
+		}
+		else
+		{
+			req.session.userId = user.id;
+			res.sendStatus(200); //OK
+		}
+	});
+});
+
+
 // POST login local
 router.post('/login', function(req, res) // v post moreš dat noter { eMail : ... , pasword: ...}
 {
