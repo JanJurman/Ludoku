@@ -136,3 +136,8 @@ th
 	background-color: $color;
 	color: white;
 }
+
+td > a
+{
+	text-decoration: underline;
+}

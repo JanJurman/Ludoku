@@ -2,8 +2,33 @@ require("./LeaderBoard.scss");
 
 function LeaderBoard()
 {
-	this.init = function()
+
+	this.setLeaderBoard = function(user)
 	{
+		console.log("vhod v setLeaderBoard funkcijo");
+		var temp = JSON.stringify(user);
+		console.log(temp);
+		var numberOfUsers = 5;				//user.length;
+		for(var i = 0; i < numberOfUsers; ++i)
+		{
+			var uporabnik = {tag:"tr",nest:
+								[
+									{tag:"td", nest:[{tag:"a", attributes: [["href", ""]],text:user[i].firstName}]},
+									{tag:"td",text:user[i].games},
+									{tag:"td",text:user[i].gamesWon},
+									{tag:"td",text:user[i].tournamentGames},
+									{tag:"td",text:user[i].tournamentGamesWon}
+								]
+							};
+			this.nest[1].nest.push(uporabnik);
+		}
+	}
+
+	this.init = function(user)
+	{
+		//console.log("vhod v init funkcijo");
+		//var test = JSON.stringify(user);
+		//console.log(test);
 		this.tag = "div";
 		this.attributes = [["class", "LeaderBoard"]];
 		this.nest = 
@@ -22,16 +47,15 @@ function LeaderBoard()
 						tag: "tr",
 						nest:
 						[
-							{tag: "th", text: "Player"},
-							{tag: "th", text: "Games"},
-							{tag: "th", text: "GamesWon" },
-							{tag: "th", text: "TournamentGames" },
-							{tag: "th", text: "TournamentGamesWon" },
-							{tag: "th", text: "isLoggedIn" }
+							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "Player" }]},
+							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "Games" }]},
+							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "GamesWon" }]},
+							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "TournamentGames" }]},
+							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "TournamentsWon" }]}
 						]
 					},
 
-					{
+					/*{
 						tag: "tr",
 						nest:
 						[
@@ -39,8 +63,7 @@ function LeaderBoard()
 							{tag: "td", text: "15"},
 							{tag: "td", text: "14" },
 							{tag: "td", text: "3" },
-							{tag: "td", text: "2" },
-							{tag: "td", text: "Yes" }
+							{tag: "td", text: "2" }
 						]
 					},
 
@@ -52,8 +75,7 @@ function LeaderBoard()
 							{tag: "td", text: "15"},
 							{tag: "td", text: "14" },
 							{tag: "td", text: "3" },
-							{tag: "td", text: "2" },
-							{tag: "td", text: "No" }
+							{tag: "td", text: "2" }
 						]
 					},
 
@@ -65,8 +87,7 @@ function LeaderBoard()
 							{tag: "td", text: "15"},
 							{tag: "td", text: "14" },
 							{tag: "td", text: "3" },
-							{tag: "td", text: "2" },
-							{tag: "td", text: "Yes" }
+							{tag: "td", text: "2" }
 						]
 					},
 
@@ -78,14 +99,14 @@ function LeaderBoard()
 							{tag: "td", text: "15"},
 							{tag: "td", text: "14" },
 							{tag: "td", text: "3" },
-							{tag: "td", text: "2" },
-							{tag: "td", text: "No" }
+							{tag: "td", text: "2" }
 						]
-					}
+					}*/
 
 				]
 			}
 		];
+		this.setLeaderBoard(user);
 	}
 
 	this.cleanUp = function()
