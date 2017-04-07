@@ -13,7 +13,7 @@ var user = require('./routes/user');
 var leaderboard = require('./routes/leaderboard')
 var game = require('./routes/game')
 var gameHistory = require('./routes/gameHistory')
-
+var lobby = require('./routes/lobby')
 
 var socketApi = require('./routes/socketApi');
 
@@ -48,8 +48,13 @@ mongoose.connect(globals.mongoURI);
 app.use('/', index);
 app.use('/user', user);
 app.use('/leaderboard', leaderboard);
+<<<<<<< HEAD
 app.use('/game', game);
 app.use('/gameHistory', gameHistory);
+=======
+//app.use('/game', game);
+app.use('/lobby', lobby);
+>>>>>>> 98a1be8921141be271d68efa88aa33f0ab69ae30
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

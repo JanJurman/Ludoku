@@ -9,6 +9,8 @@ function Ajax()
 		return url.substring(0, url.length - 1)
 	}
 
+	//če pošiljamo poleg kake IDje/other data jih je treba dat v url, npr: /user/5e56h37s6234zq  => Ajax.GET("/user/" + userId)
+	//data param je ignored (da nebote rabli istak GETof po kodi)
 	this.GET = function(url, data, callback)
 	{
 		var xhttp = new XMLHttpRequest();
@@ -23,18 +25,9 @@ function Ajax()
 			};
 		}
 
-		if (data !== null)
-		{	
-			//TODO IZBOLJŠAJ DA POŠLEŠ VEČ PARAMETROV 
-
-			xhttp.open('GET', url + "/" + data, true);
-		}
-		else
-		{
-			xhttp.open('GET', url, true);
-		}
-			//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send();
+		xhttp.open('GET', url, true);
+		//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xhttp.send();
 	}
 
 	this.POST = function(url, data, callback)
