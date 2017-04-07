@@ -12,19 +12,4 @@ var gameSchema = new Schema
 );
 
 
-gameSchema.methods.getGameWithUsers = function getGameWithUsers(item)
-{
-	var userIds = [];
-	for(var i = 0; i < item.players.length; ++i)
-	{
-		userIds.push(item.players[i]);
-	}
-	mongoose.model('user').find({_id: {$in: userIds}}).exec(function(err, users)	
-	{
-		var gwu = item.toObject();
-		gwu.players = users;
-		return gwu;
-	})
-};
-
 mongoose.model('game', gameSchema);

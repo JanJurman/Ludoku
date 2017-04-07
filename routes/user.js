@@ -27,13 +27,13 @@ function isEmpty(obj) {
 }
 
 /////////////////////////////////
-///////////////////////////////
-//////////////////////////////
-// AUTH TESTING ZBRISI ME!
-///////////////////////////////////
-///////////////////////////////
 /////////////////////////////////
-/////////////////////////////
+/////////////////////////////////
+///AUTH TESTING ZBRISI ME!///////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
 router.get('/forcelog', function (req, res)
 {
 	var User = mongoose.model('user');
@@ -195,7 +195,7 @@ router.get('/:userId', checkAuth, function(req, res, next) // npr http://127.0.0
 	var userId = req.params.userId;
 	mongoose.model('user').findOne({ _id : userId },function(err, user) //DODAJ injection check...
 	{
-		if(user != null )
+		if(user != null)
 		{
 			if(user['facebook'].id == undefined)
 			{
@@ -248,5 +248,52 @@ router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http
 		}
 	});
 });
+
+//get games at X index of user
+router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, res, next)
+{
+	//index pa skip morta bit na intervalu [0,10]; TODO
+	var userId = req.params.userId;
+	var index = parseInt(req.params.index);
+	var fetchCount = parseInt(req.params.fetchCount);
+
+	if(index < 1)
+	{
+		index = 1;
+	}
+	else if( index > 30)
+	{
+		index = 30;
+	}
+
+	if(fetchCount < 0)
+	{
+		fetchCount = 1;
+	}
+	else if(fetchCount > 30)
+	{
+		fetchCount = 30;
+	}
+
+	mongoose.model('game').find({ players: userId }).sort('-finish').skip(index).limit(fetchCount).exec(function(err, games) //DODAJ injection check...
+	{
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			if(games.length > 0)
+			{			
+				res.send(games);
+			}
+			else
+			{
+				res.send(404); //no games found with this userId
+			}
+		}
+	});
+
+})
 
 module.exports = router;
