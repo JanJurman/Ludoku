@@ -17,7 +17,7 @@
 function createLobby()
 {
   console.log("clicked!");
-  ajax.GET("/game/createLobby",null, function(res)
+  ajax.GET("/lobby/createLobby",null, function(res)
     {
       console.log(res);
       if(res.status == 200)

@@ -2,7 +2,7 @@ window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
 require("./master.scss");
 Router = require('./Router.js');
-socketClient = require('./Utils/socketClient.js');
+var socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
 
 

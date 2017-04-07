@@ -19,11 +19,15 @@ function socketClient()
 		//tu pocamo vse socket evente, emit, on, ...
 		instance.socket.on('notification', function (data){
 			//server ti reče da morš si it po stuff preko route
+			//glede na route bomo še tu mogli dodatne odločitve sprejemat, glede kazanja stuffa na websajtu
 			console.log(data);
 			if(data.type == "GET")
 			{
-				Ajax.GET(data.route, null, function(data){
-					console.log(JSON.parse(data));
+				Ajax.GET(data.route, null, function(resp){
+					console.log(resp)
+					if(resp != "OK"){
+						console.log(JSON.parse(resp));
+					}
 				});
 			}
 		});
