@@ -112,7 +112,7 @@ function Profile()
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 
 					[
-						{tag: "ul", nest: this.genGameList(0,3)}
+						{tag: "ul", nest: this.genGameList(0,4)}
 					]},
 					{tag: "div", attributes: [["class", "arrows"]], nest:
 					[

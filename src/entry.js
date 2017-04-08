@@ -22,12 +22,6 @@ Ajax.GET("user/isLoggedIn/", null, function(data)
 	}
 });
 
-// ------ Dobi usere: Games ------		treba fixat to
-
-Ajax.GET("leaderboard/games", null, function(data)
-{
-	tmp = JSON.parse(data);
-});
 
 // ------------ Nea se ukvarjaj s tem -----------------------
 
@@ -87,6 +81,14 @@ Router.routeToLogin("/login", { require: "logout" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
+Router.routeTo404( function()
+{
+	// document.querySelector("#app").innerHTML = "Damjan je cigan";
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+});
+
 // ----------------------------------------------------------
 
 Router.routeTo("/signUp", { require: "logout" }, function()
@@ -99,11 +101,13 @@ Router.routeTo("/profile", { require: "login" }, function()
 {
 	Ajax.GET("user/gamesAtPos/" + window.loggedUser._id + "/0/5", null, function(data)
 	{
+		window.MainPage.Content.LeaderBoard.cleanUp();
+		window.MainPage.Content.Lobbies.cleanUp();
+
 		window.MainPage.init();
 		window.MainPage.NavBar.init();
 		window.MainPage.NavBar.select("profile");
 		window.MainPage.Content.init();
-		window.MainPage.Content.LeaderBoard.cleanUp();
 		window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
 		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 	});
@@ -111,19 +115,28 @@ Router.routeTo("/profile", { require: "login" }, function()
 
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
-	window.MainPage.init();
-	window.MainPage.NavBar.init();
-	window.MainPage.NavBar.select("leaderboard");
-	window.MainPage.Content.init();
-	window.MainPage.Content.Profile.cleanUp();
-	window.MainPage.Content.LeaderBoard.init(tmp);
 
-	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+	// ------ Dobi usere: Games ------		treba fixat to
+	window.MainPage.Content.Profile.cleanUp();
+
+	Ajax.GET("leaderboard/games", null, function(data)
+	{
+		tmp = JSON.parse(data);
+		window.MainPage.init();
+		window.MainPage.NavBar.init();
+		window.MainPage.NavBar.select("leaderboard");
+		window.MainPage.Content.init();
+		window.MainPage.Content.LeaderBoard.init(tmp);
+
+		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+	});
+	
+
 });
 
 
 //TODO PAADREEEE FOOORGIIIVE ME
-Router.routeToHome("/lobbies", { require: "login" }, function()
+Router.routeTo("/lobbies", { require: "login" }, function()
 {
 	socketClient.connect();
 	window.MainPage.init();
