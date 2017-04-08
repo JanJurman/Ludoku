@@ -42,12 +42,26 @@
 #settingsSvg
 {
 	height: 40px;
+	vertical-align: middle;
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
-#renderSettingsDiv
-{
+
+#settingsDiv {
 	display: none;
 }
+
+#renderSettingsDiv {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.75s linear;
+}
+#settingsDiv:hover > #renderSettingsDiv {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 $leave-button-bg-color: #892222;
 $button-border-color: #166E84;
@@ -82,6 +96,41 @@ $button-border-color: #166E84;
     box-shadow: none;
   }
 }
+
+$start-button-bg-color: #228922;
+$start-border-color: #166E84;
+
+#startGameButton {
+  display: inline-block;
+  padding: 15px;
+  margin:1em;
+  height: 50px;
+  min-width: 100px;
+  background: $start-button-bg-color;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 20px;
+  border-radius: 3px;
+  box-shadow: 0 5px 0px darken($start-button-bg-color,0%);
+  border-bottom: 2px solid darken($start-button-bg-color,3%);
+  
+  &:hover{
+    background: darken($start-button-bg-color,5%);
+    box-shadow: 0 4px 1px darken($start-button-bg-color,5%);
+    border-bottom: 2px solid darken($start-button-bg-color,8%);
+    transition: all 0.1s ease-in;
+  }
+  
+  &:active{
+    transform:translateY(4px);
+    border-bottom-width: 2px;
+    box-shadow: none;
+  }
+}
+
 
 
 $button-bg-color: $color;

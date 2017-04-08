@@ -260,10 +260,6 @@ router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, re
 	{
 		index = 0;
 	}
-	else if( index > 30)
-	{
-		index = 30;
-	}
 
 	if(fetchCount < 0)
 	{

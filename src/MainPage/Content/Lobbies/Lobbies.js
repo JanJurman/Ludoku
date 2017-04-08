@@ -6,10 +6,12 @@ require("./Lobbies.scss");
 /*
 CURRENT ISSUE LIST
 
-ko prvic stisneš create lobby, imas v listu 2 lobbija
-
 ko se nekdo joina lobbiju, ludi ko so not ne vidijo
+	edit: problem je v sockets: pošlješ request na server > server prek socketov pošlje vsem userom v arraju komando ki jo naj izvedejo
+		> userov pa ni (socketId al nekaj) ker je baza prazna če poglejaš v reddis pa rečeš "KEYS *", tak da se pol nena nič izvede in 
+		ne dobis podakov za joined lobby
 
+dodaj gameStart
 
 */
 function Lobbies()
@@ -162,22 +164,21 @@ function Lobbies()
 	    });
 	}
 
-	this.renderLobbyOptions = function(lobby, oRenderDiv)
-	{
-		if(window.loggedUser._id === lobby.host)
-		{
-			//do the thing here
-			console.log("Options clicked");
-			if(document.querySelector("#renderSettingsDiv").style.display == 'none')
-			{
-				document.querySelector("#renderSettingsDiv").style.display = 'block'; //TODO ANIMATE?
-			}
-			else
-			{
-				document.querySelector("#renderSettingsDiv").style.display = 'none'; //TODO ANIMATE?				
-			}
-		}
-	}
+	// this.renderLobbyOptions = function(lobby, oRenderDiv)
+	// {
+	// 	if(window.loggedUser._id === lobby.host)
+	// 	{
+	// 		console.log("Options clicked");
+	// 		if(document.querySelector("#renderSettingsDiv").style.display == 'none')
+	// 		{
+	// 			document.querySelector("#renderSettingsDiv").style.display = 'block'; //TODO ANIMATE?
+	// 		}
+	// 		else
+	// 		{
+	// 			document.querySelector("#renderSettingsDiv").style.display = 'none'; //TODO ANIMATE?				
+	// 		}
+	// 	}
+	// }
 
 	//ko klikne host v options Set poslemo na server
 	this.setLobbyDataClick = function()
@@ -197,13 +198,14 @@ function Lobbies()
 
 	this.showLobbyDiv = function(lobby, users){
 		lobbyDiv = document.querySelector("#currentLobby");
-		lobbyDiv.style.display = '';
+		lobbyDiv.style.display = 'block';
 
 		//če smo host lahko spreminjamo podatke
 		if(window.loggedUser._id === lobby.host)
 		{
 			var settingsImg = document.querySelector("#settingsSvg");
-			settingsImg.onclick = function () { instance.renderLobbyOptions(lobby) };
+			document.querySelector("#settingsDiv").style.display = 'block';
+			// settingsImg.onclick = function () { instance.renderLobbyOptions(lobby) };
 		}
 
 		document.querySelector("#hostNameDiv").innerHTML = users[0].firstName+ " " + users[0].lastName + "'s " + "lobby";
@@ -303,7 +305,8 @@ function Lobbies()
 					{tag: "div", attributes: [["id", "gameTypeDiv"], ["class", "lobbyDataDiv"]], text: "Game type: "},
 					{tag: "div", attributes: [["id", "difficultyDiv"], ["class", "lobbyDataDiv"]], text: "Difficulty: "},
 					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: "Members: "},
-					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"}
+					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
+					{tag: "button", attributes: [["id", "startGameButton"]], text : "Start Game"}
 					//<button onclick='window.MainPage.Content.Lobbies.leaveLobby(\"lobby." + lobby.host + "\")' >LEAVE</button>";
 				]
 			 }
