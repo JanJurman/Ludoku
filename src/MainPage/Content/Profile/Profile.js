@@ -4,6 +4,8 @@ require("../../../Loader.scss");
 function Profile()
 {
 
+	this.index = 0;
+
 	this.setUser = function(user)
 	{
 		this.nest[1].nest[0].text = user.firstName + " " +  user.lastName;
@@ -13,21 +15,29 @@ function Profile()
 	{
 		var data = [];
 
-		// console.log(window.loggedUser._id);
-
-		for (var i = atIndex; i < nm; i++)
+		for (var i = atIndex; i < (atIndex + nm) ; i++)
 		{
-			var date = new Date(this.games[i].start);
 
-			if (this.games[i].players[0] = window.loggedUser._id) 
+			if (this.games[i])
 			{
-				data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]})
+
+				var date = new Date(this.games[i].start);
+
+
+				// console.log(this.games[i].players[0]);
+				if (this.games[i].players[0] == window.loggedUser._id) 
+				{
+					data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]})
+				}
+				else
+				{
+					data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]})
+				} 
 			}
-			else
+			else 
 			{
-				data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]})
-
-			} 
+				return data;
+			}
 		}
 
 		return data;
@@ -37,7 +47,9 @@ function Profile()
 	{
 		this.games = games;
 
-		
+		// console.log(games.length)
+
+		// this.genGameList(0,11);
 		
 
 
@@ -112,11 +124,13 @@ function Profile()
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 
 					[
-						{tag: "ul", nest: this.genGameList(0,4)}
+						{tag: "ul", nest: this.genGameList(0,5)},
+						// {tag: "div", attributes: [["class", "loader2"]]}
+
 					]},
 					{tag: "div", attributes: [["class", "arrows"]], nest:
 					[
-						{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrowGray.svg"]]}]},
+						{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrowGray.svg"], ["onclick", "window.MainPage.Content.Profile.back(this)"]]}]},
 						{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrow.svg"], ["onmouseover", "window.MainPage.Content.Profile.svg(this)"],["onclick", "window.MainPage.Content.Profile.next()"], ["onmouseleave", "window.MainPage.Content.Profile.svg1(this)"]]}]}
 					]}
 				]
@@ -135,30 +149,80 @@ function Profile()
 		toti.setAttribute("src", "svg/arrow.svg");
 	}
 
+
+	this.toHtml = function(data)
+	{
+		var html = "";
+		for (var i = 0; i < data.length; ++i)
+		{
+			if (data[i].tag)
+			{
+
+				html += "<" + data[i].tag;
+				if (data[i].attributes) 
+				{
+					for (var j = 0; j < data[i].attributes.length; j++)
+					{
+						html +=  " " + data[i].attributes[j][0] + "='" + data[i].attributes[j][1] + "'";
+					}
+				}
+				html += ">";
+
+				if (data[i].text)
+				{
+					html += data[i].text;
+				}
+
+				if (data[i].nest != undefined)
+				{
+					html += this.toHtml(data[i].nest);
+				}
+
+				html += "</" + data[i].tag + ">";
+			}
+		}
+		return html;
+	}
+
 	this.next = function()
 	{
+  		this.index += 5;
+  		document.querySelector(".secondaryContent .info > ul").innerHTML = this.toHtml(this.genGameList(this.index, 5));
+  		document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("src", "svg/arrow.svg");
+  		document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("onmouseover", "window.MainPage.Content.Profile.svg(this)");
+  		document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("onmouseleave", "window.MainPage.Content.Profile.svg1(this)");
+
+  		console.log(this.index >= this.games.size);
+
+  		if (!this.games[this.index + 5])
+  		{
+  			document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("src", "svg/arrowGray.svg");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onmouseover", "");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onmouseleave", "");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onclick", "");
+  		}
+	}
+
+	this.back = function()
+	{
+		if (this.index != 0)
+		{
+			// console.log("back");
+			this.index -= 5;
+			document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("src", "svg/arrow.svg");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onmouseover", "window.MainPage.Content.Profile.svg(this)");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onmouseleave", "window.MainPage.Content.Profile.svg1(this)");
+		  		document.querySelector(".arrows div:nth-child(2n) > img").setAttribute("onclick", "window.MainPage.Content.Profile.next()");
+
+			document.querySelector(".secondaryContent .info > ul").innerHTML = this.toHtml(this.genGameList(this.index, 5));
+			if (this.index == 0)
+			{
+				document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("src", "svg/arrowGray.svg");
+		  		document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("onmouseover", "");
+		  		document.querySelector(".arrows div:nth-child(2n+1) > img").setAttribute("onmouseleave", "");
+			}
+		}
 		// console.log("nekaj");
-
-
-		var op = 0.1;  // initial opacity
-    	// element.style.display = 'block';
-    	var element = document.querySelector(".secondaryContent .info > ul > li");
-
-    	for (var i = 0; i < element.length; i++)
-    	{
-   		 var timer = setInterval(function ()
-   		 {
-	        if (op >= 1)
-	        {
-	            clearInterval(timer);
-	        }
-
-	        element[i].style.opacity = op;
-	        element[i].style.filter = 'alpha(opacity=' + op * 100 + ")";
-	        op += op * 0.1;
-    	}); 
-    	}
-
 	}
 
 	this.cleanUp = function()

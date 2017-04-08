@@ -99,7 +99,7 @@ Router.routeTo("/signUp", { require: "logout" }, function()
 
 Router.routeTo("/profile", { require: "login" }, function()
 {
-	Ajax.GET("user/gamesAtPos/" + window.loggedUser._id + "/0/5", null, function(data)
+	Ajax.GET("user/gamesAtPos/" + window.loggedUser._id + "/0/30", null, function(data)
 	{
 		window.MainPage.Content.LeaderBoard.cleanUp();
 		window.MainPage.Content.Lobbies.cleanUp();
