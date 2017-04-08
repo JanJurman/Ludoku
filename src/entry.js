@@ -72,6 +72,7 @@ Router.routeToHome("/", { require: "login" }, function()
 	// socketClient.connect();
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
+	window.MainPage.NavBar.select("home");
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.LeaderBoard.cleanUp();
@@ -94,27 +95,25 @@ Router.routeTo("/signUp", { require: "logout" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
-Router.routeTo("/profile", { require: "logout" }, function()
+Router.routeTo("/profile", { require: "login" }, function()
 {
-	window.MainPage.init();
-	window.MainPage.NavBar.init();
-	window.MainPage.Content.init();
-	window.MainPage.Content.LeaderBoard.cleanUp();
-
-	if(window.loggedUser != null)
+	Ajax.GET("user/gamesAtPos/" + window.loggedUser._id + "/0/5", null, function(data)
 	{
-		
-	}
-	
-	window.MainPage.Content.Profile.init(window.loggedUser)
-
-	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+		window.MainPage.init();
+		window.MainPage.NavBar.init();
+		window.MainPage.NavBar.select("profile");
+		window.MainPage.Content.init();
+		window.MainPage.Content.LeaderBoard.cleanUp();
+		window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
+		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+	});
 });
 
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
+	window.MainPage.NavBar.select("leaderboard");
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.LeaderBoard.init(tmp);
@@ -137,8 +136,6 @@ Router.routeToHome("/lobbies", { require: "login" }, function()
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
-
-
 
 
 Router.init();

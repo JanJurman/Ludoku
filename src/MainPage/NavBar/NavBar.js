@@ -12,7 +12,7 @@ function NavBar()
 				tag: "ul",
 				nest: 
 				[
-					{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/"]], text: "Home" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/LeaderBoard"]], text: "Leaderboard" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/lobbies"]], text: "Play" }]},
@@ -21,6 +21,22 @@ function NavBar()
 				]
 			}
 		];
+	}
+
+	this.select = function(menuItem)
+	{
+		if (menuItem == "home")
+		{
+			this.nest[0].nest[0].attributes[0][1] = "floatLeft selected";
+		}
+		else if (menuItem == "profile")
+		{
+			this.nest[0].nest[5].attributes[0][1] = "floatRight selected";
+		}
+		else if(menuItem == "leaderboard")
+		{
+			this.nest[0].nest[2].attributes[0][1] = "floatLeft selected";	
+		}
 	}
 
 	this.logMeOut =  function()
