@@ -8,6 +8,7 @@
     "webpackWatch": "./node_modules/.bin/webpack --watch"
   },
   "dependencies": {
+    "async": "^2.3.0",
     "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
     "css-loader": "^0.27.3",

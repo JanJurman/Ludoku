@@ -13,7 +13,8 @@ function LeaderBoard()
 		{
 			var uporabnik = {tag:"tr",nest:
 								[
-									{tag:"td", nest:[{tag:"a", attributes: [["href", ""]],text:user[i].firstName}]},
+									{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName}]},
+									//{tag:"td", attributes:["onclick", "window.MainPage.Content.LeaderBoard.viewProfile(user[i].id)"],text:user[i].firstName},
 									{tag:"td",text:user[i].games},
 									{tag:"td",text:user[i].gamesWon},
 									{tag:"td",text:user[i].tournamentGames},
@@ -55,54 +56,6 @@ function LeaderBoard()
 						]
 					},
 
-					/*{
-						tag: "tr",
-						nest:
-						[
-							{tag: "td", text: "Damjan"},
-							{tag: "td", text: "15"},
-							{tag: "td", text: "14" },
-							{tag: "td", text: "3" },
-							{tag: "td", text: "2" }
-						]
-					},
-
-					{
-						tag: "tr",
-						nest:
-						[
-							{tag: "td", text: "Henčič"},
-							{tag: "td", text: "15"},
-							{tag: "td", text: "14" },
-							{tag: "td", text: "3" },
-							{tag: "td", text: "2" }
-						]
-					},
-
-					{
-						tag: "tr",
-						nest:
-						[
-							{tag: "td", text: "Jurman"},
-							{tag: "td", text: "15"},
-							{tag: "td", text: "14" },
-							{tag: "td", text: "3" },
-							{tag: "td", text: "2" }
-						]
-					},
-
-					{
-						tag: "tr",
-						nest:
-						[
-							{tag: "td", text: "Vračko"},
-							{tag: "td", text: "15"},
-							{tag: "td", text: "14" },
-							{tag: "td", text: "3" },
-							{tag: "td", text: "2" }
-						]
-					}*/
-
 				]
 			}
 		];
@@ -114,6 +67,11 @@ function LeaderBoard()
 		this.tag = null;
 		this.attributes = null;
 		this.nest = null;
+	}
+
+	this.viewProfile = function(ajdi)
+	{
+		 console.log(ajdi+"hahahahahahahahahahahahahahah");
 	}
 }
 

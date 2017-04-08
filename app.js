@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 var leaderboard = require('./routes/leaderboard')
 //var game = require('./routes/game')
+var gameHistory = require('./routes/gameHistory')
 var lobby = require('./routes/lobby')
 
 var socketApi = require('./routes/socketApi');
@@ -48,6 +49,7 @@ app.use('/', index);
 app.use('/user', user);
 app.use('/leaderboard', leaderboard);
 //app.use('/game', game);
+app.use('/gameHistory', gameHistory);
 app.use('/lobby', lobby);
 
 // catch 404 and forward to error handler

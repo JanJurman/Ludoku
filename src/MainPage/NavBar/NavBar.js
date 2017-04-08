@@ -14,10 +14,10 @@ function NavBar()
 				[
 					{tag: "li", attributes: [["class", "floatLeft selected"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Home" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
-					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Leaderboard" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/LeaderBoard"]], text: "Leaderboard" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Play" }]},
 					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", "#/login"], ["onclick", "window.MainPage.NavBar.logMeOut()"]], text: "Logout" }]},
-					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Profile" }]}
+					{tag: "li", attributes: [["class", "floatRight"]], nest: [{ tag: "a", attributes: [["href", "#/profile"]], text: "Profile" }]}
 				]
 			}
 		];

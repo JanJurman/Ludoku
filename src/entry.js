@@ -2,7 +2,7 @@ window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
 require("./master.scss");
 Router = require('./Router.js');
-var socketClient = require('./Utils/socketClient.js');
+socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
 var tmp;
 
@@ -23,7 +23,7 @@ Ajax.GET("user/isLoggedIn/", null, function(data)
 	}
 });
 
-// ------ Dobi usere: Games ------
+// ------ Dobi usere: Games ------		treba fixat to
 
 Ajax.GET("leaderboard/games", null, function(data)
 {
@@ -100,6 +100,13 @@ Router.routeTo("/profile", { require: "login" }, function()
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+	
+	if(window.loggedUser != null)
+	{
+		
+	}
+	
 	window.MainPage.Content.Profile.init(window.loggedUser)
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
@@ -107,7 +114,6 @@ Router.routeTo("/profile", { require: "login" }, function()
 
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
-
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
@@ -115,7 +121,6 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 	window.MainPage.Content.LeaderBoard.init(tmp);
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
-
 });
 
 
