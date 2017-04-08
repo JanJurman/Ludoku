@@ -8,6 +8,8 @@ body, html
 	font-size: 15px;
 	height: 100%;
 	width: 100%;
+
+	// z-index: 30;
 }
 
 #app
@@ -20,4 +22,11 @@ a //Vsem linkom na page-u removam defult style. Ker who d-fak hoče to lol.
 {
 	text-decoration: none;
 	color: inherit;
+}
+
+ul 
+{
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
 }

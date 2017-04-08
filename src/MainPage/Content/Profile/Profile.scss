@@ -1,5 +1,6 @@
 @import '../../../colors';
-
+$defaultElementMargin: 0.5rem;
+$basicInfoWidth: 20rem;
 
 @mixin stroke($width, $color) {
     $width: $width + 0;
@@ -27,185 +28,161 @@
 
 .Profile 
 {
-	margin: 1em;
-	height: calc(100% - 2em);
+	margin: $defaultElementMargin;
+	height: calc(100% - #{$defaultElementMargin*2});
+
+	> .basicInfo
+	{
+		display: inline-block;
+		background: #FFFFFF;
+		height: 100%;
+
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		position: relative;
+		width: $basicInfoWidth;
+		float: left;
+
+		> img 
+		{
+			display: block;
+			height: 13rem;
+			margin: $defaultElementMargin auto 0 auto;
+		}
+
+		> .infoList 
+		{
+			margin-top: $defaultElementMargin;
+			width: 100%;
+
+			> li
+			{
+				text-align: center;
+			}
+
+			> .firstLastName 
+			{
+				font-family: 'Alfa Slab One', cursive;
+				font-size: 2rem;
+			}
+
+			> .ocupation
+			{
+				font-size: 1.5rem;
+				color: lighten( $color1, 17 );
+			}
+
+			> .description
+			{
+				font-size: 1.2rem;
+				color: darken( desaturate( adjust-hue( $color, 7deg ), 8 ), 2 );
+				display: block;
+				width: 85%;
+				margin: #{$defaultElementMargin + 0.2rem} auto 0 auto;
+			}
+		}
+
+		> .switchList 
+		{
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+
+			> li
+			{
+				text-align: center;
+				height: 3rem;
+				font-size: 1.3rem;
+				font-family: 'Alfa Slab One', cursive;
+				color: $color;
+				border-top: 1px solid #D8D8D8;
+				
+
+				> img
+				{
+					display: inline-block;
+					padding: 0.3rem 0 0.3rem 3rem;
+					height: calc(100% - 0.6rem);
+					width: calc(40% - 3rem);
+					float: left;
+				}
+
+				> div
+				{
+					display: inline-block;
+					width: 60%;
+					height: 100%;
+
+					float: left;
+					line-height: 3rem;
+					text-align: left;
+				}
+			}
+
+			> li:hover
+			{
+				background: #C8D3E1;
+				border-left: 4px solid #2D5AB9;
+				cursor: pointer;
+				border-radius: 3px;
+				width: calc(100% - 4px);
+			}
+
+			> li:nth-child(2n+1):hover
+			{
+				background: #C8D3E1;
+				border-left: 4px solid #2D5AB9;
+				cursor: pointer;
+				border-radius: 3px;
+			}
+
+			> li:nth-child(2n+1)
+			{
+				background: #E4E4E4;
+			}
+		}
+	}
 }
 
-.Profile > .basicInfo
-{
-	font-size: 0.7em;
-	display: inline-block;
-	background: #FFFFFF;
-	// border: 1px solid #D8D8D8;
-	height: 100%;
-
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	position: relative;
-
-	float: left;
-}
-
-.Profile > .basicInfo > img 
-{
-	display: block;
-	height: 18em;
-	width: 20em;
-	margin: 2.5em auto 0.5em auto;
-}
-
-.basicInfo > .infoList 
-{
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-	width: 25em;
-}
-
-.Profile .firstLastName 
-{
-	font-family: 'Alfa Slab One', cursive;
-	text-align: center;
-	font-size: 2.5em;
-	padding: 0.4em 0 0 0;
-}
-
-.Profile .ocupation
-{
-	text-align: center;
-	font-size: 1.5em;
-	padding: 0.4em 0 0 0;
-	color: #8A8A8A;
-}
-
-.Profile .description
-{
-	font-size: 1.3em;
-	color: #C6C6C6;
-	padding: 1.5em 2em 0 2em;
-	text-align: center;
-}
-
-.basicInfo > .switchList 
-{
-	list-style-type: none;
-	padding: 0;
-	margin: auto 0 0 0;
-	width: 25em;
-	position: absolute;
-    bottom: 0;
-
-}
-
-.switchList > li
-{
-	text-align: center;
-	height: 3em;
-	font-size: 1.3em;
-	font-family: 'Alfa Slab One', cursive;
-	color: $color;
-	border-top: 1px solid #D8D8D8;
-	// line-height: 3em;
-}
-.switchList > li:hover
-{
-	background: #C8D3E1;
-	border-left: 4px solid #2D5AB9;
-	cursor: pointer;
-	border-radius: 3px;
-	width: calc(100% - 4px);
-}
-
-.switchList > li:nth-child(2n+1):hover
-{
-	background: #C8D3E1;
-	border-left: 4px solid #2D5AB9;
-	cursor: pointer;
-	border-radius: 3px;
-}
-
-.switchList > li:nth-child(2n+1)
-{
-	background: #E4E4E4;
-}
-
-.switchList > li img
-{
-	display: inline-block;
-	width: calc(40% - 3em);
-	padding-left: 3em;
-	float: left;
-}
-
-.switchList > li div
-{
-	display: inline-block;
-	width: 60%;
-	height: 100%;
-	
-	// padding-left: 1em;
-
-	float: left;
-	line-height: 3em;
-	text-align: left;
-}
-
-.gamesPlayedSwitch img
-{
-	height: 100%;
-}
-
-.achievmentsSwitch img 
-{
-	padding: 0.25em 0 0.25em 0;
-	height: calc(100% - 0.5em);
-}
-
-.statisticsSwitch img
-{
-	padding: 0.25em 0 0.25em 0;
-	height: calc(100% - 0.5em);
-}
+// ----------------------------------------------------------------
 
 .secondaryContent
 {
 	display: inline-block;
-	background: #FFFFFF;
 	height: 100%;
-	width: calc(100% - 19em);
-
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-	position: relative;
-
-	// float: left;
-	z-index: 20;
-	margin-left: 1.5em;
+	width: calc(100% - (#{$basicInfoWidth} + #{$defaultElementMargin}));
+	margin-left: $defaultElementMargin;
 }
 
 .secondaryContent .bannerWrapper
 {
-	padding-top: 2em;
-	padding-bottom: 5em;
+	background: #FFFFFF;
+
+	padding-top: $defaultElementMargin;
+	padding-bottom: $defaultElementMargin;
+
+	height: 4rem + 2.4rem;
+	position: relative;
 	width: 100%;
 	z-index: 10;
+
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
+
 
 
 .banner
 {
-	font-size: 2em;
 	position: relative;
-	display: block;
-	margin: 0 auto 0 auto;
+	margin:  0 auto 0 auto;
 	width: 13em;
-	height: 2em;
+	height: 4rem;
 	border: 1px solid #5386C8;
 	font-family: 'Alfa Slab One', cursive;
 
 	@include stroke(3px, #000000);
 
-	letter-spacing: 0.05em;
-	line-height: 2em;
-
+	letter-spacing: 0.06rem;
+	line-height: 4rem;
 
 	text-align: center;
 	color: #FFFFFF;
@@ -218,14 +195,14 @@
 {
 	content: '';
 	position: absolute;
-	z-index: 10;
-	left: -3em;
-	top: 1em;
+	// z-index: 10;
+	left: -6rem;
+	top: 2rem;
 	display: block;
-	width: 2em;
+	width: 4rem;
 	height: 0px;
-	border: 1em solid #5386C8;
-	border-right: 1em solid #3D5077;
+	border: 2rem solid #5386C8;
+	border-right: 2rem solid #3D5077;
 	border-bottom-color: #5386C8;
 	border-left-color: transparent;
 	transform: rotate(-5deg);
@@ -235,67 +212,48 @@
 .banner::after
 {
 	left: auto;
-	right: -3em;
-	border-left: 1em solid #3D5077;
-	border-right: 1em solid transparent;
+	right: -6rem;
+	border-left: 2rem solid #3D5077;
+	border-right: 2rem solid transparent;
 	transform: rotate(5deg);
-
 }
 
-.bannerWrapper:after
-{
-	content: "";
-	height: 3px;
-	background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
-
-	display: block;
-	position: relative;
-	top: 5.7em;
-
-}
-
-.secondaryContent .info > div:before
-{
-	content: "";
-	height: 3px;
-	background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
-
-	display: block;
-	position: relative;
-	bottom: 0.5em;
-
-}
 
 .secondaryContent .info 
 {
-	width: 100%;
-	height: calc(100% - 12em)
+	width: calc(100% - $defaultElementMargin*2);
+	height: calc(93% - #{(6.4rem + $defaultElementMargin*6)});
+	margin-top: $defaultElementMargin;
+	background: #FFFFFF;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+		padding: $defaultElementMargin;
+
+}
+
+.arrows
+{
+	margin-top: $defaultElementMargin;
+	height: 7%;
+	background: #FFFFFF;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 .secondaryContent .info ul 
 {
-	list-style-type: none;
-	margin: 0;
-	padding: 1em 1em 1em 1em;
-	height: calc(90% - 1em)
+	height: 100%;
 }
 
-.secondaryContent .info > div 
-{
-	width: 100%;
-	height: 9%;
-}
 
 .secondaryContent .info > ul > li
 {
 	width: 100%;
-	height: calc(20% - 0.2em);
-	margin-bottom: 0.3em;
+	height: calc(20% - #{$defaultElementMargin - 0.25rem});
+	padding-bottom: #{$defaultElementMargin - 0.2rem};
 }
 
 .secondaryContent .info > ul > li:last-child
 {
-	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
 
@@ -320,40 +278,6 @@
 	height: 100%;
 }
 
-
-.secondaryContent .info > div > div > img
-{
-	height: 60%;
-	width: 10%;
-	// max-height: 4em;
-	// max-width: 4em;
-
-	cursor: pointer;
-
-	display: block;
-	margin: auto;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-	margin-left: 1.5em;
-	margin-right: 1.5em;
-}
-
-.secondaryContent .info > div > div > img:hover
-{
-	// background: #C8C8C8;
-}
-
-.secondaryContent .info > div > div:nth-child(2n+1) > img
-{
-	transform:rotateY(180deg) translateY(-50%);
-	float: right;
-}
-
-.secondaryContent .info > div > div:nth-child(2n) > img
-{
-	float: left;
-}
 
 .secondaryContent .info > ul > li > div > div{
 	height: 100%;
@@ -395,6 +319,51 @@
 	margin-right: auto;
 	// width: 100%;
 }
+
+.arrows img
+{
+	height: 60%;
+	width: 10%;
+	// max-height: 4em;
+	// max-width: 4em;
+
+	cursor: pointer;
+
+	display: block;
+	margin: auto;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-left: 1.5em;
+	margin-right: 1.5em;
+}
+
+.arrows img:hover
+{
+	// background: #C8C8C8;
+}
+
+.arrows > div 
+{
+	height: 100%;
+	width: 50%;
+	display: inline-block;
+}
+
+// .arrows > div:nth-child(2n+1)
+
+
+.arrows > div:nth-child(2n+1) img
+{
+	transform:rotateY(180deg) translateY(-50%);
+	float: left;
+}
+
+.arrows > div:nth-child(2n) img
+{
+	float: right;
+}
+
 
 .hidden
 {

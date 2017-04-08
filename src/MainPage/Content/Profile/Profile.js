@@ -9,9 +9,38 @@ function Profile()
 		this.nest[1].nest[0].text = user.firstName + " " +  user.lastName;
 	}
 
-	this.init = function()
+	this.genGameList = function(atIndex, nm)
 	{
-	
+		var data = [];
+
+		// console.log(window.loggedUser._id);
+
+		for (var i = atIndex; i < nm; i++)
+		{
+			var date = new Date(this.games[i].start);
+
+			if (this.games[i].players[0] = window.loggedUser._id) 
+			{
+				data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]})
+			}
+			else
+			{
+				data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]})
+
+			} 
+		}
+
+		return data;
+	}
+
+	this.init = function(user, games)
+	{
+		this.games = games;
+
+		
+		
+
+
 		this.tag = "div";
 		this.attributes = [["class", "Profile"]];
 		this.nest = 
@@ -26,7 +55,7 @@ function Profile()
 						{
 							tag: "li",
 							attributes: [["class", "firstLastName"]],
-							text: "Janez Novak"
+							text: user.firstName + " " + user.lastName
 						},
 						{
 							tag: "li",
@@ -76,25 +105,20 @@ function Profile()
 				[
 					{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
 					[
-						{tag: "h1", attributes: [["class", "banner"]], text: "Game list"}
+						{
+							tag: "h1", attributes: [["class", "banner"]], text: "Game list"
+							
+						}
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 
 					[
-						{tag: "ul", nest: 
-						[
-							{tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: "12.12.1994 - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]},
-							{tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: "12.12.1994 - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]},
-							{tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: "12.12.1994 - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]},
-							{tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: "12.12.1994 - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]},
-							{tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: "12.12.1994 - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]},
-							// {tag: "div", attributes: [["class", "loader2"]]}
-						]},
-						{tag: "div", nest:
-						[
-							{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrowGray.svg"]]}]},
-							{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrow.svg"], ["onmouseover", "window.MainPage.Content.Profile.svg(this)"],["onclick", "window.MainPage.Content.Profile.next()"], ["onmouseleave", "window.MainPage.Content.Profile.svg1(this)"]]}]}
-						]}
+						{tag: "ul", nest: this.genGameList(0,3)}
 					]},
+					{tag: "div", attributes: [["class", "arrows"]], nest:
+					[
+						{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrowGray.svg"]]}]},
+						{tag: "div", nest: [{tag: "img", attributes: [["src", "svg/arrow.svg"], ["onmouseover", "window.MainPage.Content.Profile.svg(this)"],["onclick", "window.MainPage.Content.Profile.next()"], ["onmouseleave", "window.MainPage.Content.Profile.svg1(this)"]]}]}
+					]}
 				]
 			}
 		];
