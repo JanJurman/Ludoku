@@ -102,11 +102,6 @@ Router.routeTo("/profile", { require: "login" }, function()
 	window.MainPage.Content.init();
 	window.MainPage.Content.LeaderBoard.cleanUp();
 	
-	if(window.loggedUser != null)
-	{
-		
-	}
-	
 	window.MainPage.Content.Profile.init(window.loggedUser)
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
@@ -138,8 +133,6 @@ Router.routeToHome("/lobbies", { require: "login" }, function()
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
-
-
 
 
 Router.init();
