@@ -18,8 +18,8 @@ module.exports = function(mongoose, Schema) {
 				], type: 2, start: new Date("Sun Apr 02 2017 9:32:14 GMT+0200 (CEST)"), finish: new Date("Sun Apr 02 2017 9:58:14 GMT+0200 (CEST)")},
 			{players:
 				[
-					janez,
-					nina
+					nina,
+					janez
 				], type: 2, start: new Date("Wed Apr 05 2017 16:22:30 GMT+0200 (CEST)"), finish: new Date("Wed Apr 05 2017 17:00:21 GMT+0200 (CEST)")},
 			{players:
 				[
@@ -31,7 +31,37 @@ module.exports = function(mongoose, Schema) {
 					janez,
 					nina
 				], type: 2, start: new Date("Sat Apr 08 2017 13:20:00 GMT+0200 (CEST)"), finish: new Date("Sat Apr 08 2017 13:55:00 GMT+0200 (CEST)")},
-
+			{players:
+				[
+					dmitry,
+					janez
+				], type: 2, start: new Date("Mon Apr 10 2017 8:23:00 GMT+0200 (CEST)"), finish: new Date("Mon Apr 10 2017 9:01:00 GMT+0200 (CEST)")},
+			{players:
+				[
+					ashley,
+					janez,
+					dmitry
+				], type: 3, start: new Date("Mon Apr 10 2017 10:12:00 GMT+0200 (CEST)"), finish: new Date("Mon Apr 10 2017 11:07:00 GMT+0200 (CEST)")},
+			{players:
+				[
+					dmitry,
+					janez
+				], type: 2, start: new Date("Mon Apr 10 2017 14:08:00 GMT+0200 (CEST)"), finish: new Date("Mon Apr 10 2017 14:47:00 GMT+0200 (CEST)")},
+			{players:
+				[
+					janez,
+					dmitry
+				], type: 2, start: new Date("Tue Apr 11 2017 17:34:00 GMT+0200 (CEST)"), finish: new Date("Tue Apr 11 2017 17:59:00 GMT+0200 (CEST)")},
+			{players:
+				[
+					janez,
+					nina
+				], type: 2, start: new Date("Wed Apr 12 2017 09:11:00 GMT+0200 (CEST)"), finish: new Date("Wed Apr 12 2017 09:44:00 GMT+0200 (CEST)")},
+			{players:
+				[
+					janez,
+					dmitry
+				], type: 2, start: new Date("Fri Apr 14 2017 12:22:00 GMT+0200 (CEST)"), finish: new Date("Fri Apr 14 2017 13:19:00 GMT+0200 (CEST)")},
 			{players:
 				[
 					dmitry,

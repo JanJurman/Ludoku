@@ -123,7 +123,7 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 
 
 //TODO PAADREEEE FOOORGIIIVE ME
-Router.routeToHome("/lobbies", { require: "login" }, function()
+Router.routeTo("/lobbies", { require: "login" }, function()
 {
 	socketClient.connect();
 	window.MainPage.init();
