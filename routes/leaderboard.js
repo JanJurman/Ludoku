@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
+mongoose.Promise = global.Promise;
 
 function checkAuth(req, res, next)
 {

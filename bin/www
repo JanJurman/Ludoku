@@ -8,11 +8,13 @@ var app = require('../app');
 var debug = require('debug')('ludoku:server');
 var http = require('http');
 
+var globals = require('../globals.js')
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || globals.port);
 app.set('port', port);
 
 /**
@@ -99,7 +101,7 @@ io.attach(server);
 /**
  * Redis server start
  */
-var redis_port = '5555'
+var redis_port = globals.redisPort;
 const RedisServer = require('redis-server');
 const serverR = new RedisServer(redis_port);
 serverR.open((err) => {

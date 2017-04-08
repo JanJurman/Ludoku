@@ -1,3 +1,5 @@
+var globals = require('../globals.js')
+
 var socket_io = require('socket.io');
 var io = socket_io();
 var socketApi = {};
@@ -6,7 +8,7 @@ socketApi.io = io;
 
 //redis connect
 var redis = require('redis');
-var redisClient = redis.createClient({host : 'localhost', port : 5555});
+var redisClient = redis.createClient({host : globals.ip , port : globals.redisPort});
 
 redisClient.on('ready',function() {
  console.log("[Redis Client] Redis client is ready");
@@ -19,7 +21,7 @@ redisClient.on('error',function() {
 
 //on connect
 io.on('connection', function(socket){
-	sess = socket.handshake.session
+	sess = socket.handshake.session  // == req.session
 
 	if(!sess.userId){ 
 		//console.log("REFUSED, nisi logged in!")
@@ -55,36 +57,63 @@ io.on('connection', function(socket){
 		redisClient.get(sess.userId+".socketsOpen", function(err,reply) {
 			reply = JSON.parse(reply)
 			reply.numOfSockets--
-			var arr = reply.socketIds.split(",");
-			//izloči tegale IDja in zloži nazaj
-			var out = ""
-			for(i=0;i<arr.length;++i){
-				if(arr[i] == socket.id) 
-					continue;
-				if(out.length == 0)
-					out += arr[i];
-				else
-					out += "," + arr[i]
+			if(reply.numOfSockets == 0){
+				redisClient.del(sess.userId+".socketsOpen");
+			}else{
+				var arr = reply.socketIds.split(",");
+				//izloči tegale IDja in zloži nazaj
+				var out = ""
+				for(i=0;i<arr.length;++i){
+					if(arr[i] == socket.id)
+						continue;
+					if(out.length == 0)
+						out += arr[i];
+					else
+						out += "," + arr[i]
+				}
+				reply.socketIds = out;
+				redisClient.set(sess.userId+".socketsOpen",JSON.stringify(reply));
 			}
-			reply.socketIds = out;
-			redisClient.set(sess.userId+".socketsOpen",JSON.stringify(reply));
 		});
+	});
+
+	socket.on('testEmit', function(data, fn){
+		console.log(data)
+		fn("banana!")
 	});
 
 
 });
 
 
-//to je primer api funkcije, ki bi bla dostopna v drugih modulih
-socketApi.sendNotification = function(sessionId, routeToGo, reqType, dataTosend) {
+// enemu clientu, njegov session ID
+socketApi.sendNotificationToClient = function(sessionId, routeToGo, reqType, dataTosend) {
 	//poišči pripadajč socket id
 	redisClient.get(sessionId+".socketsOpen", function(err,reply) {
-		reply = JSON.parse(reply)
-		reply.socketIds.split(",").forEach( function(item, index){
-			io.sockets.socket().emit('notification', {route: routeToGo, type: reqType, data: dataTosend});
-		});
-		
+		if(reply){
+			reply = JSON.parse(reply)
+			reply.socketIds.split(",").forEach( function(item, index){
+				if(io.sockets.connected[item]){
+					io.sockets.connected[item].emit('notification', {route: routeToGo, type: reqType, data: dataTosend});
+				}
+			});
+		}
 	});
+}
+
+// vsem userjem
+socketApi.sendNotificationToAll = function(routeToGo, reqType, dataTosend) {
+	io.sockets.emit('notification', {route: routeToGo, type: reqType, data: dataTosend});
+}
+
+// arrayu userjev (session IDjev)
+socketApi.sendNotificationToClients = function(sessionIdArray, routeToGo, reqType, dataTosend) {
+	if(sessionIdArray != null && sessionIdArray.length != 0)
+	{
+		sessionIdArray.forEach(function(item, index){
+			socketApi.sendNotificationToClient(item, routeToGo, reqType, dataTosend);
+		});
+	}
 }
 
 module.exports = socketApi;

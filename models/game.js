@@ -11,4 +11,5 @@ var gameSchema = new Schema
 	}
 );
 
+
 mongoose.model('game', gameSchema);

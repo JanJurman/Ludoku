@@ -4,7 +4,7 @@ require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
-
+var tmp;
 
 // ------ Shranim logged usera, oziroma null če ni logged------
 Ajax.GET("user/isLoggedIn/", null, function(data)
@@ -20,6 +20,13 @@ Ajax.GET("user/isLoggedIn/", null, function(data)
 	{
 		window.loggedUser = null;
 	}
+});
+
+// ------ Dobi usere: Games ------		treba fixat to
+
+Ajax.GET("leaderboard/games", null, function(data)
+{
+	tmp = JSON.parse(data);
 });
 
 // ------------ Nea se ukvarjaj s tem -----------------------
@@ -92,6 +99,13 @@ Router.routeTo("/profile", { require: "logout" }, function()
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+	
+	if(window.loggedUser != null)
+	{
+		
+	}
+	
 	window.MainPage.Content.Profile.init(window.loggedUser)
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
@@ -99,18 +113,32 @@ Router.routeTo("/profile", { require: "logout" }, function()
 
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
-	// console.log("Dela route.");
-	// window.LeaderBoard.init();
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
-	window.MainPage.Content.LeaderBoard.init();
-
+	window.MainPage.Content.LeaderBoard.init(tmp);
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
-
 });
+
+
+//TODO PAADREEEE FOOORGIIIVE ME
+Router.routeToHome("/lobbies", { require: "login" }, function()
+{
+	socketClient.connect();
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.Content.init();
+	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+
+	window.MainPage.Content.Lobbies.init();
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+});
+
+
 
 
 Router.init();
