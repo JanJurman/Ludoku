@@ -5,6 +5,7 @@ function Router()
 	this.routesData = {};
 	this.homeLocation = "#/";
 	this.loginLocation = "#/login";
+	this.location404 = "#/404";
 	this.currentLoaction = "";
 
 
@@ -18,6 +19,12 @@ function Router()
 	{
 		this.routeTo(location, SETTINGS, CALLBACK);
 		this.loginLocation = "#" + location;
+	}
+
+	this.routeTo404 = function(CALLBACK)
+	{
+		this.routesData["#/404"] = {callback: CALLBACK};
+		
 	}
 
 	this.routeTo = function(location, SETTINGS, CALLBACK)
@@ -79,7 +86,7 @@ function Router()
 		}
 		else
 		{
-			document.querySelector("#app").innerHTML = "404 BITCH";
+			this.routesData["#/404"].callback();
 			this.currentLoaction = location.hash;
 		}
 		
