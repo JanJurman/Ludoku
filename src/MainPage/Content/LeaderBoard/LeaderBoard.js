@@ -13,12 +13,12 @@ function LeaderBoard()
 		{
 			var uporabnik = {tag:"tr",nest:
 								[
-									{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName}]},
+									{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName + " " +user[i].lastName}]},
 									//{tag:"td", attributes:["onclick", "window.MainPage.Content.LeaderBoard.viewProfile(user[i].id)"],text:user[i].firstName},
 									{tag:"td",text:user[i].games},
 									{tag:"td",text:user[i].gamesWon},
 									{tag:"td",text:user[i].tournamentGames},
-									{tag:"td",text:user[i].tournamentGamesWon}
+									{tag:"td",text:user[i].tournamentsWon}
 								]
 							};
 			this.nest[1].nest.push(uporabnik);
@@ -27,9 +27,6 @@ function LeaderBoard()
 
 	this.init = function(user)
 	{
-		//console.log("vhod v init funkcijo");
-		//var test = JSON.stringify(user);
-		//console.log(test);
 		this.tag = "div";
 		this.attributes = [["class", "LeaderBoard"]];
 		this.nest = 
