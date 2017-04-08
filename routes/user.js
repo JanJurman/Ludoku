@@ -252,7 +252,6 @@ router.get('/lastGames/:userId', checkAuth, function(req, res, next) // npr http
 //get games at X index of user
 router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, res, next)
 {
-	//index pa skip morta bit na intervalu [0,10]; TODO
 	var userId = req.params.userId;
 	var index = parseInt(req.params.index);
 	var fetchCount = parseInt(req.params.fetchCount);

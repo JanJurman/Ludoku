@@ -90,6 +90,8 @@ io.on('connection', function(socket){
 socketApi.sendNotificationToClient = function(sessionId, routeToGo, reqType, dataTosend) {
 	//poišči pripadajč socket id
 	redisClient.get(sessionId+".socketsOpen", function(err,reply) {
+		console.log(reply);
+		console.log("error: " + err);
 		if(reply){
 			reply = JSON.parse(reply)
 			reply.socketIds.split(",").forEach( function(item, index){
@@ -111,6 +113,7 @@ socketApi.sendNotificationToClients = function(sessionIdArray, routeToGo, reqTyp
 	if(sessionIdArray != null && sessionIdArray.length != 0)
 	{
 		sessionIdArray.forEach(function(item, index){
+			console.log("sending notification: "+ routeToGo+"   "+ "to client: " + item + "    data: " + dataTosend);
 			socketApi.sendNotificationToClient(item, routeToGo, reqType, dataTosend);
 		});
 	}

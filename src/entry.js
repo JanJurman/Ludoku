@@ -100,7 +100,7 @@ Router.routeTo("/profile", { require: "logout" }, function()
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
 	window.MainPage.Content.LeaderBoard.cleanUp();
-	
+
 	if(window.loggedUser != null)
 	{
 		
