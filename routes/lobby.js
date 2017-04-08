@@ -12,6 +12,8 @@ var route = "/lobby"
 GAMETYPES:
 1v1 5 zaporednih sudokujev: "1v1"
 do 8 playerjev enak sudoku: "8enak"
+solo gamemode: 				"solo"
+
 more TBD
 
 DIFFICULTIES (velja samo pri 8enak):
@@ -19,7 +21,7 @@ easy
 medium
 hard
 */
-function addLobby(lobbyId){
+function addLobbyToTracker(lobbyId){
 	redisClient.get("lobbies", function(err,reply) {
 		if(reply === null){
 			//če ga ni ga narediš
@@ -36,7 +38,7 @@ function addLobby(lobbyId){
 	});
 }
 
-function removeLobby(lobbyId){
+function removeLobbyFromTracker(lobbyId){
 	redisClient.get("lobbies", function(err,reply) {
 		if(reply !== null){
 			var lobbyIds = JSON.parse(reply)
@@ -63,13 +65,13 @@ router.get('/createLobby', function (req, res)
 	redisClient.set(key, JSON.stringify(value));
 
 	//add to lobbies tracker
-	addLobby(key)
+	addLobbyToTracker(key)
 	console.log("Lobby created. " +key +": "+ JSON.stringify(value));
 
 	socketApi.sendNotificationToAll(route + '/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en poleg
 
-	//vrnemo OK
-	res.sendStatus(200);
+	//vrnemo lobby ID
+	res.send(key)
 
 });
 
@@ -83,7 +85,7 @@ router.get('/removeLobby', function (req, res)
 	redisClient.del(key);
 
 	//remove from lobbies tracker
-	removeLobby(key)
+	removeLobbyFromTracker(key)
 
 	socketApi.sendNotificationToAll(route + '/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en zginu
 
@@ -108,8 +110,10 @@ router.post('/setLobbyParams', function(req, res)
 				//povej vsem v lobbyju da je lobby data updated; pošlješ jim še lobby ID za ziher
 				if(lobbyData.members != null && lobbyData.members.length != 0)
 				{
-					socketApi.sendNotificationToClients(lobbyData.members, route +  '/getLobbyParams/' + key, 'GET', null)
+					socketApi.sendNotificationToClients(lobbyData.members, route +  '/getLobbyParams', 'GET', key)
 				}
+				//povej vsem da je novi lobby data
+				socketApi.sendNotificationToAll(route + '/getLobbies', 'GET', '')
 				res.sendStatus(200) //OK
 			}else{
 				res.sendStatus(404) // not found
@@ -164,7 +168,6 @@ router.get('/getLobbies', function(req, res)
 
 });
 
-
 router.get('/joinLobby/:lobbyId', function(req, res)
 {
 	var lobbyId = req.params.lobbyId;
@@ -180,7 +183,8 @@ router.get('/joinLobby/:lobbyId', function(req, res)
 					redisClient.set(key, JSON.stringify(lobby));
 
 					//socket to all lobby members to fetch new lobby data
-					socketApi.sendNotificationToClients(lobby.members, route +  '/getLobbyParams/' + key, 'GET', null)
+					console.log("socket noficication to all, fetch new lobby params")
+					socketApi.sendNotificationToClients(lobby.members, route +  '/getLobbyParams', 'GET', key)
 				}
 				
 				res.sendStatus(200) // OK
@@ -215,16 +219,17 @@ router.get('/leaveLobby/:lobbyId', function(req, res)
 					var index = lobby.members.indexOf(lobby.host);
 					if (index == -1) {
 					    //če je host šel, naj vsi leavajo
-					    socketApi.sendNotificationToClients(lobby.members, route +  '/leaveLobby/' + key, 'GET', null)
+					    socketApi.sendNotificationToClients(lobby.members, route +  '/leaveLobby', 'GET', key)
 					}else{
 					//drugače pa socket to all lobby members to fetch new lobby data
-					socketApi.sendNotificationToClients(lobby.members, route +  '/getLobbyParams/' + key, 'GET', null)
+					socketApi.sendNotificationToClients(lobby.members, route +  '/getLobbyParams', 'GET', key)
 					}
 				}
 				else{
 					//če je members array prazn, delete lobby from redis
 					redisClient.del(key)
-					removeLobby(key)
+					removeLobbyFromTracker(key)
+					socketApi.sendNotificationToAll(route + '/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en zginu
 				}
 
 				res.sendStatus(200) // OK

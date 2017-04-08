@@ -120,7 +120,7 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 
 
 //TODO PAADREEEE FOOORGIIIVE ME
-Router.routeToHome("/lobbyTest", { require: "login" }, function()
+Router.routeToHome("/lobbies", { require: "login" }, function()
 {
 	socketClient.connect();
 	window.MainPage.init();
@@ -129,7 +129,7 @@ Router.routeToHome("/lobbyTest", { require: "login" }, function()
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.LeaderBoard.cleanUp();
 
-	window.MainPage.Content.lobbyTest.init();
+	window.MainPage.Content.Lobbies.init();
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });

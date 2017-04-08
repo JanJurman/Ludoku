@@ -4,6 +4,7 @@ var Ajax = require('./Ajax.js')
 function socketClient()
 {
 	this.io = require('socket.io-client');
+	this.actions = []
 
 	var instance = this;
 	this.connect = function(){
@@ -23,13 +24,32 @@ function socketClient()
 			console.log(data);
 			if(data.type == "GET")
 			{
-				Ajax.GET(data.route, null, function(resp){
-					console.log(resp)
-					if(resp != "OK"){
-						console.log(JSON.parse(resp));
+				//poglej v actions in routu poišči pripadajoč action
+				var found = false;
+				instance.actions.forEach(function(item, index){
+					if(item[0] == data.route){
+						console.log("najden action, route:" + data.route + ", data: " + data.data)
+						item[1](data.data)
+						found = true;
 					}
+
 				});
+				if(!found)
+				{
+					console.log("action ni bil najden")
+					console.log("route:" + data.route + ", data: " + data.data + " type: " + data.type)
+					//otherwise do this for dev purposes
+					Ajax.GET(data.route + "/" + data.data, null, function(resp){
+						console.log(resp)
+						if(resp != "OK"){
+							var obj = JSON.parse(resp);
+							// poglej v actions in
+
+						}
+					});
+				}
 			}
+			
 		});
 
 	}
@@ -39,6 +59,14 @@ function socketClient()
 		instance.socket.emit('testEmit', name , function (data) {
 	  		console.log(data);
 		});
+	}
+
+
+	this.addAction = function(route, action){
+		var el = [route, action]
+		if(this.actions.indexOf(el) == -1){
+			this.actions.push(el)
+		}
 	}
 
 }
