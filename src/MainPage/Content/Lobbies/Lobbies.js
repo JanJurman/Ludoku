@@ -168,7 +168,14 @@ function Lobbies()
 		{
 			//do the thing here
 			console.log("Options clicked");
-			document.querySelector("#renderSettingsDiv").style.display = 'block'; //TODO ANIMATE?
+			if(document.querySelector("#renderSettingsDiv").style.display == 'none')
+			{
+				document.querySelector("#renderSettingsDiv").style.display = 'block'; //TODO ANIMATE?
+			}
+			else
+			{
+				document.querySelector("#renderSettingsDiv").style.display = 'none'; //TODO ANIMATE?				
+			}
 		}
 	}
 
