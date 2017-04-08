@@ -14,7 +14,6 @@ Ajax.GET("user/isLoggedIn/", null, function(data)
 		Ajax.GET("user/", null, function(data)
 		{
 			window.loggedUser = JSON.parse(data); 
-			location.hash = "#/";
 		});
 	}
 	else
@@ -95,7 +94,7 @@ Router.routeTo("/signUp", { require: "logout" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
-Router.routeTo("/profile", { require: "login" }, function()
+Router.routeTo("/profile", { require: "logout" }, function()
 {
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
