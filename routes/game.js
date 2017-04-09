@@ -25,7 +25,7 @@ router.get('/startGame', function(req, res)
 					//init game
 					gameInit(lobby)
 					//preko soketof povej vsem memberjem naj se redirectajo na game
-					socketApi.sendNotificationToClients(lobby.members, route +  '#GAMESTART', 'GET', 'game.' + lobby.host)
+					socketApi.sendNotificationToClients(lobby.members, '#GAMESTART', 'GET', 'game.' + lobby.host)
 				}
 				else{
 					//NOT LOVED
@@ -93,12 +93,13 @@ router.get('/getSudoku/:gameId', function(req, res)
 	// zmaga, razn če gameType = 1v1
 
 	var gameId = req.params.gameId
+
 	redisClient.get(gameId, function(err,reply) {
 		if(reply != undefined){
 			var game = JSON.parse(reply)
 
 			for(var i = 0; i < game.members.length; ++i){
-				if(game.members[i] == req.session.userId){
+				if(game.members[i].id == req.session.userId){
 					//a sm Zmago?? Ne, ti si Milan
 					var curS = game.members[i].currentSudoku
 					if(game.gameType == "1v1" && curS == 5 || game.gameType != "1v1" && curS == 1 ){
@@ -117,7 +118,7 @@ router.get('/getSudoku/:gameId', function(req, res)
 					}else{
 						//send next sudoku
 						var sudoku = game.sudokus[curS]
-						res.send({sudoku: sudoku, finished: null})
+						res.send({sudoku: sudoku.puzzle, finished: null})
 					}
 				}
 			}
@@ -285,16 +286,19 @@ function getPuzzleFromDB(difficulty){
 			model = mongoose.model('easySudoku');
 			break;
 	}
+	var puzzle = null;
 	model.aggregate( { $sample: { size: 1 } }, function(err, sudoku){
 		//return sudoku[0].sudoku  //
-		return "500690001007004908089205006090050400805040103043806009058461002400000015910080034"  //for testing, pol bomo z base pobirali
+
+		if(err)console.log(err);
 	})
+		return "500690001007004908089205006090050400805040103043806009058461002400000015910080034"  //for testing, pol bomo z base pobirali
 	
 }
 
 var sudoku = require('sudoku')
 function getSudoku(difficulty){
-	var puzzle = getPuzzleFromDB(game.difficulty)
+	var puzzle = getPuzzleFromDB(difficulty)
 	//spravi v vredi format - 1d array, prazno je null
 	var cor_puzz = []
 	for (var i = 0; i < puzzle.length; ++i) {
@@ -370,7 +374,8 @@ function gameInit(lobby){
 
 	//shrani game v redis
 	redisClient.set("game." + game.host, JSON.stringify(game))
-
+	console.log("ADDED GAME TO REDIS? /////////////////////////////")
+	console.log(JSON.stringify(game));
 }
 
 

@@ -6,11 +6,6 @@ require("./Lobbies.scss");
 /*
 CURRENT ISSUE LIST
 
-ko se nekdo joina lobbiju, ludi ko so not ne vidijo
-	edit: problem je v sockets: pošlješ request na server > server prek socketov pošlje vsem userom v arraju komando ki jo naj izvedejo
-		> userov pa ni (socketId al nekaj) ker je baza prazna če poglejaš v reddis pa rečeš "KEYS *", tak da se pol nena nič izvede in 
-		ne dobis podakov za joined lobby
-
 dodaj gameStart
 
 */
@@ -234,13 +229,23 @@ function Lobbies()
 	    });	
 	}
 
+	this.redirectToGame = function(gameId)
+	{
+		setTimeout(function(){
+			window.MainPage.Content.Game.gameId = gameId;
+			window.location.href = "#/game";	
+		}, 1000);
+	}
+
 	this.init = function()
 	{
 		//add posible actions to socketClient:
 		socketClient.addAction("/lobby/getLobbyParams", this.getLobbyData)
 		socketClient.addAction("/lobby/getLobbies", this.getLobbies)
 		socketClient.addAction("/lobby/leaveLobby", this.leaveLobby)
+		socketClient.addAction("#GAMESTART", this.redirectToGame)
 	
+
 		this.tag = "div";
 		this.attributes = [["class", "Lobbies"]];
 		this.nest = 
@@ -300,7 +305,6 @@ function Lobbies()
 					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: "Members: "},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.startGame()'], ["id", "startGameButton"]], text : "Start Game"}
-					//<button onclick='window.MainPage.Content.Lobbies.leaveLobby(\"lobby." + lobby.host + "\")' >LEAVE</button>";
 				]
 			 }
 		];
