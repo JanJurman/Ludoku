@@ -70,6 +70,7 @@ Router.routeToHome("/", { require: "login" }, function()
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.LeaderBoard.cleanUp();
+	window.MainPage.Content.Game.cleanUp();
 
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
@@ -87,6 +88,7 @@ Router.routeTo404( function()
 	window.MainPage.init();
 	window.MainPage.NavBar.init();
 	window.MainPage.Content.init();
+	window.MainPage.Content.Game.cleanUp();
 });
 
 // ----------------------------------------------------------
@@ -103,6 +105,7 @@ Router.routeTo("/profile", { require: "login" }, function()
 	{
 		window.MainPage.Content.LeaderBoard.cleanUp();
 		window.MainPage.Content.Lobbies.cleanUp();
+		window.MainPage.Content.Game.cleanUp();
 
 		window.MainPage.init();
 		window.MainPage.NavBar.init();
@@ -118,6 +121,7 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 
 	// ------ Dobi usere: Games ------		treba fixat to
 	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.Game.cleanUp();
 
 	Ajax.GET("leaderboard/games", null, function(data)
 	{
@@ -135,6 +139,24 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 });
 
 
+Router.routeToHome("/game", { require: "logout" }, function()
+{
+	// socketClient.connect();
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.NavBar.select("play");
+	window.MainPage.Content.init();
+	window.MainPage.Content.Game.init();
+
+	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+	window.MainPage.Content.Lobbies.cleanUp();
+
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+});
+
+
 //TODO PAADREEEE FOOORGIIIVE ME
 Router.routeTo("/lobbies", { require: "login" }, function()
 {
@@ -144,6 +166,7 @@ Router.routeTo("/lobbies", { require: "login" }, function()
 	window.MainPage.Content.init();
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.LeaderBoard.cleanUp();
+	window.MainPage.Content.Game.cleanUp();
 
 	window.MainPage.Content.Lobbies.init();
 

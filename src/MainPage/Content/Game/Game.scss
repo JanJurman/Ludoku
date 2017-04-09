@@ -1,0 +1,30 @@
+@import '../../../colors';
+$defaultElementMargin: 0.5rem;
+$leftBarWidth: 20rem;
+
+.Game
+{
+	margin: $defaultElementMargin;
+	height: calc(100% - #{$defaultElementMargin*2});
+	width: calc(100% - #{$defaultElementMargin*2});
+
+	> div
+	{
+		display: inline-block;
+		background-color: #FFFFFF;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	}
+
+	> .info
+	{
+		width: 20rem;
+		height: 100%;
+	}
+
+	> .windowContainer
+	{
+		margin-left: $defaultElementMargin;
+		width: calc(100% - #{$leftBarWidth + $defaultElementMargin});
+		height: 100%;
+	}
+}
