@@ -11,7 +11,7 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var leaderboard = require('./routes/leaderboard')
-//var game = require('./routes/game')
+var game = require('./routes/game')
 var gameHistory = require('./routes/gameHistory')
 var lobby = require('./routes/lobby')
 
@@ -48,7 +48,7 @@ mongoose.connect(globals.mongoURI);
 app.use('/', index);
 app.use('/user', user);
 app.use('/leaderboard', leaderboard);
-//app.use('/game', game);
+app.use('/game', game);
 app.use('/gameHistory', gameHistory);
 app.use('/lobby', lobby);
 

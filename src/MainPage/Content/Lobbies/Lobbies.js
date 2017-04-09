@@ -213,10 +213,19 @@ function Lobbies()
 	{
 		Ajax.GET("/lobby/leaveLobby/" + lobbyID, null, function(res)
 	    {
-	    	// no op
 	    	instance.myLobbyId = null;
 	    	instance.clearLobbyDiv();
 	    	console.log("LEFT")
+	    });	
+	}
+
+	this.startGame = function(){
+		Ajax.GET("/game/startGame", null, function(res)
+	    {
+	    	//instance.myLobbyId = null;
+	    	instance.clearLobbyDiv();
+	    	console.log("game start ajax sent!")
+	    	//socket server pol obvesti vse lobby memberje, da se naj redirectajo na /#/game
 	    });	
 	}
 
@@ -273,7 +282,7 @@ function Lobbies()
 							[
 								{tag: "option", attributes: [["value", "solo"]], text: "Solo"},
 								{tag: "option", attributes: [["value", "1v1"]], text: "1v1"},
-								{tag: "option", attributes: [["value", "8v8"]], text: "8v8"},
+								{tag: "option", attributes: [["value", "8enak"]], text: "8ffa"},
 								{tag: "option", attributes: [["value", "tournament"]], text: "Tournament"}
 							]},
 							{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.setLobbyDataClick()'], ["id", "setLobbyDataButton"]],  text: "Set"}
@@ -285,7 +294,7 @@ function Lobbies()
 					{tag: "div", attributes: [["id", "difficultyDiv"], ["class", "lobbyDataDiv"]], text: "Difficulty: "},
 					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: "Members: "},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
-					{tag: "button", attributes: [["id", "startGameButton"]], text : "Start Game"}
+					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.startGame()'], ["id", "startGameButton"]], text : "Start Game"}
 					//<button onclick='window.MainPage.Content.Lobbies.leaveLobby(\"lobby." + lobby.host + "\")' >LEAVE</button>";
 				]
 			 }

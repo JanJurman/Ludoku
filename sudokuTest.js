@@ -1,3 +1,4 @@
+/*
 var sudoku = require('sudoku');
 
 function printboard(board) {
@@ -24,7 +25,8 @@ function printcode(n) {
 
 
 var puzzle = sudoku.makepuzzle();
-
+console.log(puzzle)
+console.log(JSON.stringify(puzzle))
 console.log(printboard(puzzle))
 
 var solution = sudoku.solvepuzzle(puzzle);
@@ -39,3 +41,34 @@ console.log(printboard(solution))
 var difficulty = sudoku.ratepuzzle(puzzle, 4);
 
 console.log(difficulty)
+*/
+
+var sudoku = require('sudoku')
+var puzzle = "500690001007004908089205006090050400805040103043806009058461002400000015910080034"  //for testing, pol bomo z base pobirali
+//spravi v vredi format - 1d array, prazno je null
+var cor_puzz = []
+for (var i = 0; i < puzzle.length; i++) {
+	var ch = puzzle.charAt(i)
+	if(ch == "0"){
+		cor_puzz.push(null)
+	}else{
+		cor_puzz.push(parseInt(ch) - 1)
+	}
+}
+
+var solved = sudoku.solvepuzzle(cor_puzz)
+
+//dajmo nazaj v non dumb format
+var c=0
+for (var i = 0; i < cor_puzz.length; i++) {
+	++solved[i]
+	if(cor_puzz[i] != null){
+		++cor_puzz[i]
+		if(solved[i] != cor_puzz[i])
+			++c
+	}
+
+}
+console.log("C: " + c)
+console.log(JSON.stringify(cor_puzz))
+console.log(JSON.stringify(solved))
