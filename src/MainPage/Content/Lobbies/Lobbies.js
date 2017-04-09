@@ -66,7 +66,7 @@ function Lobbies()
 	// za ene callback madness, za druge elegant solution   edit: holy fuck delalo je sprve
 	this.getUsersRec = function(users, lobby, callback)
 	{
-		Ajax.GET("/user/"+lobby.host, null, function(res,error)
+		Ajax.GET("/user/"+lobby.members[users.length], null, function(res,error)
 		{
 			if(!error)
 			{
@@ -77,7 +77,7 @@ function Lobbies()
 				}
 				else
 				{
-					getUsersRec(users,lobby,callback);
+					instance.getUsersRec(users,lobby,callback);
 				}
 			}
 			else //TODO
@@ -163,22 +163,6 @@ function Lobbies()
 
 	    });
 	}
-
-	// this.renderLobbyOptions = function(lobby, oRenderDiv)
-	// {
-	// 	if(window.loggedUser._id === lobby.host)
-	// 	{
-	// 		console.log("Options clicked");
-	// 		if(document.querySelector("#renderSettingsDiv").style.display == 'none')
-	// 		{
-	// 			document.querySelector("#renderSettingsDiv").style.display = 'block'; //TODO ANIMATE?
-	// 		}
-	// 		else
-	// 		{
-	// 			document.querySelector("#renderSettingsDiv").style.display = 'none'; //TODO ANIMATE?				
-	// 		}
-	// 	}
-	// }
 
 	//ko klikne host v options Set poslemo na server
 	this.setLobbyDataClick = function()

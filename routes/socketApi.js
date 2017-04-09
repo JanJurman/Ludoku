@@ -37,9 +37,10 @@ io.on('connection', function(socket){
 	
 	//add to redis
 	redisClient.get(sess.userId+".socketsOpen",function(err,reply) {
-		if(reply === null){
+		if(reply == null){
 			reply = {numOfSockets: 1, socketIds: socket.id};
 			redisClient.set(sess.userId+".socketsOpen",JSON.stringify(reply));
+			console.log('[Socket Server]' + JSON.stringify(reply));
 		}else{
 			reply = JSON.parse(reply)
 			reply.numOfSockets++
@@ -49,6 +50,7 @@ io.on('connection', function(socket){
 				reply.socketIds += "," + socket.id
 			}
 			redisClient.set(sess.userId+".socketsOpen",JSON.stringify(reply));
+			console.log('[Socket Server]' + JSON.stringify(reply));
 		}
 	});
 
@@ -73,6 +75,7 @@ io.on('connection', function(socket){
 				}
 				reply.socketIds = out;
 				redisClient.set(sess.userId+".socketsOpen",JSON.stringify(reply));
+				console.log('[Socket Server]' + JSON.stringify(reply));
 			}
 		});
 	});
@@ -90,12 +93,15 @@ io.on('connection', function(socket){
 socketApi.sendNotificationToClient = function(sessionId, routeToGo, reqType, dataTosend) {
 	//poišči pripadajč socket id
 	redisClient.get(sessionId+".socketsOpen", function(err,reply) {
-		console.log(reply);
-		console.log("error: " + err);
+		// console.log("querry: " + reply);
+		// console.log("error: " + err);
 		if(reply){
 			reply = JSON.parse(reply)
+			// console.log("parsed querry: " + reply);
 			reply.socketIds.split(",").forEach( function(item, index){
+				console.log("item: " + item);
 				if(io.sockets.connected[item]){
+					// console.log("???");
 					io.sockets.connected[item].emit('notification', {route: routeToGo, type: reqType, data: dataTosend});
 				}
 			});
