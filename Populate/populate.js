@@ -1,4 +1,4 @@
-var populate = function(insertions, index)
+/*var populate = function(insertions, index)
 {
 	if(index == insertions.length)
 	{
@@ -26,5 +26,37 @@ require("./populateUsers.js")(mongoose,Schema);
 
 //izvedi vse time dependant insertione po vrsti po arrayu
 var timeDependantInsertions = ["./populateGames.js"];
+var index = 0;
+setTimeout(populate.bind(null, timeDependantInsertions, index), 500);
+*/
+
+var populate = function(insertions, index)
+{
+	if(index == insertions.length)
+	{
+		setTimeout(process.exit, 1000);
+	}
+	else
+	{
+		require(insertions[index])(mongoose,Schema);
+		setTimeout(populate.bind(null, insertions, index+1), 1000);
+	}
+}
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var fs = require('fs');
+
+fs.readdirSync(__dirname + '/../models').forEach(function(filename)
+{
+	require(__dirname + '/../models/' + filename)
+});
+mongoose.connect('mongodb://127.0.0.1:27017/Ludoku');
+
+require("./populateAchievements.js")(mongoose,Schema);
+require("./populateUsers.js")(mongoose,Schema);
+
+//izvedi vse time dependant insertione po vrsti po arrayu
+var timeDependantInsertions = ["./populateGames.js", "./populateEasySudoku.js", "./populateMediumSudoku.js", "./populateHardSudoku.js"];
 var index = 0;
 setTimeout(populate.bind(null, timeDependantInsertions, index), 500);
