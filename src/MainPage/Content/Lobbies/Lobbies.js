@@ -6,11 +6,6 @@ require("./Lobbies.scss");
 /*
 CURRENT ISSUE LIST
 
-ko se nekdo joina lobbiju, ludi ko so not ne vidijo
-	edit: problem je v sockets: pošlješ request na server > server prek socketov pošlje vsem userom v arraju komando ki jo naj izvedejo
-		> userov pa ni (socketId al nekaj) ker je baza prazna če poglejaš v reddis pa rečeš "KEYS *", tak da se pol nena nič izvede in 
-		ne dobis podakov za joined lobby
-
 dodaj gameStart
 
 */
