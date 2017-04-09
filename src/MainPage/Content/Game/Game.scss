@@ -1,0 +1,345 @@
+@import '../../../colors';
+$defaultElementMargin: 0.5rem;
+$leftBarWidth: 30rem;
+
+@mixin stroke($width, $color) {
+    $width: $width + 0;
+    $shadow: 0 0 0 transparent;
+    $i: 0;
+    $w: 1;
+
+    @while ($i < $width) {
+        $i: $i + 1;
+        $j: 0;
+        $w: $w + 2;
+
+        @for $r from 1 through $w {
+            @for $c from 1 through $w {
+                $x: $c - ceil($w / 2);
+                $y: $r - ceil($w / 2);
+
+                $shadow: #{$shadow}, #{$x}px #{$y}px 0 $color;
+            }
+        }
+    }
+
+    text-shadow: $shadow;
+}
+
+.Game
+{
+	margin: $defaultElementMargin;
+	height: calc(100% - #{$defaultElementMargin*2});
+	width: calc(100% - #{$defaultElementMargin*2});
+
+
+
+	> .bannerWrapper
+	{
+		background: #FFFFFF;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+
+		padding-top: $defaultElementMargin*2;
+		padding-bottom: $defaultElementMargin;
+
+		height: 4rem + 2.4rem;
+		position: relative;
+		width: 100%;
+		z-index: 10;
+
+
+		> .banner
+		{
+			position: relative;
+			margin:  0 auto 0 auto;
+			width: 13em;
+			height: 4rem;
+			border: 1px solid #5386C8;
+			font-family: 'Alfa Slab One', cursive;
+
+			@include stroke(3px, #000000);
+
+			letter-spacing: 0.06rem;
+			line-height: 4rem;
+
+			text-align: center;
+			color: #FFFFFF;
+			background: #5386C8;
+			border-radius: 4px;
+			box-shadow: 0 0 30px rgba(0,0,0,.15) inset, 0 6px 10px rgba(0,0,0,.15);
+		}
+
+		> .banner::before, .banner::after
+		{
+			content: '';
+			position: absolute;
+			// z-index: 10;
+			left: -6rem;
+			top: 2rem;
+			display: block;
+			width: 4rem;
+			height: 0px;
+			border: 2rem solid #5386C8;
+			border-right: 2rem solid #3D5077;
+			border-bottom-color: #5386C8;
+			border-left-color: transparent;
+			transform: rotate(-5deg);
+			z-index: -1;
+		}
+
+		> .banner::after
+		{
+			left: auto;
+			right: -6rem;
+			border-left: 2rem solid #3D5077;
+			border-right: 2rem solid transparent;
+			transform: rotate(5deg);
+		}
+	}
+
+	> .windowContainer
+	{
+		// margin-top: $defaultElementMargin;
+		// width: calc(100% - #{$leftBarWidth + $defaultElementMargin});
+		// height: 100%;
+
+		height: calc(100% - #{4rem + 2.4rem + $defaultElementMargin*4});
+		margin-top: $defaultElementMargin;
+		width: 100%;
+
+		> div
+		{
+			display: inline-block;
+			float: left;
+		}
+
+		> .info
+		{
+			width: $leftBarWidth;
+			height: 100%;
+			background-color: #FFFFFF;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			position: relative;
+
+			> .timer
+			{
+				width: 100%;
+				height: 6rem;
+				font-family: 'Alfa Slab One', cursive;
+				text-align: center;
+				font-size: 3rem;
+				line-height: 6rem;
+					@include stroke(2px, #3364AD);
+			}
+
+
+			> .players
+			{
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				margin-bottom: $defaultElementMargin + 0.5rem;
+
+				> .playerDescriptor
+				{
+					
+
+					> .name
+					{
+
+						width: 100%;
+						height: 1.5rem;
+						font-family: 'Alfa Slab One', cursive;
+						text-align: center;
+						font-size: 1rem;
+						line-height: 1.5rem;
+					}
+					> .progress
+					{
+						height: 2rem;
+						width: 80%;
+
+						margin: auto;
+						background: #A4A4A4;
+						border: 2px solid #606DBC;
+						box-sizing: border-box;
+
+
+
+						position: relative;
+
+						> div 
+						{
+							height: 100%;
+							width: 50%;
+							background: repeating-linear-gradient(
+							45deg,
+							#606DBC,
+							#606dbc 10px,
+							#465298 10px,
+							#465298 20px
+
+							);
+							// position: absolute;
+							// top: 0;
+						}
+						> span
+						{
+							font-family: 'Alfa Slab One', cursive;
+							position: absolute;
+							top: 0.2rem;
+							left: 47%;
+							color: #FFFFFF;
+							font-size: 1rem;
+						}
+
+					}
+					
+				}
+				
+			}
+
+		}
+
+		> .window
+		{
+			height: 100%;
+			margin-left: $defaultElementMargin;
+			width: calc(100% - #{$leftBarWidth + $defaultElementMargin});
+
+			background: #FFFFFF;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+
+			position: relative;
+
+			> .sudoku
+			{
+				height: calc(100% - #{$defaultElementMargin * 2});
+				width: calc(100% - #{$defaultElementMargin * 2});
+
+				padding: $defaultElementMargin;
+
+
+				> div 
+				{
+					display: inline-block;
+					background: #EBEBEB;
+					float: left;
+				}
+
+				> .field
+				{
+					height: 100%;
+					width: calc(90% - #{$defaultElementMargin});
+
+					> ul 
+					{
+						height: calc(100%/9 );
+						width: 100%;
+						box-sizing: border-box;
+
+						// overflow: hidden;
+						> li
+						{	
+							box-sizing: border-box;
+							display: inline-block;
+							height: 100%;
+							width: calc(100%/9);
+							border: 0.8px solid #C9C3C3;
+							cursor: pointer;
+						}
+
+						> li:hover
+						{
+							// background-color: 
+
+							border: 1.3px solid #000000;
+						}
+
+						>li.selected
+						{
+							// border: 3px solid #465AD4;
+							// border-right: 3px solid #465AD4;
+							background: #9AA5CB;
+						}
+
+						> li:nth-child(3), li:nth-child(6)
+						{
+							border-right: 1.5px solid #252525;
+						}
+
+						> li:nth-child(4), li:nth-child(7)
+						{
+							border-left: 1.5px solid #252525;
+						}
+					}
+
+					> ul:nth-child(3) > li, ul:nth-child(6) > li
+					{
+						border-bottom: 1.5px solid #252525;
+					}
+
+					> ul:nth-child(4) > li, ul:nth-child(7) > li
+					{
+						border-top: 1.5px solid #252525;
+					}
+
+
+					// position: absolute;
+					//   top: 50%;
+					//   transform: translateY(-50%);
+					
+				}
+
+				> .controls
+				{
+					margin-left: $defaultElementMargin;
+					width: calc(10% - #{$defaultElementMargin});
+					height: 100%;
+					
+
+					> ul 
+					{
+						height: 100%;
+						width: 100%;
+						box-sizing: border-box;
+
+						> li
+						{	
+							box-sizing: border-box;
+							height: calc(100%/9);
+							width: 100%;
+							border: 0.8px solid #C9C3C3;
+							// line-height: 
+							text-align: center;
+							// vertical-align: middle;
+							// margin-top: -0.5rem;
+							font-size: 3rem;
+							font-family: 'Alfa Slab One', cursive;
+						}
+
+						> li:before {
+						  content: "";
+						  display: inline-block;
+						  height: 100%;
+						  vertical-align: middle;
+						}
+
+
+						> li:hover
+						{
+							// background-color: 
+
+							border: 1.3px solid #000000;
+						}
+					}
+
+						.hoverable
+						{
+							cursor: pointer;
+						}
+				}
+			}
+		}
+	}
+}

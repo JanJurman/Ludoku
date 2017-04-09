@@ -118,8 +118,7 @@ function Profile()
 					{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
 					[
 						{
-							tag: "h1", attributes: [["class", "banner"]], text: "Game list"
-							
+							tag: "h1", attributes: [["class", "banner"]], text: "Game list"	
 						}
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 

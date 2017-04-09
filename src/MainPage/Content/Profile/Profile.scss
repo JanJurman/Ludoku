@@ -1,6 +1,6 @@
 @import '../../../colors';
 $defaultElementMargin: 0.5rem;
-$basicInfoWidth: 20rem;
+$basicInfoWidth: 23rem;
 
 @mixin stroke($width, $color) {
     $width: $width + 0;
@@ -46,7 +46,7 @@ $basicInfoWidth: 20rem;
 		{
 			display: block;
 			height: 13rem;
-			margin: $defaultElementMargin auto 0 auto;
+			margin: $defaultElementMargin*3 auto 0 auto;
 		}
 
 		> .infoList 
@@ -141,232 +141,199 @@ $basicInfoWidth: 20rem;
 			}
 		}
 	}
-}
-
-// ----------------------------------------------------------------
-
-.secondaryContent
-{
-	display: inline-block;
-	height: 100%;
-	width: calc(100% - (#{$basicInfoWidth} + #{$defaultElementMargin}));
-	margin-left: $defaultElementMargin;
-}
-
-.secondaryContent .bannerWrapper
-{
-	background: #FFFFFF;
-
-	padding-top: $defaultElementMargin;
-	padding-bottom: $defaultElementMargin;
-
-	height: 4rem + 2.4rem;
-	position: relative;
-	width: 100%;
-	z-index: 10;
-
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-}
-
-
-
-.banner
-{
-	position: relative;
-	margin:  0 auto 0 auto;
-	width: 13em;
-	height: 4rem;
-	border: 1px solid #5386C8;
-	font-family: 'Alfa Slab One', cursive;
-
-	@include stroke(3px, #000000);
-
-	letter-spacing: 0.06rem;
-	line-height: 4rem;
-
-	text-align: center;
-	color: #FFFFFF;
-	background: #5386C8;
-	border-radius: 4px;
-	box-shadow: 0 0 30px rgba(0,0,0,.15) inset, 0 6px 10px rgba(0,0,0,.15);
-}
-
-.banner::before, .banner::after
-{
-	content: '';
-	position: absolute;
-	// z-index: 10;
-	left: -6rem;
-	top: 2rem;
-	display: block;
-	width: 4rem;
-	height: 0px;
-	border: 2rem solid #5386C8;
-	border-right: 2rem solid #3D5077;
-	border-bottom-color: #5386C8;
-	border-left-color: transparent;
-	transform: rotate(-5deg);
-	z-index: -1;
-}
-
-.banner::after
-{
-	left: auto;
-	right: -6rem;
-	border-left: 2rem solid #3D5077;
-	border-right: 2rem solid transparent;
-	transform: rotate(5deg);
-}
-
-
-.secondaryContent .info 
-{
-	width: calc(100% - $defaultElementMargin*2);
-	height: calc(93% - #{(6.4rem + $defaultElementMargin*6)});
-	margin-top: $defaultElementMargin;
-	background: #FFFFFF;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-		padding: $defaultElementMargin;
-
-}
-
-.arrows
-{
-	margin-top: $defaultElementMargin;
-	height: 7%;
-	background: #FFFFFF;
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-}
-
-.secondaryContent .info ul 
-{
-	height: 100%;
-}
-
-
-.secondaryContent .info > ul > li
-{
-	width: 100%;
-	height: calc(20% - #{$defaultElementMargin - 0.25rem});
-	padding-bottom: #{$defaultElementMargin - 0.2rem};
-}
-
-.secondaryContent .info > ul > li:last-child
-{
-	padding-bottom: 0;
-}
-
-
-.secondaryContent .info > ul > li > div
-{
-	height: 100%;
-	width: 100%;
-
-	background: #7E969A;
-	cursor: pointer;
-}
-
-.secondaryContent .info > ul > li > div:hover
-{
-	background: #ACACAC;
-}
-
-.secondaryContent .info > div > div
-{
-	width: 50%;
-	display: inline-block;
-	height: 100%;
-}
-
-
-.secondaryContent .info > ul > li > div > div{
-	height: 100%;
-	float: left;
 	
+	.secondaryContent
+	{
+		display: inline-block;
+		height: 100%;
+		width: calc(100% - (#{$basicInfoWidth} + #{$defaultElementMargin}));
+		margin-left: $defaultElementMargin;
 
-	display: flex;
-	align-items: center; /* align vertical */
-	font-family: 'Alfa Slab One', cursive;
+		> .bannerWrapper
+		{
+			background: #FFFFFF;
 
-	font-size: 2em;
-	@include stroke(1px, #FFFFFF);
+			padding-top: $defaultElementMargin*2;
+			padding-bottom: $defaultElementMargin;
 
-	
-}
+			height: 4rem + 2.4rem;
+			position: relative;
+			width: 100%;
+			z-index: 10;
 
-.secondaryContent .info > ul > li > div > div:nth-child(2n+1)
-{
-	
-	width: 57%;
-	// text-align: right; margin-left: auto;
-	 margin-left: auto;
-	 margin-right: 3%;
-	 justify-content: flex-end;
-	
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 
-}
+			> .banner
+			{
+				position: relative;
+				margin:  0 auto 0 auto;
+				width: 13em;
+				height: 4rem;
+				border: 1px solid #5386C8;
+				font-family: 'Alfa Slab One', cursive;
 
-.secondaryContent .info > ul > li > div > div:nth-child(2n)
-{
-	width: 40%;
-	// padding-right: 30%;
-}
-.secondaryContent .info > ul > li > div > div img
-{
-	height: 70%;
-	float: left;
-	display: block;
-	margin-right: auto;
-	// width: 100%;
-}
+				@include stroke(3px, #000000);
 
-.arrows img
-{
-	height: 60%;
-	width: 10%;
-	// max-height: 4em;
-	// max-width: 4em;
+				letter-spacing: 0.06rem;
+				line-height: 4rem;
 
-	cursor: pointer;
+				text-align: center;
+				color: #FFFFFF;
+				background: #5386C8;
+				border-radius: 4px;
+				box-shadow: 0 0 30px rgba(0,0,0,.15) inset, 0 6px 10px rgba(0,0,0,.15);
+			}
 
-	display: block;
-	margin: auto;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-	margin-left: 1.5em;
-	margin-right: 1.5em;
-}
+			> .banner::before, .banner::after
+			{
+				content: '';
+				position: absolute;
+				// z-index: 10;
+				left: -6rem;
+				top: 2rem;
+				display: block;
+				width: 4rem;
+				height: 0px;
+				border: 2rem solid #5386C8;
+				border-right: 2rem solid #3D5077;
+				border-bottom-color: #5386C8;
+				border-left-color: transparent;
+				transform: rotate(-5deg);
+				z-index: -1;
+			}
 
-.arrows img:hover
-{
-	// background: #C8C8C8;
-}
+			> .banner::after
+			{
+				left: auto;
+				right: -6rem;
+				border-left: 2rem solid #3D5077;
+				border-right: 2rem solid transparent;
+				transform: rotate(5deg);
+			}
+		}
 
-.arrows > div 
-{
-	height: 100%;
-	width: 50%;
-	display: inline-block;
-}
+		> .info 
+		{
+			width: calc(100% - $defaultElementMargin*2);
+			height: calc(93% - #{(6.4rem + $defaultElementMargin*7)});
+			margin-top: $defaultElementMargin;
+			background: #FFFFFF;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+				padding: $defaultElementMargin;
 
-// .arrows > div:nth-child(2n+1)
+			> ul 
+			{
+				height: 100%;
 
+				> li
+				{
+					width: 100%;
+					height: calc(20% - #{$defaultElementMargin - 0.25rem});
+					padding-bottom: #{$defaultElementMargin - 0.2rem};
 
-.arrows > div:nth-child(2n+1) img
-{
-	transform:rotateY(180deg) translateY(-50%);
-	float: left;
-}
+					 > div
+					{
+						height: 100%;
+						width: 100%;
 
-.arrows > div:nth-child(2n) img
-{
-	float: right;
-}
+						background: #7E969A;
+						cursor: pointer;
 
+						> div
+						{
+							height: 100%;
+							float: left;
+							
 
-.hidden
-{
-	opacity: 0;
-	// display: none;
+							display: flex;
+							align-items: center; /* align vertical */
+							font-family: 'Alfa Slab One', cursive;
+
+							font-size: 2em;
+							@include stroke(1px, #FFFFFF);
+
+							> img
+							{
+								height: 70%;
+								float: left;
+								display: block;
+								margin-right: auto;
+								// width: 100%;
+							}
+						}
+
+						> div:nth-child(2n+1)
+						{
+							
+							width: 57%;
+							// text-align: right; margin-left: auto;
+							 margin-left: auto;
+							 margin-right: 3%;
+							 justify-content: flex-end;
+						}
+
+						> div:nth-child(2n)
+						{
+							width: 40%;
+							// padding-right: 30%;
+						}
+					}
+
+					> div:hover
+					{
+						background: #ACACAC;
+					}
+				}
+
+				 > li:last-child
+				{
+					padding-bottom: 0;
+				}
+			}
+		}
+		
+		> .arrows
+		{
+			margin-top: $defaultElementMargin;
+			height: 7%;
+			background: #FFFFFF;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+
+			img
+			{
+				height: 60%;
+				width: 10%;
+				// max-height: 4em;
+				// max-width: 4em;
+
+				cursor: pointer;
+
+				display: block;
+				margin: auto;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				margin-left: 1.5em;
+				margin-right: 1.5em;
+			}
+
+			> div 
+			{
+				height: 100%;
+				width: 50%;
+				display: inline-block;
+			}
+
+			> div:nth-child(2n+1) img
+			{
+				transform:rotateY(180deg) translateY(-50%);
+				float: left;
+			}
+
+			 > div:nth-child(2n) img
+			{
+				float: right;
+			}
+		}
+	}
 }
