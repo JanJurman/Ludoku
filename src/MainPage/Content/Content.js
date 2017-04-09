@@ -4,7 +4,7 @@ function Content()
 {
 	this.Profile = require('./Profile/Profile.js');
 	this.LeaderBoard = require('./LeaderBoard/LeaderBoard.js');
-	//TODO REMOVE ME LATER 
+
 	this.Lobbies = require('./Lobbies/Lobbies.js');
 
 	this.init = function()
