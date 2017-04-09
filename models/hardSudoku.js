@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var hardSudokuSchema = new Schema
 (
 	{
-		sudoku: [Number]
+		sudoku: String
 	}
 );
 

@@ -1,3 +1,6 @@
 mongo Ludoku --eval 'db.users.drop();'
 mongo Ludoku --eval 'db.achievements.drop();'
-mongo Ludoku --eval 'db.games.drop();';
+mongo Ludoku --eval 'db.games.drop();'
+mongo Ludoku --eval 'db.easysudokus.drop();'
+mongo Ludoku --eval 'db.mediumsudokus.drop();'
+mongo Ludoku --eval 'db.hardsudokus.drop();'
