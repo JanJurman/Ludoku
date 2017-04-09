@@ -1,5 +1,5 @@
 var express = require('express');
-var mongoose = require('mongoose');
+//var mongoose = require('mongoose');
 var router = express.Router();
 var socketApi = require('./socketApi.js');
 var redis = require('redis');
@@ -242,19 +242,5 @@ router.get('/leaveLobby/:lobbyId', function(req, res)
 	}
 });
 
-
-/*
-Dodaj:
-
-- joinLobby
-- leaveLobby
-- maybe razdelitev na /lobby & /game
-
-//  (\/)
-	(° )
-	/  \
-   / , |-<
-  / /\/
-*///
 
 module.exports = router;

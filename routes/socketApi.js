@@ -125,4 +125,15 @@ socketApi.sendNotificationToClients = function(sessionIdArray, routeToGo, reqTyp
 	}
 }
 
+socketApi.sendNotificationToClientsInJSONObject = function(sessionIdArray, routeToGo, reqType, dataTosend) {
+	if(sessionIdArray != null && sessionIdArray.length != 0)
+	{
+		sessionIdArray.forEach(function(item, index){
+			console.log("sending notification: "+ routeToGo+"   "+ "to client: " + item.id + "    data: " + dataTosend);
+			socketApi.sendNotificationToClient(item.id, routeToGo, reqType, dataTosend);
+		});
+	}
+}
+
+
 module.exports = socketApi;
