@@ -46,7 +46,7 @@ $basicInfoWidth: 20rem;
 		{
 			display: block;
 			height: 13rem;
-			margin: $defaultElementMargin auto 0 auto;
+			margin: $defaultElementMargin*3 auto 0 auto;
 		}
 
 		> .infoList 
@@ -157,7 +157,7 @@ $basicInfoWidth: 20rem;
 {
 	background: #FFFFFF;
 
-	padding-top: $defaultElementMargin;
+	padding-top: $defaultElementMargin*2;
 	padding-bottom: $defaultElementMargin;
 
 	height: 4rem + 2.4rem;
@@ -222,7 +222,7 @@ $basicInfoWidth: 20rem;
 .secondaryContent .info 
 {
 	width: calc(100% - $defaultElementMargin*2);
-	height: calc(93% - #{(6.4rem + $defaultElementMargin*6)});
+	height: calc(93% - #{(6.4rem + $defaultElementMargin*7)});
 	margin-top: $defaultElementMargin;
 	background: #FFFFFF;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);

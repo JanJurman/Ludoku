@@ -4,6 +4,7 @@ function Content()
 {
 	this.Profile = require('./Profile/Profile.js');
 	this.LeaderBoard = require('./LeaderBoard/LeaderBoard.js');
+	this.Game = require('./Game/Game.js');
 	//TODO REMOVE ME LATER 
 	this.Lobbies = require('./Lobbies/Lobbies.js');
 
@@ -15,7 +16,8 @@ function Content()
 		[
 			this.Profile,
 			this.LeaderBoard,
-			this.Lobbies
+			this.Lobbies,
+			this.Game
 		];
 	}
 }

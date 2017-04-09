@@ -37,6 +37,10 @@ function NavBar()
 		{
 			this.nest[0].nest[2].attributes[0][1] = "floatLeft selected";	
 		}
+		else if (menuItem == "play")
+		{
+			this.nest[0].nest[3].attributes[0][1] = "floatLeft selected";	
+		}
 	}
 
 	this.logMeOut =  function()
