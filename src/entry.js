@@ -135,10 +135,10 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 		window.MainPage.Content.init();
 		window.MainPage.Content.LeaderBoard.init(tmp);
 
-		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
+		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 	});	
 
-	Ajax.GET("leaderboard/tournamentGames", null, function(data)
+	/*Ajax.GET("leaderboard/tournamentGames", null, function(data)
 	{
 		tmp = JSON.parse(data);
 
@@ -175,7 +175,7 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 		window.MainPage.Content.LeaderBoard.init(tmp);
 
 		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
-	});		
+	});	*/	
 
 });
 
