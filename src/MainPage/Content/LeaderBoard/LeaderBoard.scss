@@ -31,7 +31,7 @@ $basicInfoWidth: 23rem;
 
 $list-hdlColor: #383e4a;
 $list-textColor: #fff;
-$list-colors:  #fa6855, #e0574f, #d7514d, #cd4b4b, #c24448;
+$list-colors:  #0053a9, #1964b1, #3275ba, #4c86c2, #6697cb;
 $list-itemHeight: 3.125rem; 
 $list-space: .938rem;
 $list-width: 17.813rem;
@@ -117,6 +117,18 @@ $list-width: 17.813rem;
 .NavBar > ul > li.selected
 {
 	background-color: $color;
+}
+
+.LeaderBoard
+{
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  bottom: 50%;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
 }
 
 html, body {
@@ -220,7 +232,7 @@ a {
   
     li:nth-child(1):hover 
     {
-      box-shadow: 0 5px 8px -5px #954448;
+      box-shadow: 0 5px 8px -5px #536C98;
     &:before {
        content: '';
        display: block;
@@ -231,7 +243,7 @@ a {
 	     height: 0;
 	     border-left: $list-space solid transparent;
     	 border-right: 0px solid transparent;
-       border-top: ($list-itemHeight / 5) solid #954448;
+       border-top: ($list-itemHeight / 5) solid #536C98;
        z-index: 0;
     }
     &:after 
@@ -245,14 +257,14 @@ a {
 	     height: 0;
 	     border-right: $list-space solid transparent;
     	 border-left: 0px solid transparent;
-       border-top: ($list-itemHeight / 5) solid #954448;
+       border-top: ($list-itemHeight / 5) solid #536C98;
        z-index: 0;      
     }
   }
 
   li:nth-child(2):hover 
   {
-      box-shadow: 0 5px 4px -5px #954448;
+      box-shadow: 0 5px 4px -5px #536C98;
     &:before {
        content: '';
        display: block;
@@ -263,7 +275,7 @@ a {
 	     height: 0;
 	     border-left: $list-space solid transparent;
     	 border-right: 0px solid transparent;
-       border-top: ($list-itemHeight / 8) solid #954448;
+       border-top: ($list-itemHeight / 8) solid #536C98;
        z-index: 0;
     }
     &:after 
@@ -277,20 +289,20 @@ a {
 	     height: 0;
 	     border-right: $list-space solid transparent;
     	 border-left: 0px solid transparent;
-       border-top: ($list-itemHeight / 8) solid #954448;
+       border-top: ($list-itemHeight / 8) solid #536C98;
        z-index: 0;      
     }
   }
   
   li:nth-child(3):hover 
   {
-      box-shadow: 0 -5px 4px -5px #954448,
-        0 5px 4px -5px #954448;
+      box-shadow: 0 -5px 4px -5px #536C98,
+        0 5px 4px -5px #536C98;
   }
   
    li:nth-child(4):hover 
    {
-      box-shadow: 0 -5px 4px -5px #954448;
+      box-shadow: 0 -5px 4px -5px #536C98;
     &:before {
        content: '';
        display: block;
@@ -301,7 +313,7 @@ a {
 	     height: 0;
 	     border-left: $list-space solid transparent;
     	 border-right: 0px solid transparent;
-       border-bottom: ($list-itemHeight / 8) solid #954448;
+       border-bottom: ($list-itemHeight / 8) solid #536C98;
        z-index: 0;
     }
     &:after 
@@ -315,14 +327,14 @@ a {
 	     height: 0;
 	     border-right: $list-space solid transparent;
     	 border-left: 0px solid transparent;
-       border-bottom: ($list-itemHeight / 8) solid #954448;
+       border-bottom: ($list-itemHeight / 8) solid #536C98;
        z-index: 0;      
     }
   }
   
   li:nth-child(5):hover 
   {
-      box-shadow: 0 -5px 8px -5px #954448;
+      box-shadow: 0 -5px 8px -5px #536C98;
     &:before {
        content: '';
        display: block;
@@ -333,7 +345,7 @@ a {
 	     height: 0;
 	     border-left: $list-space solid transparent;
     	 border-right: 0px solid transparent;
-       border-bottom: ($list-itemHeight / 5) solid #954448;
+       border-bottom: ($list-itemHeight / 5) solid #536C98;
        z-index: 0;
     }
     &:after 
@@ -347,7 +359,7 @@ a {
 	     height: 0;
 	     border-right: $list-space solid transparent;
     	 border-left: 0px solid transparent;
-       border-bottom: ($list-itemHeight / 5) solid #954448;
+       border-bottom: ($list-itemHeight / 5) solid #536C98;
        z-index: 0;      
     }
   }

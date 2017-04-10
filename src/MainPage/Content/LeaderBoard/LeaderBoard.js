@@ -15,15 +15,17 @@ function LeaderBoard()
 		{
 			var uporabnik = {tag:"tr",nest:
 								[
-									{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName + " " +user[i].lastName}]}/*,
+									/*{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName + " " +user[i].lastName}]},
 									//{tag:"td", attributes:["onclick", "window.MainPage.Content.LeaderBoard.viewProfile(user[i].id)"],text:user[i].firstName},
 									{tag:"td",text:user[i].games},
 									{tag:"td",text:user[i].gamesWon},
 									{tag:"td",text:user[i].tournamentGames},
 									{tag:"td",text:user[i].tournamentsWon}*/
+									{tag:"li", nest:[{tag:"em", text:user[i].firstName + " " + user[i].lastName},{tag:"strong",text:user[i].games}]}
 								]
 							};
-			this.nest[1].nest.push(uporabnik);
+			//this.nest[1].nest.push(uporabnik);
+			this.nest[1].nest[0].nest[1].nest.push(uporabnik);
 		}
 	}
 
@@ -31,7 +33,7 @@ function LeaderBoard()
 	{
 		//design naredi
 		this.tag = "div";
-		//this.attributes = [["class", "LeaderBoard"]];
+		this.attributes = [["class", "LeaderBoard"]];
 		this.nest = 
 		[
 			{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
@@ -72,7 +74,7 @@ function LeaderBoard()
 					
 						{tag:"ol", nest:
 							[
-								{tag:"li", nest:
+								/*{tag:"li", nest:
 									[
 										{tag:"em", text: "Burrito Peligroso"},
 										{tag:"strong", text: "315"}
@@ -89,7 +91,19 @@ function LeaderBoard()
 										{tag:"em", text: "John Doe"},
 										{tag:"strong", text: "122"}
 									]
-								}
+								},
+								{tag:"li", nest:
+									[
+										{tag:"em", text: "Sergej aus Siberia"},
+										{tag:"strong", text: "111"}
+									]
+								},
+								{tag:"li", nest:
+									[
+										{tag:"em", text: "Hans aus Tirol"},
+										{tag:"strong", text: "100"}
+									]
+								}*/
 
 							]
 						}
