@@ -36,8 +36,8 @@ function NavBar()
 	    	var res = JSON.parse(res)
 	    	if(res.sudoku){
 		    	var sudoku = res.sudoku;
-		       	console.log("Were In!");
-		    	console.log(sudoku);
+		       	// console.log("Were In!");
+		    	// console.log(sudoku);
 				var sudokuGrid = document.querySelector(".field");
 				for(var i = 0; i < 9; ++i)
 				{
@@ -96,7 +96,7 @@ function NavBar()
 		Ajax.GET("/game/getGameProgress/"+gameId, null, function(res)
 	    {
 	    	var members = JSON.parse(res)
-	    	console.log(res)
+	    	// console.log(res)
 	    });
 	}
 

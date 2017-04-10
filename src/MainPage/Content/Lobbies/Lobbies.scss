@@ -1,170 +1,343 @@
 @import '../../../colors';
+$defaultElementMargin: 0.5rem;
+$lobbiesListWidth: 15rem;
+
+@mixin stroke($width, $color) {
+    $width: $width + 0;
+    $shadow: 0 0 0 transparent;
+    $i: 0;
+    $w: 1;
+
+    @while ($i < $width) {
+        $i: $i + 1;
+        $j: 0;
+        $w: $w + 2;
+
+        @for $r from 1 through $w {
+            @for $c from 1 through $w {
+                $x: $c - ceil($w / 2);
+                $y: $r - ceil($w / 2);
+
+                $shadow: #{$shadow}, #{$x}px #{$y}px 0 $color;
+            }
+        }
+    }
+
+    text-shadow: $shadow;
+}
+
+
+#lobbyParent
+{
+  margin-top:$defaultElementMargin;
+  height: calc(100% - #{ 6.4rem + $defaultElementMargin*4});
+  width: 100%;
+}
 
 .Lobbies
 {
-	height: calc(100% - 2em);
-	width: calc(100% - 2em);
-	padding: 2em;
-	position: relative
-}
+  height: calc(100% - #{2*$defaultElementMargin});
+  width: calc(100% - #{2*$defaultElementMargin});
+  padding: $defaultElementMargin;  
+  position: relative;
 
-#lobbiesList
-{
-	width: 30%;
-	height: 100%;
-	float: left;
-    position:relative;
-}
 
-#currentLobby
-{
+  #createLobbyDiv
+  {
+    width: 100%;
+    height: 7rem;
+  }
+
+  #lobbiesListParent
+  {
+    /*margin: $defaultElementMargin;*/
+    width: $lobbiesListWidth;
+    height: calc(100%);
     float: left;
- 	width: calc(70% - 4em); //ampak zakaj dela	
-	height: 100%;
-	padding: 2em;
+    position:relative;
+    background: White;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .lobbiesListEntry
+  {
+    background: #D6D6D6;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .lobbiesListEntry:hover
+  {
+    background: #7E969A;
+  }
+
+  #currentLobby
+  {
+    /*display: none;    */
+    /*margin: $defaultElementMargin;*/
+    margin-left: $defaultElementMargin;
+    height: calc(100% - #{$defaultElementMargin * 4});
+    width: calc(100% - #{$lobbiesListWidth + $defaultElementMargin*5});
+    float: left;
+    /*padding: 2em;*/
+    padding: #{$defaultElementMargin * 2};
     position: relative;
-    background: MediumSeaGreen;
-}
-
-#hostNameDiv
-{
-	text-align: center;
-	font-weight: bold;
-	font-size: 28px;
-}
-
-.lobbyDataDiv
-{
-	font-size: 20px;
-	margin:1em;
-}
-
-#settingsSvg
-{
-	height: 40px;
-	vertical-align: middle;
-	margin-top: 1em;
-	margin-bottom: 1em;
-}
-
-
-#settingsDiv {
-	display: none;
-}
-
-#renderSettingsDiv {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.75s linear;
-}
-#settingsDiv:hover > #renderSettingsDiv {
-  visibility: visible;
-  opacity: 1;
-}
-
-
-$leave-button-bg-color: #892222;
-$button-border-color: #166E84;
-
-#leaveButton {
-  display: inline-block;
-  padding: 15px;
-  margin:1em;
-  height: 50px;
-  min-width: 100px;
-  background: $leave-button-bg-color;
-  border: none;
-  outline: none;
-  color: white;
-  font-family: inherit;
-  font-weight: 400;
-  font-size: 20px;
-  border-radius: 3px;
-  box-shadow: 0 5px 0px darken($leave-button-bg-color,0%);
-  border-bottom: 2px solid darken($leave-button-bg-color,3%);
-  
-  &:hover{
-    background: darken($leave-button-bg-color,5%);
-    box-shadow: 0 4px 1px darken($leave-button-bg-color,5%);
-    border-bottom: 2px solid darken($leave-button-bg-color,8%);
-    transition: all 0.1s ease-in;
+    background: White;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   }
-  
-  &:active{
-    transform:translateY(4px);
-    border-bottom-width: 2px;
-    box-shadow: none;
+
+  #hostNameDiv
+  {
+    text-align: center;
+    font-weight: bold;
+    font-size: 28px;
   }
-}
 
-$start-button-bg-color: #228922;
-$start-border-color: #166E84;
-
-#startGameButton {
-  display: inline-block;
-  padding: 15px;
-  margin:1em;
-  height: 50px;
-  min-width: 100px;
-  background: $start-button-bg-color;
-  border: none;
-  outline: none;
-  color: white;
-  font-family: inherit;
-  font-weight: 400;
-  font-size: 20px;
-  border-radius: 3px;
-  box-shadow: 0 5px 0px darken($start-button-bg-color,0%);
-  border-bottom: 2px solid darken($start-button-bg-color,3%);
-  
-  &:hover{
-    background: darken($start-button-bg-color,5%);
-    box-shadow: 0 4px 1px darken($start-button-bg-color,5%);
-    border-bottom: 2px solid darken($start-button-bg-color,8%);
-    transition: all 0.1s ease-in;
+  .lobbyDataDiv
+  {
+    font-size: 20px;
+    margin:1em;
   }
-  
-  &:active{
-    transform:translateY(4px);
-    border-bottom-width: 2px;
-    box-shadow: none;
+
+  #settingsSvg
+  {
+    height: 40px;
+    vertical-align: middle;
+    margin-top: 1em;
+    margin-bottom: 1em;
   }
-}
 
 
-
-$button-bg-color: $color;
-$button-border-color: #166E84;
-
-#setLobbyDataButton
-{
-  display: inline-block;
-  padding: 15px;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  height: 50px;
-  min-width: 100px;
-  background: $button-bg-color;
-  border: none;
-  outline: none;
-  color: white;
-  font-family: inherit;
-  font-weight: 400;
-  font-size: 20px;
-  border-radius: 3px;
-  box-shadow: 0 5px 0px darken($button-bg-color,0%);
-  border-bottom: 2px solid darken($button-bg-color,3%);
-  
-  &:hover{
-    background: darken($button-bg-color,5%);
-    box-shadow: 0 4px 1px darken($button-bg-color,5%);
-    border-bottom: 2px solid darken($button-bg-color,8%);
-    transition: all 0.1s ease-in;
+  #settingsDiv {
+    display: none;
   }
-  
-  &:active{
-    transform:translateY(4px);
-    border-bottom-width: 2px;
-    box-shadow: none;
+
+  #renderSettingsDiv {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.75s linear;
   }
+
+  #settingsDiv:hover > #renderSettingsDiv {
+    visibility: visible;
+    opacity: 1;
+  }
+
+
+  $leave-button-bg-color: #892222;
+  $button-border-color: #166E84;
+
+  #leaveButton {
+    padding:1rem;
+    font-family: 'Alfa Slab One', cursive;;
+
+    display: inline-block;
+    margin:1em;
+    height: 50px;
+    min-width: 100px;
+    background: $leave-button-bg-color;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: 0 5px 0px darken($leave-button-bg-color,0%);
+    border-bottom: 2px solid darken($leave-button-bg-color,3%);
+    
+    &:hover{
+      background: darken($leave-button-bg-color,5%);
+      box-shadow: 0 4px 1px darken($leave-button-bg-color,5%);
+      border-bottom: 2px solid darken($leave-button-bg-color,8%);
+      transition: all 0.1s ease-in;
+    }
+    
+    &:active{
+      transform:translateY(4px);
+      border-bottom-width: 2px;
+      box-shadow: none;
+    }
+  }
+
+  $start-button-bg-color: #228922;
+  $start-border-color: #166E84;
+
+  #startGameButton {
+    padding:1rem;
+    font-family: 'Alfa Slab One', cursive;
+
+
+    display: none;
+    margin:1em;
+    height: 50px;
+    min-width: 100px;
+    background: $start-button-bg-color;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: 0 5px 0px darken($start-button-bg-color,0%);
+    border-bottom: 2px solid darken($start-button-bg-color,3%);
+    
+    &:hover{
+      background: darken($start-button-bg-color,5%);
+      box-shadow: 0 4px 1px darken($start-button-bg-color,5%);
+      border-bottom: 2px solid darken($start-button-bg-color,8%);
+      transition: all 0.1s ease-in;
+    }
+    
+    &:active{
+      transform:translateY(4px);
+      border-bottom-width: 2px;
+      box-shadow: none;
+    }
+  }
+
+
+
+  $button-bg-color: $color;
+  $button-border-color: #166E84;
+
+  #setLobbyDataButton
+  {
+    display: inline-block;
+    padding:1rem;
+    font-family: 'Alfa Slab One', cursive;;
+
+
+
+    margin-top: 1em;
+    margin-bottom: 1em;
+    height: 50px;
+    min-width: 100px;
+    background: $button-bg-color;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: 0 5px 0px darken($button-bg-color,0%);
+    border-bottom: 2px solid darken($button-bg-color,3%);
+    
+    &:hover{
+      background: darken($button-bg-color,5%);
+      box-shadow: 0 4px 1px darken($button-bg-color,5%);
+      border-bottom: 2px solid darken($button-bg-color,8%);
+      transition: all 0.1s ease-in;
+    }
+    
+    &:active{
+      transform:translateY(4px);
+      border-bottom-width: 2px;
+      box-shadow: none;
+    }
+  }
+
+
+  $create-lobby-button-bg-color: #228922;
+  $create-lobby-border-color: #166E84;
+
+  #createLobbyButton
+  {
+    display: block;
+  
+    margin:auto;
+    margin-top: #{$defaultElementMargin*2};
+    height: 70%;
+    padding:1rem;
+    font-family: 'Alfa Slab One', cursive;;
+
+    min-width: 100px;
+    background: $create-lobby-button-bg-color;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: 0 5px 0px darken($create-lobby-button-bg-color,0%);
+    border-bottom: 2px solid darken($create-lobby-button-bg-color,3%);
+    @include stroke(2px, #000000);
+
+    &:hover{
+      background: darken($create-lobby-button-bg-color,5%);
+      box-shadow: 0 4px 1px darken($create-lobby-button-bg-color,5%);
+      border-bottom: 2px solid darken($create-lobby-button-bg-color,8%);
+      transition: all 0.1s ease-in;
+    }
+    
+    &:active{
+      transform:translateY(4px);
+      border-bottom-width: 2px;
+      box-shadow: none;
+    }
+  }
+
+
+  > .bannerWrapper
+  {
+      background: #FFFFFF;
+
+      padding-top: $defaultElementMargin*2;
+      padding-bottom: $defaultElementMargin;
+
+      height: 4rem + 2.4rem;
+      position: relative;
+      width: 100%;
+      z-index: 10;
+
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+
+      > .banner
+      {
+          position: relative;
+          margin:  0 auto 0 auto;
+          width: 13em;
+          height: 4rem;
+          border: 1px solid #5386C8;
+          font-family: 'Alfa Slab One', cursive;
+
+          @include stroke(3px, #000000);
+
+          letter-spacing: 0.06rem;
+          line-height: 4rem;
+
+          text-align: center;
+          color: #FFFFFF;
+          background: #5386C8;
+          border-radius: 4px;
+          box-shadow: 0 0 30px rgba(0,0,0,.15) inset, 0 6px 10px rgba(0,0,0,.15);
+      }
+
+      > .banner::before, .banner::after
+      {
+          content: '';
+          position: absolute;
+          // z-index: 10;
+          left: -6rem;
+          top: 2rem;
+          display: block;
+          width: 4rem;
+          height: 0px;
+          border: 2rem solid #5386C8;
+          border-right: 2rem solid #3D5077;
+          border-bottom-color: #5386C8;
+          border-left-color: transparent;
+          transform: rotate(-5deg);
+          z-index: -1;
+      }
+
+      > .banner::after
+      {
+          left: auto;
+          right: -6rem;
+          border-left: 2rem solid #3D5077;
+          border-right: 2rem solid transparent;
+          transform: rotate(5deg);
+      }
+  }
+
 }

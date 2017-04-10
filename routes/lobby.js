@@ -66,7 +66,7 @@ router.get('/createLobby', function (req, res)
 
 	//add to lobbies tracker
 	addLobbyToTracker(key)
-	console.log("Lobby created. " +key +": "+ JSON.stringify(value));
+	// console.log("Lobby created. " +key +": "+ JSON.stringify(value));
 
 	socketApi.sendNotificationToAll(route + '/getLobbies', 'GET', '') //naj si vsi grejo po lobbije spet, saj je zaj en poleg
 
@@ -183,7 +183,7 @@ router.get('/joinLobby/:lobbyId', function(req, res)
 					redisClient.set(key, JSON.stringify(lobby));
 
 					//socket to all lobby members to fetch new lobby data
-					console.log("socket noficication to all, fetch new lobby params")
+					// console.log("socket noficication to all, fetch new lobby params")
 					socketApi.sendNotificationToClients(lobby.members, route +  '/getLobbyParams', 'GET', key)
 				}
 				
