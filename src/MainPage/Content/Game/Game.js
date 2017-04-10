@@ -65,15 +65,15 @@ function NavBar()
 					[
 						{tag: "div", attributes: [["class", "field"]], nest: 
 						[
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li", attributes: [["class", "selected"]]},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]},
-							{tag: "ul", nest: [{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"},{tag: "li"}]}
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]},
+							{tag: "ul", nest: [{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"},{tag: "li", text: "1"}]}
 						]},
 						{tag: "div", attributes: [["class", "controls"]], nest: 
 						[
@@ -83,6 +83,98 @@ function NavBar()
 				]}
 			]}
 		];
+
+		var toti = this;
+
+		window.onkeydown = function(e)
+		{
+			toti.interceptKeys(e);
+		}
+
+		window.onkeyup = function(e)
+		{
+			toti.interceptKeyRelase(e);
+		}
+	}
+
+	this.interceptKeys = function(e)
+	{
+		if (e.keyCode == 49)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(1)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 50)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(2)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 51)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(3)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 52)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(4)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 53)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(5)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 54)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(6)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 55)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(7)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 56)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(8)").setAttribute("class", "selected");
+		}
+		else if (e.keyCode == 57)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(9)").setAttribute("class", "selected");
+		}
+	}
+
+	this.interceptKeyRelase = function(e)
+	{
+		if (e.keyCode == 49)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(1)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 50)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(2)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 51)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(3)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 52)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(4)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 53)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(5)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 54)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(6)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 55)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(7)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 56)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(8)").setAttribute("class", "");
+		}
+		else if (e.keyCode == 57)
+		{
+			document.querySelector(".Game .controls > ul > li:nth-child(9)").setAttribute("class", "");
+		}
 	}
 
 	this.cleanUp =  function()
