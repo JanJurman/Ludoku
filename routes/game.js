@@ -54,6 +54,11 @@ router.post('/submitSudoku', function(req, res){
 				var game = JSON.parse(reply)
 
 				var newProgress = evalSudoku(sudoku, game, req.session.userId)
+				if(newProgress == -1){
+					//narobe sudoku ali pa je šol predaleč (drugi sudoku ko je samo en)
+					res.sendStatus(200)
+					console.log("A SEM TU?")
+				}
 				//temu memberju nastavi nov progress
 
 				for(var i = 0; i < game.members.length; ++i){
@@ -110,8 +115,7 @@ router.get('/getSudoku/:gameId', function(req, res)
 						game.usersFinished.push(req.session.userId)
 						if(game.usersFinished.length == game.members.length){
 							//fsi so konec, shrani v mongo podatke, zbrisi i redisa
-							saveGameToMongo(game)
-							redisClient.del(gameId)
+							finishGame(gameId, game)
 						}else{
 							redisClient.set(gameId, JSON.stringify(game))
 						}
@@ -217,6 +221,16 @@ router.get('/getGameProgress/:gameId', function(req, res)
 
 });
 
+function finishGame(gameId, game){
+	saveGameToMongo(game)
+	redisClient.del(gameId)
+
+	//TODO: vsem igralcem inkrementiraj št iger, čekiraj achivemente, etc...
+
+	//TODO: MAYBE socket obvesti vse da je konec igre
+	 //socketApi.sendNotificationToClientsInJSONObject(game.members, route +  '/getGameProgress', 'GET', 'game.' + game.host)
+}
+
 
 
 function evalSudoku(sudoku, game, userId){
@@ -228,7 +242,7 @@ function evalSudoku(sudoku, game, userId){
 			currentSudoku = item.currentSudoku
 		}
 	});
-	if(currentSudoku == -1) return 0; //failsafe
+	if(currentSudoku == -1 || currentSudoku >= game.sudokus.length) return -1; //failsafe
 
 	var solvedSudoku = game.sudokus[currentSudoku].solved
 	var beginingStateSudoku = game.sudokus[currentSudoku].puzzle

@@ -29,35 +29,40 @@ function NavBar()
 			Ajax.POST("/game/submitSudoku", {sudoku: sudoku, gameId: this.gameId}, null)
 	}
 
-	this.fillSudokuGrid = function()
+	this.fillSudokuGrid = function(id = this.gameId)
 	{
-		Ajax.GET("/game/getSudoku/"+this.gameId, null, function(res)
+		Ajax.GET("/game/getSudoku/"+id, null, function(res)
 	    {
-	    	var sudoku = JSON.parse(res).sudoku;
-	       	console.log("Were In!");
-	    	console.log(sudoku);
-			var sudokuGrid = document.querySelector(".field");
-			for(var i = 0; i < 9; ++i)
-			{
-				//dobi ul
-				var ul = sudokuGrid.children[i];
-				for(var j = 0; j < 9; ++j)
+	    	var res = JSON.parse(res)
+	    	if(res.sudoku){
+		    	var sudoku = res.sudoku;
+		       	console.log("Were In!");
+		    	console.log(sudoku);
+				var sudokuGrid = document.querySelector(".field");
+				for(var i = 0; i < 9; ++i)
 				{
-					var li = ul.children[j];
-					//li.innerHTML = sudoku[i*9 + j];
-					if(sudoku[i*9 + j] == null)
+					//dobi ul
+					var ul = sudokuGrid.children[i];
+					for(var j = 0; j < 9; ++j)
 					{
-						li.innerHTML = " ";						
-					}
-					else
-					{
-						li.innerHTML = sudoku[i*9 + j];
-						//naredi unselectable
-						li.setAttribute("class", "unselectable");
-					}
-				}	
+						var li = ul.children[j];
+						//li.innerHTML = sudoku[i*9 + j];
+						if(sudoku[i*9 + j] == null)
+						{
+							li.innerHTML = " ";						
+						}
+						else
+						{
+							li.innerHTML = sudoku[i*9 + j];
+							//naredi unselectable
+							li.setAttribute("class", "unselectable");
+						}
+					}	
+				}
+			}else if(res.finished){
+				//res.finished je zaporedna številka, kateri si bil
+				console.log("YAY, bil si " + res.finished)
 			}
-
 	    });
 	}
 
@@ -99,6 +104,7 @@ function NavBar()
 	{
 		//socketClient events:
 		socketClient.addAction('/game/getGameProgress', this.getGameProgress)
+		socketClient.addAction('/game/getSudoku', this.fillSudokuGrid)
 
 		var instance = this
 		this.fillSudokuGrid();
