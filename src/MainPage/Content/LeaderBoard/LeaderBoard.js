@@ -31,7 +31,7 @@ function LeaderBoard()
 	{
 		//design naredi
 		this.tag = "div";
-		//this.attributes = [["class", "LeaderBoard"]];
+		this.attributes = [["class", "LeaderBoard"]];
 		this.nest = 
 		[
 			{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
