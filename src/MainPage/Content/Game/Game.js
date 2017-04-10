@@ -2,6 +2,43 @@ require("./Game.scss");
 
 function NavBar()
 {
+	this.gameId = null;
+
+	this.fillSudokuGrid = function()
+	{
+		Ajax.GET("/game/getSudoku/"+this.gameId, null, function(res)
+	    {
+	    	var sudoku = JSON.parse(res).sudoku;
+	       	console.log("Were In!");
+	    	console.log(sudoku);
+			var sudokuGrid = document.querySelector(".field");
+			for(var i = 0; i < 9; ++i)
+			{
+				//dobi ul
+				var ul = sudokuGrid.children[i];
+				for(var j = 0; j < 9; ++j)
+				{
+					var li = ul.children[j];
+					//li.innerHTML = sudoku[i*9 + j];
+					if(sudoku[i*9 + j] == null)
+					{
+						li.innerHTML = " ";						
+					}
+					else
+					{
+						li.innerHTML = i*9 + j;
+					}
+				}	
+			}
+
+	    });
+	}
+
+	this.logicInit = function()
+	{
+		this.fillSudokuGrid();
+	}
+
 	this.init = function()
 	{
 		this.tag = "div";
@@ -175,6 +212,7 @@ function NavBar()
 		{
 			document.querySelector(".Game .controls > ul > li:nth-child(9)").setAttribute("class", "");
 		}
+		this.logicInit();
 	}
 
 	this.cleanUp =  function()

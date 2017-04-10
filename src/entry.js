@@ -119,13 +119,16 @@ Router.routeTo("/profile", { require: "login" }, function()
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
 
-	// ------ Dobi usere: Games ------		treba fixat to
+	// ------ Dobi usere: Games ------		treba fixat to------------------------------------------------------
+	//quick fix
+
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.Game.cleanUp();
 
 	Ajax.GET("leaderboard/games", null, function(data)
 	{
 		tmp = JSON.parse(data);
+
 		window.MainPage.init();
 		window.MainPage.NavBar.init();
 		window.MainPage.NavBar.select("leaderboard");
@@ -133,8 +136,46 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 		window.MainPage.Content.LeaderBoard.init(tmp);
 
 		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+	});	
+
+	/*Ajax.GET("leaderboard/tournamentGames", null, function(data)
+	{
+		tmp = JSON.parse(data);
+
+		window.MainPage.init();
+		window.MainPage.NavBar.init();
+		window.MainPage.NavBar.select("leaderboard");
+		window.MainPage.Content.init();
+		window.MainPage.Content.LeaderBoard.init(tmp);
+
+		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
 	});
-	
+
+	Ajax.GET("leaderboard/gamesWon", null, function(data)
+	{
+		tmp = JSON.parse(data);
+
+		window.MainPage.init();
+		window.MainPage.NavBar.init();
+		window.MainPage.NavBar.select("leaderboard");
+		window.MainPage.Content.init();
+		window.MainPage.Content.LeaderBoard.init(tmp);
+
+		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
+	});	
+
+	Ajax.GET("leaderboard/tournamentsWon", null, function(data)
+	{
+		tmp = JSON.parse(data);
+
+		window.MainPage.init();
+		window.MainPage.NavBar.init();
+		window.MainPage.NavBar.select("leaderboard");
+		window.MainPage.Content.init();
+		window.MainPage.Content.LeaderBoard.init(tmp);
+
+		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
+	});	*/	
 
 });
 

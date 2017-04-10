@@ -33,19 +33,19 @@ userSchema.methods.maskData = function maskData()
 
 userSchema.methods.leaderboardGames = function leaderboardGames()
 {
-	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games, "gamesWon": this.gamesWon, "tournamentGames": this.tournamentGames, "tournamentsWon": this.tournamentsWon};
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games};
 };
 userSchema.methods.leaderboardTournamentGames = function leaderboardTournamentGames()
 {
-	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games, "gamesWon": this.gamesWon, "tournamentGames": this.tournamentGames, "tournamentsWon": this.tournamentsWon};
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "tournamentGames": this.tournamentGames};
 };
 userSchema.methods.leaderboardGamesWon = function leaderboardGamesWon()
 {
-	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games, "gamesWon": this.gamesWon, "tournamentGames": this.tournamentGames, "tournamentsWon": this.tournamentsWon};
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games};
 };
 userSchema.methods.leaderboardTournamentsWon = function leaderboardTournamentsWon()
 {
-	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games, "gamesWon": this.gamesWon, "tournamentGames": this.tournamentGames, "tournamentsWon": this.tournamentsWon};
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "tournamentsWon": this.tournamentsWon};
 };
 
 mongoose.model('user', userSchema);

@@ -6,11 +6,6 @@ require("./Lobbies.scss");
 /*
 CURRENT ISSUE LIST
 
-ko se nekdo joina lobbiju, ludi ko so not ne vidijo
-	edit: problem je v sockets: pošlješ request na server > server prek socketov pošlje vsem userom v arraju komando ki jo naj izvedejo
-		> userov pa ni (socketId al nekaj) ker je baza prazna če poglejaš v reddis pa rečeš "KEYS *", tak da se pol nena nič izvede in 
-		ne dobis podakov za joined lobby
-
 dodaj gameStart
 
 */
@@ -218,11 +213,28 @@ function Lobbies()
 	{
 		Ajax.GET("/lobby/leaveLobby/" + lobbyID, null, function(res)
 	    {
-	    	// no op
 	    	instance.myLobbyId = null;
 	    	instance.clearLobbyDiv();
 	    	console.log("LEFT")
 	    });	
+	}
+
+	this.startGame = function(){
+		Ajax.GET("/game/startGame", null, function(res)
+	    {
+	    	//instance.myLobbyId = null;
+	    	instance.clearLobbyDiv();
+	    	console.log("game start ajax sent!")
+	    	//socket server pol obvesti vse lobby memberje, da se naj redirectajo na /#/game
+	    });	
+	}
+
+	this.redirectToGame = function(gameId)
+	{
+		setTimeout(function(){
+			window.MainPage.Content.Game.gameId = gameId;
+			window.location.href = "#/game";	
+		}, 1000);
 	}
 
 	this.init = function()
@@ -231,7 +243,9 @@ function Lobbies()
 		socketClient.addAction("/lobby/getLobbyParams", this.getLobbyData)
 		socketClient.addAction("/lobby/getLobbies", this.getLobbies)
 		socketClient.addAction("/lobby/leaveLobby", this.leaveLobby)
+		socketClient.addAction("#GAMESTART", this.redirectToGame)
 	
+
 		this.tag = "div";
 		this.attributes = [["class", "Lobbies"]];
 		this.nest = 
@@ -278,7 +292,7 @@ function Lobbies()
 							[
 								{tag: "option", attributes: [["value", "solo"]], text: "Solo"},
 								{tag: "option", attributes: [["value", "1v1"]], text: "1v1"},
-								{tag: "option", attributes: [["value", "8v8"]], text: "8v8"},
+								{tag: "option", attributes: [["value", "8enak"]], text: "8ffa"},
 								{tag: "option", attributes: [["value", "tournament"]], text: "Tournament"}
 							]},
 							{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.setLobbyDataClick()'], ["id", "setLobbyDataButton"]],  text: "Set"}
@@ -290,8 +304,7 @@ function Lobbies()
 					{tag: "div", attributes: [["id", "difficultyDiv"], ["class", "lobbyDataDiv"]], text: "Difficulty: "},
 					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: "Members: "},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
-					{tag: "button", attributes: [["id", "startGameButton"]], text : "Start Game"}
-					//<button onclick='window.MainPage.Content.Lobbies.leaveLobby(\"lobby." + lobby.host + "\")' >LEAVE</button>";
+					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.startGame()'], ["id", "startGameButton"]], text : "Start Game"}
 				]
 			 }
 		];
