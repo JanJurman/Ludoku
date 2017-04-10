@@ -164,8 +164,8 @@ function saveGameToMongo(game){
 	var Game = mongoose.model('game');
 
 	var users = []
-	game.members.forEach(function(item, index){
-		users.push(mongoose.Types.ObjectId(item.id))
+	game.usersFinished.forEach(function(item, index){
+		users.push(mongoose.Types.ObjectId(item))
 	})
 
 	var gameToSave = new Game({ players: users, type: maperino[game.gameType], start: game.startTime, finish: Date().now });
@@ -173,6 +173,45 @@ function saveGameToMongo(game){
 	    if (err) return console.error(err);
 	});
 }
+
+function updateUserStatistics(game)
+{
+	var users = []
+	game.usersFinished.forEach(function(item, index){
+		users.push(mongoose.Types.ObjectId(item))
+	})
+	//update user here, no need for callback ker je vseeno če zaj al čez par ms
+	var User = mongoose.model('user');
+	if( maperino[game.gameType] < 100 ) //lol!    normal game
+	{
+		//users users sorted by finish time => prvi je winner
+		User.findByIdAndUpdate(users[0],{ $inc: {gamesWon:1} }, function(err, result){
+			if(err){console.log(err);}
+		});
+		users.forEach(function(user, index)
+		{
+			User.findByIdAndUpdate(user,{ $inc: {games:1} }, function(err, result){
+				if(err){console.log(err);}
+			});
+		})
+	}
+	else //tournament game ma type 10X; npr 100
+	{
+		//users users sorted by finish time => prvi je winner
+		User.findByIdAndUpdate(users[0],{ $inc: {tournamentsWon:1} }, function(err, result){
+			if(err){console.log(err);}
+		});
+		users.forEach(function(user, index)
+		{
+			User.findByIdAndUpdate(user,{ $inc: {tournamentGames:1} }, function(err, result){
+				if(err){console.log(err);}
+			});
+		})
+	}
+
+
+}
+
 
 //TODO: delete this at some point?
 router.get('/getGame/:gameId', function(req, res)
@@ -204,7 +243,7 @@ router.get('/getGameProgress/:gameId', function(req, res)
 			var membs = game.members
 			for(var i = 0; i < membs.length; ++i){
 				if(userId == membs[i].id){
-					console.log("FOUND")
+					// console.log("FOUND")
 					membs.splice(i, 1);
 					found = true;
 				}
@@ -222,11 +261,13 @@ router.get('/getGameProgress/:gameId', function(req, res)
 });
 
 function finishGame(gameId, game){
+	// console.log("calling finish game");
 	saveGameToMongo(game)
+	updateUserStatistics(game)
 	redisClient.del(gameId)
 
 	//TODO: vsem igralcem inkrementiraj št iger, čekiraj achivemente, etc...
-
+	//TODO: daj random sudoku namesto hard coded
 	//TODO: MAYBE socket obvesti vse da je konec igre
 	 //socketApi.sendNotificationToClientsInJSONObject(game.members, route +  '/getGameProgress', 'GET', 'game.' + game.host)
 }
@@ -354,7 +395,7 @@ function gameInit(lobby){
 
 	if(game.gameType != "1v1"){
 		game.sudokus[0] = getSudoku(game.difficulty)
-		console.log(JSON.stringify(game.sudokus[0]))
+		// console.log(JSON.stringify(game.sudokus[0]))
 	}
 	else{ 
 		//če je 1v1 5 sudokujev, mormo težavnost stopnjevat
@@ -391,8 +432,8 @@ function gameInit(lobby){
 
 	//shrani game v redis
 	redisClient.set("game." + game.host, JSON.stringify(game))
-	console.log("ADDED GAME TO REDIS? /////////////////////////////")
-	console.log(JSON.stringify(game));
+	// console.log("ADDED GAME TO REDIS? /////////////////////////////")
+	// console.log(JSON.stringify(game));
 }
 
 

@@ -3,12 +3,6 @@ var socketClient = require('../../../Utils/socketClient.js')
 
 require("./Lobbies.scss");
 
-/*
-CURRENT ISSUE LIST
-
-dodaj gameStart
-
-*/
 function Lobbies()
 {
 	this.myLobbyId = 0;
@@ -18,7 +12,7 @@ function Lobbies()
 	{
 		Ajax.GET("/lobby/createLobby",null, function(res)
 	    {
-			console.log("Lobby successfuly created: " + res);
+			// console.log("Lobby successfuly created: " + res);
 			//then join
 			
 			instance.joinLobby(res)
@@ -31,7 +25,7 @@ function Lobbies()
 	{
 	  Ajax.GET("/lobby/removeLobby",null, function(res)
 	    {
-	        console.log("Lobby deleted.");
+	        // console.log("Lobby deleted.");
 	    });
 	}
 
@@ -89,7 +83,7 @@ function Lobbies()
 	    	instance.clearLobbiesDiv()
 	    	if(res === null)
 	    	{
-	    		console.log("No lobbies");
+	    		// console.log("No lobbies");
 	    	}
 	    	else
 	    	{
@@ -97,7 +91,7 @@ function Lobbies()
 	    		if(lobbies[0] == null){
 	    			return;
 	    		}
-		      	console.log(lobbies);
+		      	// console.log(lobbies);
 		      	
 		    	lobbies.forEach(function(item, index){
 		    		//tukaj mores noter iskat player imena zaradi race conditions
@@ -120,7 +114,7 @@ function Lobbies()
 	}
 	this.addLobbytoLobbiesDiv = function(lobby,host){
 		lobbiesDiv = document.querySelector("#lobbiesList");
-		lobbiesDiv.innerHTML += "<div style='border: 2px solid red;'>"+"Host: "+host.firstName+" "+host.lastName+"</br>" + "Game type: " + lobby.gameType + "</br> Difficulty: " + lobby.difficulty + 
+		lobbiesDiv.innerHTML += "<div class='lobbiesListEntry'>"+"Host: "+host.firstName+" "+host.lastName+"</br>" + "Game type: " + lobby.gameType + "</br> Difficulty: " + lobby.difficulty + 
 							"</br>Players: "+lobby.members.length+"</br><button onclick='window.MainPage.Content.Lobbies.joinLobby(\"lobby." + lobby.host + "\")' >JOIN</button>" + 
 							"</div>";
 	}
@@ -130,19 +124,19 @@ function Lobbies()
 	{
 		Ajax.POST("/lobby/setLobbyParams", {"gameType" :gameType, "difficulty" : difficulty}, function(res)
 	    {
-	    	console.log("We did it boiiis!!");
+	    	// console.log("We did it boiiis!!");
 	    	instance.getLobbyData();
 	    });
 	}
 
 	this.getLobbyData = function(lobbyID = this.myLobbyId)
 	{
-		console.log("GET LOBBY DATA")
+		// console.log("GET LOBBY DATA")
 		Ajax.GET("/lobby/getLobbyParams/" + lobbyID, null, function(res)
 	    {
 	    	lobby = JSON.parse(res)
-	    	console.log("Getting lobby params:");
-	    	console.log(lobby);
+	    	// console.log("Getting lobby params:");
+	    	// console.log(lobby);
 	    	instance.getPlayersThenCallFunction(lobby, instance.showLobbyDiv);
 	    });
 	}
@@ -182,9 +176,8 @@ function Lobbies()
 		//če smo host lahko spreminjamo podatke
 		if(window.loggedUser._id === lobby.host)
 		{
-			var settingsImg = document.querySelector("#settingsSvg");
 			document.querySelector("#settingsDiv").style.display = 'block';
-			// settingsImg.onclick = function () { instance.renderLobbyOptions(lobby) };
+			document.querySelector("#startGameButton").style.display = 'inline-block';
 		}
 
 		document.querySelector("#hostNameDiv").innerHTML = users[0].firstName+ " " + users[0].lastName + "'s " + "lobby";
@@ -224,7 +217,7 @@ function Lobbies()
 	    {
 	    	//instance.myLobbyId = null;
 	    	instance.clearLobbyDiv();
-	    	console.log("game start ajax sent!")
+	    	// console.log("game start ajax sent!")
 	    	//socket server pol obvesti vse lobby memberje, da se naj redirectajo na /#/game
 	    });	
 	}
@@ -250,25 +243,51 @@ function Lobbies()
 		this.attributes = [["class", "Lobbies"]];
 		this.nest = 
 		[
-			{
-				tag: "ul", 
-				attributes: [["class", "testingList"]], 
-				nest: 
-				[
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.createLobby()'>Create lobby</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.getLobbies()'>Get lobies</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.removeLobby()'>Remove lobby</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.setLobbyData(\"1v1\", \"medium\")'>Set lobby data</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.getLobbyData()'>Get lobby data</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.joinLobby()'>Join Lobby</button>"},
-					{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.leaveLobby()'>Leave Lobby</button>"}
+			// {
+			// 	tag: "ul", 
+			// 	attributes: [["class", "testingList"]], 
+			// 	nest: 
+			// 	[
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.createLobby()'>Create lobby</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.getLobbies()'>Get lobies</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.removeLobby()'>Remove lobby</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.setLobbyData(\"1v1\", \"medium\")'>Set lobby data</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.getLobbyData()'>Get lobby data</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.joinLobby()'>Join Lobby</button>"},
+			// 		{tag: "li", attributes: [["class", "name"]] , text: "<button onclick='window.MainPage.Content.Lobbies.leaveLobby()'>Leave Lobby</button>"}
 
 					
+			// 	]
+			// },
+
+			{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
+			[
+				{tag: "h1", attributes: [["class", "banner"]], text: "Lobbies"}
+			]},
+
+
+
+			{tag: "div", attributes: [["id", "lobbyParent"]], 
+
+			nest:
+			[
+
+			
+			{tag: "div", attributes: [["id", "lobbiesListParent"]],
+			nest:
+			[
+				{tag: "div", attributes: [["id", "createLobbyDiv"]],
+				nest:
+				[
+					{tag: "button", attributes: [["id", "createLobbyButton"], ["onclick",'window.MainPage.Content.Lobbies.createLobby()']] , text: "Create lobby"},	
 				]
+				},
+				{tag: "div", attributes: [["id", "lobbiesList"]]}
+			]
 			},
-			{tag: "div", attributes: [["id", "lobbiesList"]]},
+
 			{
-				tag: "div", attributes: [["id", "currentLobby"], ["style", "display:none"]], 
+				tag: "div", attributes: [["id", "currentLobby"]], 
 				nest:
 				[
 					{tag: "div", attributes: [["id", "hostNameDiv"]], text: "GETHOSTNAME"+"'s lobby"},
@@ -306,7 +325,10 @@ function Lobbies()
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.startGame()'], ["id", "startGameButton"]], text : "Start Game"}
 				]
-			 }
+			},
+		]
+		}
+
 		];
 
 
