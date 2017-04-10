@@ -44,8 +44,9 @@ router.get('/startGame', function(req, res)
 
 //post sudoku for evaluation
 router.post('/submitSudoku', function(req, res){
+	console.log("SUBMIT SUDOKU")
 	if(req.body.sudoku && req.body.gameId){
-		var sudoku = JSON.parse(req.body.sudoku)
+		var sudoku = req.body.sudoku
 		//get game from redis
 		var key = req.body.gameId
 		redisClient.get(key, function(err,reply) {
@@ -53,18 +54,23 @@ router.post('/submitSudoku', function(req, res){
 				var game = JSON.parse(reply)
 
 				var newProgress = evalSudoku(sudoku, game, req.session.userId)
+				if(newProgress == -1){
+					//narobe sudoku ali pa je šol predaleč (drugi sudoku ko je samo en)
+					res.sendStatus(200)
+					console.log("A SEM TU?")
+				}
 				//temu memberju nastavi nov progress
 
 				for(var i = 0; i < game.members.length; ++i){
-					if(game.members[i] == req.session.userId){
+					if(game.members[i].id == req.session.userId){
 						
 						//če sm rešu sudoku do konca, mi povej da naj naslednjega naložim
 						if(newProgress == 1){
 							++game.members[i].currentSudoku
-							sendNotificationToClient(game.members[i].id,route +  '/getSudoku', 'GET', 'game.' + game.host)
+							socketApi.sendNotificationToClient(game.members[i].id,route +  '/getSudoku', 'GET', 'game.' + game.host)
 						}else{
 							//normalize progress to number of sudokus
-							if(game.gameType = "1v1")
+							if(game.gameType == "1v1")
 								newProgress /= 5
 							newProgress = game.members[i].currentSudoku * 0.2 + newProgress
 						}
@@ -72,12 +78,13 @@ router.post('/submitSudoku', function(req, res){
 						game.members[i].progress = newProgress
 					}
 				}
+
+				//save back to redis
+				redisClient.set(key, JSON.stringify(game))
+
 				//preko soketov reči vsem naj si grejo po novi progess data
 				socketApi.sendNotificationToClientsInJSONObject(game.members, route +  '/getGameProgress', 'GET', 'game.' + game.host)
 
-				
-				//save back to redis
-				redisClient.set(key, game)
 
 				res.sendStatus(200)
 			}else{
@@ -108,10 +115,9 @@ router.get('/getSudoku/:gameId', function(req, res)
 						game.usersFinished.push(req.session.userId)
 						if(game.usersFinished.length == game.members.length){
 							//fsi so konec, shrani v mongo podatke, zbrisi i redisa
-							saveGameToMongo(game)
-							redisClient.del(gameId)
+							finishGame(gameId, game)
 						}else{
-							redisClient.set(gameId, game)
+							redisClient.set(gameId, JSON.stringify(game))
 						}
 						console.log("nekdo je dokončal game")
 						res.send({sudoku: null, finished: game.usersFinished.length})
@@ -138,7 +144,7 @@ router.get('/getSolution/:gameId', function(req, res)
 			var game = JSON.parse(reply)
 
 			for(var i = 0; i < game.members.length; ++i){
-				if(game.members[i] == req.session.userId){
+				if(game.members[i].id == req.session.userId){
 					res.send(game.sudokus[game.members[i].currentSudoku].solved)
 				}
 			}
@@ -197,7 +203,8 @@ router.get('/getGameProgress/:gameId', function(req, res)
 			var game = JSON.parse(reply)
 			var membs = game.members
 			for(var i = 0; i < membs.length; ++i){
-				if(userId == membs.id){
+				if(userId == membs[i].id){
+					console.log("FOUND")
 					membs.splice(i, 1);
 					found = true;
 				}
@@ -214,6 +221,16 @@ router.get('/getGameProgress/:gameId', function(req, res)
 
 });
 
+function finishGame(gameId, game){
+	saveGameToMongo(game)
+	redisClient.del(gameId)
+
+	//TODO: vsem igralcem inkrementiraj št iger, čekiraj achivemente, etc...
+
+	//TODO: MAYBE socket obvesti vse da je konec igre
+	 //socketApi.sendNotificationToClientsInJSONObject(game.members, route +  '/getGameProgress', 'GET', 'game.' + game.host)
+}
+
 
 
 function evalSudoku(sudoku, game, userId){
@@ -225,7 +242,7 @@ function evalSudoku(sudoku, game, userId){
 			currentSudoku = item.currentSudoku
 		}
 	});
-	if(currentSudoku == -1) return 0; //failsafe
+	if(currentSudoku == -1 || currentSudoku >= game.sudokus.length) return -1; //failsafe
 
 	var solvedSudoku = game.sudokus[currentSudoku].solved
 	var beginingStateSudoku = game.sudokus[currentSudoku].puzzle

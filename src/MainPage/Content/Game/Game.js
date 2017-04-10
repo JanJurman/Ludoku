@@ -1,17 +1,15 @@
 require("./Game.scss");
+var socketClient = require('../../../Utils/socketClient.js')
 
 function NavBar()
 {
 	this.gameId = null;
 
-	this.fillSudokuGrid = function()
+	this.sendSudoku = function()
 	{
-		Ajax.GET("/game/getSudoku/"+this.gameId, null, function(res)
-	    {
-	    	var sudoku = JSON.parse(res).sudoku;
-	       	console.log("Were In!");
-	    	console.log(sudoku);
-			var sudokuGrid = document.querySelector(".field");
+		//get sudoku from grid
+		var sudoku = []
+		var sudokuGrid = document.querySelector(".field");
 			for(var i = 0; i < 9; ++i)
 			{
 				//dobi ul
@@ -19,25 +17,122 @@ function NavBar()
 				for(var j = 0; j < 9; ++j)
 				{
 					var li = ul.children[j];
-					//li.innerHTML = sudoku[i*9 + j];
-					if(sudoku[i*9 + j] == null)
-					{
-						li.innerHTML = " ";						
-					}
-					else
-					{
-						li.innerHTML = i*9 + j;
+					if(li.innerHTML == " "){
+						sudoku.push(null)
+					}else{
+						sudoku.push(parseInt(li.innerHTML))
 					}
 				}	
 			}
 
+			//send ajax
+			Ajax.POST("/game/submitSudoku", {sudoku: sudoku, gameId: this.gameId}, null)
+	}
+
+	this.fillSudokuGrid = function(id = this.gameId)
+	{
+		Ajax.GET("/game/getSudoku/"+id, null, function(res)
+	    {
+	    	var res = JSON.parse(res)
+	    	if(res.sudoku){
+		    	var sudoku = res.sudoku;
+		       	console.log("Were In!");
+		    	console.log(sudoku);
+				var sudokuGrid = document.querySelector(".field");
+				for(var i = 0; i < 9; ++i)
+				{
+					//dobi ul
+					var ul = sudokuGrid.children[i];
+					for(var j = 0; j < 9; ++j)
+					{
+						var li = ul.children[j];
+						//li.innerHTML = sudoku[i*9 + j];
+						if(sudoku[i*9 + j] == null)
+						{
+							li.innerHTML = " ";						
+						}
+						else
+						{
+							li.innerHTML = sudoku[i*9 + j];
+							//naredi unselectable
+							li.setAttribute("class", "unselectable");
+						}
+					}	
+				}
+			}else if(res.finished){
+				//res.finished je zaporedna številka, kateri si bil
+				console.log("YAY, bil si " + res.finished)
+			}
+	    });
+	}
+
+	this.cheat = function(sudokuSolution)
+	{
+		var sudokuGrid = document.querySelector(".field");
+		for(var i = 0; i < 9; ++i)
+		{
+			//dobi ul
+			var ul = sudokuGrid.children[i];
+			for(var j = 0; j < 9; ++j)
+			{
+				var li = ul.children[j];
+				//li.innerHTML = sudoku[i*9 + j];
+				if(sudokuSolution[i*9 + j] == null)
+				{
+					li.innerHTML = " ";						
+				}
+				else
+				{
+					li.innerHTML = sudokuSolution[i*9 + j];
+					//naredi unselectable
+					//li.setAttribute("class", "unselectable");
+				}
+			}	
+		}
+	}
+
+	this.getGameProgress = function(gameId){
+		//ajaxaj si game progress in ga baci v progress bare
+		Ajax.GET("/game/getGameProgress/"+gameId, null, function(res)
+	    {
+	    	var members = JSON.parse(res)
+	    	console.log(res)
 	    });
 	}
 
 	this.logicInit = function()
 	{
+		//socketClient events:
+		socketClient.addAction('/game/getGameProgress', this.getGameProgress)
+		socketClient.addAction('/game/getSudoku', this.fillSudokuGrid)
+
+		var instance = this
 		this.fillSudokuGrid();
+
+		//dajmo vsem lijem onckick
+		var sudokuGrid = document.querySelector(".field");
+		for(var i = 0; i < 9; ++i)
+		{
+			//dobi ul
+			var ul = sudokuGrid.children[i];
+			for(var j = 0; j < 9; ++j)
+			{
+				var li = ul.children[j];
+				li.onclick = function(){
+					var x = document.querySelector(".field .selected")
+					if(x)
+						x.setAttribute("class", "")
+					if(!instance.hasClass(this, "unselectable")){
+						this.setAttribute("class", "selected");
+					}
+				}
+			}	
+		}
 	}
+
+	this.hasClass = function(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
 
 	this.init = function()
 	{
@@ -136,83 +231,33 @@ function NavBar()
 
 	this.interceptKeys = function(e)
 	{
-		if (e.keyCode == 49)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(1)").setAttribute("class", "selected");
+		var code = e.keyCode
+		if(code >= 49 && code <= 57){
+			var num = code - 48
+			document.querySelector(".Game .controls > ul > li:nth-child(" + num + ")").setAttribute("class", "selected");
+			//selected liju daj cifro not
+			var sel = document.querySelector(".field .selected")
+			if(sel){
+				sel.innerHTML = num
+				//send sudoku to be evaled
+				this.sendSudoku()
+			}
 		}
-		else if (e.keyCode == 50)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(2)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 51)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(3)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 52)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(4)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 53)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(5)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 54)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(6)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 55)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(7)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 56)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(8)").setAttribute("class", "selected");
-		}
-		else if (e.keyCode == 57)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(9)").setAttribute("class", "selected");
+		else if(code == 48){ //nula
+			var sel = document.querySelector(".field .selected")
+			if(sel){
+				sel.innerHTML = " "
+			}
 		}
 	}
 
 	this.interceptKeyRelase = function(e)
 	{
-		if (e.keyCode == 49)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(1)").setAttribute("class", "");
+		var code = e.keyCode
+		if(code >= 49 && code <= 57){
+			var num = code - 48
+			document.querySelector(".Game .controls > ul > li:nth-child(" + num + ")").setAttribute("class", "");
 		}
-		else if (e.keyCode == 50)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(2)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 51)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(3)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 52)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(4)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 53)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(5)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 54)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(6)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 55)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(7)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 56)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(8)").setAttribute("class", "");
-		}
-		else if (e.keyCode == 57)
-		{
-			document.querySelector(".Game .controls > ul > li:nth-child(9)").setAttribute("class", "");
-		}
-		this.logicInit();
 	}
 
 	this.cleanUp =  function()

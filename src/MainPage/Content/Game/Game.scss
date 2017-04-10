@@ -275,6 +275,14 @@ $leftBarWidth: 30rem;
 							background: #9AA5CB;
 						}
 
+						>li.unselectable
+						{
+							// border: 3px solid #465AD4;
+							// border-right: 3px solid #465AD4;
+							// background: #9AA5CB;
+							color: maroon //TODO NASTAVI BARVO
+						}
+
 						> li:nth-child(3), li:nth-child(6)
 						{
 							border-right: 1.5px solid #252525;

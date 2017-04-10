@@ -195,6 +195,7 @@ Router.routeToHome("/game", { require: "logout" }, function()
 
 
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+	window.MainPage.Content.Game.logicInit();
 });
 
 
