@@ -145,13 +145,10 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 				{
 					tournamentsWon = JSON.parse(data);
 
-					console.log(games+"GAMES");
 					tmp.push(games);
 					tmp.push(gamesWon);
 					tmp.push(tournamentGames);
 					tmp.push(tournamentsWon);
-
-					console.log(tmp+"preden gre dalje");
 
 					window.MainPage.init();
 					window.MainPage.NavBar.init();

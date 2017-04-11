@@ -7,9 +7,6 @@ function LeaderBoard()
 	{
 		//razberi po čem so sortani useri
 
-		console.log("vhod v setLeaderBoard funkcijo");
-		var temp = JSON.stringify(user);
-		console.log(temp);
 		var numberOfUsers = 5;				//user.length;
 
 		for(var i = 0; i < 4; ++i)
@@ -54,7 +51,6 @@ function LeaderBoard()
 
 			for(var j = 0; j < 5; ++j)
 			{
-				console.log(user[i][j].lastName+"imeeeeeeMoje");
 				var uporabnik;
 
 				if(i == 0)
@@ -78,7 +74,7 @@ function LeaderBoard()
 
 
 			var section = {tag:"section", attributes:[["class", "players"]], nest:[naslovH1, uporabniki]};
-			this.nest[1].nest.push(section);
+			this.nest[1].nest[0].nest.push(section);
 		}
 
 	}
@@ -97,15 +93,23 @@ function LeaderBoard()
 				}
 			]},
 
-			{tag: "div", nest:
+			{tag: "div", attributes: [["class", "okvir"]], nest:
 			[
-				{tag:"section", attributes: [["class", "players"]], nest:
-					[
-						
-					]
-				}
-			]}
+				{tag: "div", attributes: [["class", "boardWrapper"]], nest:
+				[
 
+				]}
+			]},
+
+			{tag: "div", attributes: [["class", "okvir"]], nest:
+			[
+				{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
+				[
+					{
+						tag: "h1", attributes: [["class", "banner"]], text: "Coming soon"	
+					}
+				]}
+			]}
 
 		];
 		this.setLeaderBoard(user);
@@ -120,7 +124,7 @@ function LeaderBoard()
 
 	this.viewProfile = function(ajdi)
 	{
-		 console.log(ajdi+"hahahahahahahahahahahahahahah");
+		 console.log(ajdi);
 	}
 }
 
