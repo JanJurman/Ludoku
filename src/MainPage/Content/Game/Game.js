@@ -3,8 +3,9 @@ var socketClient = require('../../../Utils/socketClient.js')
 
 function NavBar()
 {
-	this.gameId = null;
-
+	//this.gameId = null;
+	var playersMap = new Array();
+	var instance = this;
 	this.sendSudoku = function()
 	{
 		//get sudoku from grid
@@ -96,7 +97,7 @@ function NavBar()
 		Ajax.GET("/game/getGameProgress/"+gameId, null, function(res)
 	    {
 	    	var members = JSON.parse(res)
-	    	// console.log(res)
+	    	instance.updateProgressBars(members)
 	    });
 	}
 
@@ -128,11 +129,113 @@ function NavBar()
 				}
 			}	
 		}
+
+		//init progress bars
+		Ajax.GET("/game/getGameProgress/"+this.gameId, null, function(res)
+	    {
+			res = JSON.parse(res)
+			console.log("initialising game:")
+			var members = new Array()
+			res.forEach(function(item, index) //naredi array user IDjev
+			{
+				members.push(item.id);
+			})
+			console.log(res)
+			console.log(members);
+
+			//tukaj pride recursive getUser name call
+	    	instance.getPlayersThenCallFunction(members, instance.renderProgressBars);
+			console.log("finished recursive madness:")
+	    	console.log(playersMap);
+	    });
+
 	}
+
+	
+
+	this.getPlayersThenCallFunction = function(members, callback)
+	{
+		var users = new Array();
+		instance.getUsersRec(users, members, callback);
+	}
+
+	// za ene callback madness, za druge elegant solution   edit: holy fuck delalo je sprve
+	this.getUsersRec = function(users, members, callback)
+	{
+		Ajax.GET("/user/"+members[users.length], null, function(res,error)
+		{
+			if(!error)
+			{
+				users.push(JSON.parse(res));
+				if(users.length === members.length)
+				{
+					//TODO tu neki bomo naredli pol lookup table
+					callback(users);
+				}
+				else
+				{
+					instance.getUsersRec(users,members,callback);
+				}
+			}
+			else //TODO
+			{
+				callback(members, {firstName: "Anon", lastName:""});
+			}
+		});
+	}
+
+	this.renderProgressBars = function(players)
+	{
+
+		var progressBars =	"";
+		var playersDiv = document.querySelector(".players")
+
+		console.log("rendering progress bars")
+		players.forEach(function(item, index)
+		{
+			console.log(item);
+			playersMap[item._id] = {name: item.firstName, lastName: item.lastName, pBarIndex:index}
+			progressBars +=	"<div class='playerDescriptor'>"
+								+"<div class='name'>"+item.firstName+ " " +item.lastName+ "</div>"
+								+"<div class='progress'>"
+									+"<div></div>"
+									+"<span>"+"0%"+"</span>"
+								+"</div>"
+							+"</div>";
+		})
+
+		playersDiv.innerHTML = progressBars;
+	}
+
+	this.updateProgressBars = function(players)
+	{
+		var playersDiv = document.querySelector('.players')
+		//[{"id":"58ea52500829db229c94c008","progress":0,"currentSudoku":0}]
+		console.log("entered updateProgressBars");
+		console.log(players);
+		players.forEach(function(player, index)
+		{
+			console.log(player)
+			var playerData = playersMap[player.id];
+			console.log("updating progress bar with new player");
+			console.log(playersMap)
+			console.log(playerData);
+
+			var progress = Math.floor(player.progress * 100)
+			console.log("playerData: ");
+			console.log(playerData);
+			var progressDiv = playersDiv.childNodes[playerData.pBarIndex].childNodes[1];
+			
+
+			progressDiv.childNodes[0].style.width = progress + "%";
+			progressDiv.childNodes[1].innerHTML = progress + "%";
+		})
+	}
+
 
 	this.hasClass = function(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-}
+	}
 
 	this.init = function()
 	{
@@ -173,20 +276,6 @@ function NavBar()
 							{tag: "div", attributes: [["class", "name"]], text: "Janez Novak"},
 							{tag: "div", attributes: [["class", "progress"]] , nest: [{tag: "div"}, {tag: "span", text: "50%"}]}
 
-						]},
-						{tag: "div", attributes: [["class", "playerDescriptor"]], nest:[
-							{tag: "div", attributes: [["class", "name"]], text: "Janez Novak"},
-							{tag: "div", attributes: [["class", "progress"]] , nest: [{tag: "div"}, {tag: "span", text: "50%"}]}
-
-						]},
-						{tag: "div", attributes: [["class", "playerDescriptor"]], nest:[
-							{tag: "div", attributes: [["class", "name"]], text: "Janez Novak"},
-							{tag: "div", attributes: [["class", "progress"]] , nest: [{tag: "div"}, {tag: "span", text: "50%"}]}
-
-						]},
-						{tag: "div", attributes: [["class", "playerDescriptor"]], nest:[
-							{tag: "div", attributes: [["class", "name"]], text: "Janez Novak"},
-							{tag: "div", attributes: [["class", "progress"]] , nest: [{tag: "div"}, {tag: "span", text: "50%"}]}
 						]}
 
 					]}
