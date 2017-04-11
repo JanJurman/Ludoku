@@ -45,12 +45,11 @@ $lobbiesListWidth: 15rem;
   #createLobbyDiv
   {
     width: 100%;
-    height: 7rem;
+    height: 7.5rem;
   }
 
   #lobbiesListParent
   {
-    /*margin: $defaultElementMargin;*/
     width: $lobbiesListWidth;
     height: calc(100%);
     float: left;
@@ -61,6 +60,7 @@ $lobbiesListWidth: 15rem;
 
   .lobbiesListEntry
   {
+    //font-family: 'Alfa Slab One', cursive;
     background: #D6D6D6;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -128,10 +128,11 @@ $lobbiesListWidth: 15rem;
   $button-border-color: #166E84;
 
   #leaveButton {
+    display:none;
+
     padding:1rem;
     font-family: 'Alfa Slab One', cursive;;
 
-    display: inline-block;
     margin:1em;
     height: 50px;
     min-width: 100px;
@@ -142,9 +143,10 @@ $lobbiesListWidth: 15rem;
     font-weight: 400;
     font-size: 20px;
     border-radius: 3px;
-    box-shadow: 0 5px 0px darken($leave-button-bg-color,0%);
+    box-shadow: 0 5px 0px darken($leave-button-bg-color,7%);
     border-bottom: 2px solid darken($leave-button-bg-color,3%);
-    
+    @include stroke(2px, #000000);
+ 
     &:hover{
       background: darken($leave-button-bg-color,5%);
       box-shadow: 0 4px 1px darken($leave-button-bg-color,5%);
@@ -178,9 +180,10 @@ $lobbiesListWidth: 15rem;
     font-weight: 400;
     font-size: 20px;
     border-radius: 3px;
-    box-shadow: 0 5px 0px darken($start-button-bg-color,0%);
+    box-shadow: 0 5px 0px darken($start-button-bg-color,7%);
     border-bottom: 2px solid darken($start-button-bg-color,3%);
-    
+    @include stroke(2px, #000000);
+
     &:hover{
       background: darken($start-button-bg-color,5%);
       box-shadow: 0 4px 1px darken($start-button-bg-color,5%);
@@ -219,9 +222,10 @@ $lobbiesListWidth: 15rem;
     font-weight: 400;
     font-size: 20px;
     border-radius: 3px;
-    box-shadow: 0 5px 0px darken($button-bg-color,0%);
+    box-shadow: 0 5px 0px darken($button-bg-color,7%);
     border-bottom: 2px solid darken($button-bg-color,3%);
-    
+    @include stroke(2px, #000000);
+
     &:hover{
       background: darken($button-bg-color,5%);
       box-shadow: 0 4px 1px darken($button-bg-color,5%);
@@ -245,8 +249,8 @@ $lobbiesListWidth: 15rem;
     display: block;
   
     margin:auto;
-    margin-top: #{$defaultElementMargin*2};
-    height: 70%;
+    margin-top: #{$defaultElementMargin*4};
+    height: 60%;
     padding:1rem;
     font-family: 'Alfa Slab One', cursive;;
 
@@ -258,7 +262,7 @@ $lobbiesListWidth: 15rem;
     font-weight: 400;
     font-size: 20px;
     border-radius: 3px;
-    box-shadow: 0 5px 0px darken($create-lobby-button-bg-color,0%);
+    box-shadow: 0 5px 0px darken($create-lobby-button-bg-color,7%);
     border-bottom: 2px solid darken($create-lobby-button-bg-color,3%);
     @include stroke(2px, #000000);
 
@@ -275,6 +279,44 @@ $lobbiesListWidth: 15rem;
       box-shadow: none;
     }
   }
+
+  $join-lobby-button-bg-color: $color;
+  $join-lobby-border-color: #166E84;
+
+  .lobbiesListEntry > button
+  {
+    display: block;
+    margin-top: 0.5em;
+  
+    height: 2em;
+    font-family: 'Alfa Slab One', cursive;;
+
+    min-width: 50px;
+    background: $join-lobby-button-bg-color;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 3px;
+    box-shadow: 0 5px 0px darken($join-lobby-button-bg-color,7%);
+    border-bottom: 2px solid darken($join-lobby-button-bg-color,3%);
+    @include stroke(2px, #000000);
+
+    &:hover{
+      background: darken($join-lobby-button-bg-color,5%);
+      box-shadow: 0 4px 1px darken($join-lobby-button-bg-color,5%);
+      border-bottom: 2px solid darken($join-lobby-button-bg-color,8%);
+      transition: all 0.1s ease-in;
+    }
+    
+    &:active{
+      transform:translateY(4px);
+      border-bottom-width: 2px;
+      box-shadow: none;
+    }
+  }
+
 
 
   > .bannerWrapper

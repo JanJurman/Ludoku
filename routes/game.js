@@ -24,8 +24,6 @@ router.get('/startGame', function(req, res)
 					redisClient.del(key)
 					//init game
 					gameInit(lobby)
-					//preko soketof povej vsem memberjem naj se redirectajo na game
-					socketApi.sendNotificationToClients(lobby.members, '#GAMESTART', 'GET', 'game.' + lobby.host)
 				}
 				else{
 					//NOT LOVED
@@ -44,7 +42,7 @@ router.get('/startGame', function(req, res)
 
 //post sudoku for evaluation
 router.post('/submitSudoku', function(req, res){
-	console.log("SUBMIT SUDOKU")
+	//console.log("SUBMIT SUDOKU")
 	if(req.body.sudoku && req.body.gameId){
 		var sudoku = req.body.sudoku
 		//get game from redis
@@ -57,21 +55,20 @@ router.post('/submitSudoku', function(req, res){
 				if(newProgress == -1){
 					//narobe sudoku ali pa je šol predaleč (drugi sudoku ko je samo en)
 					res.sendStatus(200)
-					console.log("A SEM TU?")
+					//console.log("A SEM TU?")
 				}
 				//temu memberju nastavi nov progress
 
 				for(var i = 0; i < game.members.length; ++i){
 					if(game.members[i].id == req.session.userId){
-						
+						//normalize progress to number of sudokus
+						if(game.gameType == "1v1")
+							newProgress /= 5
 						//če sm rešu sudoku do konca, mi povej da naj naslednjega naložim
 						if(newProgress == 1){
 							++game.members[i].currentSudoku
 							socketApi.sendNotificationToClient(game.members[i].id,route +  '/getSudoku', 'GET', 'game.' + game.host)
 						}else{
-							//normalize progress to number of sudokus
-							if(game.gameType == "1v1")
-								newProgress /= 5
 							newProgress = game.members[i].currentSudoku * 0.2 + newProgress
 						}
 
@@ -119,7 +116,7 @@ router.get('/getSudoku/:gameId', function(req, res)
 						}else{
 							redisClient.set(gameId, JSON.stringify(game))
 						}
-						console.log("nekdo je dokončal game")
+						//console.log("nekdo je dokončal game")
 						res.send({sudoku: null, finished: game.usersFinished.length})
 					}else{
 						//send next sudoku
@@ -157,8 +154,9 @@ router.get('/getSolution/:gameId', function(req, res)
 
 var maperino = []
 maperino["1v1"] = 2
-maperino["8enak"] = 8
-maperino["solo"] = 1
+maperino["8FFA"] = 8
+maperino["Solo"] = 1
+maperino["Tournament"] = 100
 
 function saveGameToMongo(game){
 	var Game = mongoose.model('game');
@@ -327,58 +325,78 @@ tule:
 
 */
 
-function getPuzzleFromDB(difficulty){
-	var model = null;
-	switch(difficulty){
-		case "easy":
-			model = mongoose.model('easySudoku');
-			break;
-		case "medium":
-			model = mongoose.model('mediumSudoku');
-			break;
-		case "hard":
-			model = mongoose.model('hardSudoku');
-			break;
-		default:
-			//isto kot easy
-			model = mongoose.model('easySudoku');
-			break;
-	}
-	var puzzle = null;
-	model.aggregate( { $sample: { size: 1 } }, function(err, sudoku){
-		//return sudoku[0].sudoku  //
+function getPuzzlesFromDB(difficulty, game, lobby){
+	var index = 0
+	var puzzleList = new Array()
+	fetchPuzzleFromMongoRec(difficulty, index, puzzleList, game, lobby, getSudokus);
+}
 
-		if(err)console.log(err);
-	})
-		return "500690001007004908089205006090050400805040103043806009058461002400000015910080034"  //for testing, pol bomo z base pobirali
-	
+function fetchPuzzleFromMongoRec(difficulty, index, puzzleList, game, lobby, callback)
+{
+	if(index < difficulty.length)
+	{
+		var model = null;
+		switch(difficulty[index]){
+			case "Easy":
+				model = mongoose.model('easySudoku');
+				break;
+			case "Medium":
+				model = mongoose.model('mediumSudoku');
+				break;
+			case "Hard":
+				model = mongoose.model('hardSudoku');
+				break;
+			default:
+				model = mongoose.model('easySudoku');
+				break;
+		}
+
+		model.aggregate( { $sample: { size: 1 } }, function(err, sudoku){
+			if(err)console.log(err);
+			puzzleList.push(sudoku[0].sudoku)
+			fetchPuzzleFromMongoRec(difficulty, index + 1, puzzleList, game, lobby, callback);
+		})
+	}
+	else
+	{
+		callback(puzzleList, game,lobby) //gremo v getSudokus
+	}
 }
 
 var sudoku = require('sudoku')
-function getSudoku(difficulty){
-	var puzzle = getPuzzleFromDB(difficulty)
-	//spravi v vredi format - 1d array, prazno je null
-	var cor_puzz = []
-	for (var i = 0; i < puzzle.length; ++i) {
-		var ch = puzzle.charAt(i)
-		if(ch == "0"){
-			cor_puzz.push(null)
-		}else{
-			cor_puzz.push(parseInt(ch) - 1)
+function getSudokus(puzzleList, game, lobby){
+	
+	var readySudokus = new Array();
+	puzzleList.forEach(function(puzzle, index) //puzzle je string
+	{
+		//spravi v vredi format - 1d array, prazno je null
+		var cor_puzz = []
+		for (var i = 0; i < puzzle.length; ++i) {
+			var ch = puzzle.charAt(i)
+			if(ch == "0"){
+				cor_puzz.push(null)
+			}else{
+				cor_puzz.push(parseInt(ch) - 1)
+			}
 		}
-	}
 
-	var solved = sudoku.solvepuzzle(cor_puzz)
+		var solved = sudoku.solvepuzzle(cor_puzz)
 
-	//dajmo nazaj v non dumb format
-	for (var i = 0; i < cor_puzz.length; i++) {
-		if(cor_puzz[i] != null){
-			++cor_puzz[i]
+		//dajmo nazaj v non dumb format
+		for (var i = 0; i < cor_puzz.length; i++) {
+			if(cor_puzz[i] != null){
+				++cor_puzz[i]
+			}
+			++solved[i]
 		}
-		++solved[i]
-	}
+		readySudokus.push({puzzle: cor_puzz, solved: solved})
+	})
 
-	return {puzzle: cor_puzz, solved: solved}
+	game.sudokus = readySudokus
+	redisClient.set("game." + game.host, JSON.stringify(game))
+	//preko soketof povej vsem memberjem naj se redirectajo na game
+	socketApi.sendNotificationToClients(lobby.members, '#GAMESTART', 'GET', 'game.' + lobby.host)
+
 }
 
 function gameInit(lobby){
@@ -393,8 +411,10 @@ function gameInit(lobby){
 		game.members.push({id: item, progress: 0, currentSudoku: 0})
 	})
 
+	var difficulty = []
+
 	if(game.gameType != "1v1"){
-		game.sudokus[0] = getSudoku(game.difficulty)
+		difficulty = [game.difficulty];
 		// console.log(JSON.stringify(game.sudokus[0]))
 	}
 	else{ 
@@ -402,36 +422,39 @@ function gameInit(lobby){
 		//if easy -> e e e m m
 		//if med -> e m m h h
 		//If hard -> m m h h h
+		if(game.difficulty == "Easy"){
+			difficulty = ["Easy","Easy","Easy","Medium","Medium"]
 
-		if(game.difficulty == "easy"){
-			game.sudokus[0] = getSudoku("easy")
-			game.sudokus[1] = getSudoku("easy")
-			game.sudokus[2] = getSudoku("easy")
-			game.sudokus[3] = getSudoku("medium")
-			game.sudokus[4] = getSudoku("medium")
+			// game.sudokus[0] = getSudoku("Easy")
+			// game.sudokus[1] = getSudoku("Easy")
+			// game.sudokus[2] = getSudoku("Easy")
+			// game.sudokus[3] = getSudoku("Medium")
+			// game.sudokus[4] = getSudoku("Medium")
 		}
-		if(game.difficulty == "medium"){
-			game.sudokus[0] = getSudoku("easy")
-			game.sudokus[1] = getSudoku("medium")
-			game.sudokus[2] = getSudoku("medium")
-			game.sudokus[3] = getSudoku("hard")
-			game.sudokus[4] = getSudoku("hard")
+		if(game.difficulty == "Medium"){
+			difficulty = ["Easy","Medium","Medium","Hard","Hard"]
+			// game.sudokus[0] = getSudoku("Easy")
+			// game.sudokus[1] = getSudoku("Medium")
+			// game.sudokus[2] = getSudoku("Medium")
+			// game.sudokus[3] = getSudoku("Hard")
+			// game.sudokus[4] = getSudoku("Hard")
 		}
-		if(game.difficulty == "hard"){
-			game.sudokus[0] = getSudoku("medium")
-			game.sudokus[1] = getSudoku("medium")
-			game.sudokus[2] = getSudoku("hard")
-			game.sudokus[3] = getSudoku("hard")
-			game.sudokus[4] = getSudoku("hard")
+		if(game.difficulty == "Hard"){
+			difficulty = ["Medium","Medium","Hard","Hard","Hard"]
+			// game.sudokus[0] = getSudoku("Medium")
+			// game.sudokus[1] = getSudoku("Medium")
+			// game.sudokus[2] = getSudoku("Hard")
+			// game.sudokus[3] = getSudoku("Hard")
+			// game.sudokus[4] = getSudoku("Hard")
 		}
-
 	}
+	getPuzzlesFromDB(difficulty, game, lobby)
+	// game.sudokus = getSudokus(difficulty, callback) //TODO wrap shit up
 
 	// console.log(JSON.stringify(cor_puzz))
 	// console.log(JSON.stringify(solved))
 
 	//shrani game v redis
-	redisClient.set("game." + game.host, JSON.stringify(game))
 	// console.log("ADDED GAME TO REDIS? /////////////////////////////")
 	// console.log(JSON.stringify(game));
 }

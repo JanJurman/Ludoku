@@ -4,7 +4,7 @@ module.exports = function(mongoose, Schema) {
 
 	//array of update objects
 	var insertions = [
-		{ local:{eMail: "janez.novak@gmail.com", passwordHash: "jazSemJanez", dateOfBirth: new Date("7.25.1992"), sex:"M"}, firstName: "Janez", lastName: "Novak", games:12, tournamentGames:3, gamesWon:200, tournamentsWon:1},
+		{ local:{eMail: "janez.novak@gmail.com", passwordHash: "jazSemJanez", dateOfBirth: new Date("7.25.1992"), sex:"M"}, firstName: "Janez", lastName: "Novak", games:1217, tournamentGames:3, gamesWon:200, tournamentsWon:1},
 		{ local:{eMail: "nina.novak@gmail.com", passwordHash: "jazSemNina", dateOfBirth: new Date("3.12.1993"), sex:"F"},  firstName: "Nina", lastName: "Novak", games:32, tournamentGames:10, gamesWon:12, tournamentsWon:4},
 		{ local:{eMail: "dmitry.glukhovsky@gmail.com", passwordHash: "cyka", dateOfBirth: new Date("12.6.1979"), sex:"M"}, firstName: "Dmitry", lastName: "Glukhovsky", games:120, tournamentGames:12, gamesWon:40, tournamentsWon:3},
 		{ local:{eMail: "ashley.barrett@gmail.com", passwordHash: "speak", dateOfBirth: new Date("2.11.1984"), sex:"F"}, firstName: "Ashley", lastName: "Barett", games:4, tournamentGames:15, gamesWon:1, tournamentsWon:7},

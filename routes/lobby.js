@@ -11,15 +11,15 @@ var route = "/lobby"
 /*
 GAMETYPES:
 1v1 5 zaporednih sudokujev: "1v1"
-do 8 playerjev enak sudoku: "8enak"
-solo gamemode: 				"solo"
+do 8 playerjev enak sudoku: "8FFA"
+solo gamemode: 				"Solo"
 
 more TBD
 
-DIFFICULTIES (velja samo pri 8enak):
-easy
-medium
-hard
+DIFFICULTIES (velja samo pri 8FFA):
+Easy
+Medium
+Hard
 */
 function addLobbyToTracker(lobbyId){
 	redisClient.get("lobbies", function(err,reply) {
