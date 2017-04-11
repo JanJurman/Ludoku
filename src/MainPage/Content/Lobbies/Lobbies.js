@@ -115,7 +115,7 @@ function Lobbies()
 	this.addLobbytoLobbiesDiv = function(lobby,host){
 		lobbiesDiv = document.querySelector("#lobbiesList");
 		lobbiesDiv.innerHTML += "<div class='lobbiesListEntry'>"+"Host: "+host.firstName+" "+host.lastName+"</br>" + "Game type: " + lobby.gameType + "</br> Difficulty: " + lobby.difficulty + 
-							"</br>Players: "+lobby.members.length+"</br><button onclick='window.MainPage.Content.Lobbies.joinLobby(\"lobby." + lobby.host + "\")' >JOIN</button>" + 
+							"</br>Players: "+lobby.members.length+"</br><button onclick='window.MainPage.Content.Lobbies.joinLobby(\"lobby." + lobby.host + "\")' >Join</button>" + 
 							"</div>";
 	}
 
@@ -148,6 +148,7 @@ function Lobbies()
 	    	instance.myLobbyId = lobbyID;
 	    	console.log("JOINED")
 			//instance.getLobbies() // posodobi lobi list (npr ti hostaš lobi pa stisneš join drugemu)
+			document.querySelector("#leaveButton").style.display = 'inline-block'
 			document.querySelector("#currentLobby").style.display = ''; //prikazi lobby
 
 	    });
@@ -290,7 +291,7 @@ function Lobbies()
 				tag: "div", attributes: [["id", "currentLobby"]], 
 				nest:
 				[
-					{tag: "div", attributes: [["id", "hostNameDiv"]], text: "GETHOSTNAME"+"'s lobby"},
+					{tag: "div", attributes: [["id", "hostNameDiv"]], text: "Currently not in a lobby."},
 					
 					{tag: "div", attributes: [["id", "settingsDiv"], ["class", "lobbyDataDiv"]],
 					nest:
@@ -302,26 +303,26 @@ function Lobbies()
 							{tag: "select", attributes: [["id", "difficultySelect"]],
 							nest: 
 							[
-								{tag: "option", attributes: [["value", "easy"]], text: "Easy"},
-								{tag: "option", attributes: [["value", "medium"]], text: "Medium"}, //god help tistemu, ki bo hoto kaj spremenit tu not
-								{tag: "option", attributes: [["value", "hard"]], text: "Hard"}
+								{tag: "option", attributes: [["value", "Easy"]], text: "Easy"},
+								{tag: "option", attributes: [["value", "Medium"]], text: "Medium"}, //god help tistemu, ki bo hoto kaj spremenit tu not
+								{tag: "option", attributes: [["value", "Hard"]], text: "Hard"}
 							]},
 							{tag: "select", attributes: [["id", "gameTypeSelect"]],
 							nest:
 							[
-								{tag: "option", attributes: [["value", "solo"]], text: "Solo"},
+								{tag: "option", attributes: [["value", "Solo"]], text: "Solo"},
 								{tag: "option", attributes: [["value", "1v1"]], text: "1v1"},
-								{tag: "option", attributes: [["value", "8enak"]], text: "8ffa"},
-								{tag: "option", attributes: [["value", "tournament"]], text: "Tournament"}
+								{tag: "option", attributes: [["value", "8FFA"]], text: "8FFA"},
+								{tag: "option", attributes: [["value", "Tournament"]], text: "Tournament"}
 							]},
 							{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.setLobbyDataClick()'], ["id", "setLobbyDataButton"]],  text: "Set"}
 						]}
 
 					]},
 
-					{tag: "div", attributes: [["id", "gameTypeDiv"], ["class", "lobbyDataDiv"]], text: "Game type: "},
-					{tag: "div", attributes: [["id", "difficultyDiv"], ["class", "lobbyDataDiv"]], text: "Difficulty: "},
-					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: "Members: "},
+					{tag: "div", attributes: [["id", "gameTypeDiv"], ["class", "lobbyDataDiv"]], text: ""},
+					{tag: "div", attributes: [["id", "difficultyDiv"], ["class", "lobbyDataDiv"]], text: ""},
+					{tag: "div", attributes: [["id", "membersDiv"], ["class", "lobbyDataDiv"]], text: ""},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.leaveLobby()'], ["id", "leaveButton"]],  text: "Leave"},
 					{tag: "button", attributes: [["onclick",'window.MainPage.Content.Lobbies.startGame()'], ["id", "startGameButton"]], text : "Start Game"}
 				]

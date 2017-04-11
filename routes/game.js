@@ -44,7 +44,7 @@ router.get('/startGame', function(req, res)
 
 //post sudoku for evaluation
 router.post('/submitSudoku', function(req, res){
-	console.log("SUBMIT SUDOKU")
+	//console.log("SUBMIT SUDOKU")
 	if(req.body.sudoku && req.body.gameId){
 		var sudoku = req.body.sudoku
 		//get game from redis
@@ -57,7 +57,7 @@ router.post('/submitSudoku', function(req, res){
 				if(newProgress == -1){
 					//narobe sudoku ali pa je šol predaleč (drugi sudoku ko je samo en)
 					res.sendStatus(200)
-					console.log("A SEM TU?")
+					//console.log("A SEM TU?")
 				}
 				//temu memberju nastavi nov progress
 
@@ -119,7 +119,7 @@ router.get('/getSudoku/:gameId', function(req, res)
 						}else{
 							redisClient.set(gameId, JSON.stringify(game))
 						}
-						console.log("nekdo je dokončal game")
+						//console.log("nekdo je dokončal game")
 						res.send({sudoku: null, finished: game.usersFinished.length})
 					}else{
 						//send next sudoku
@@ -157,8 +157,9 @@ router.get('/getSolution/:gameId', function(req, res)
 
 var maperino = []
 maperino["1v1"] = 2
-maperino["8enak"] = 8
-maperino["solo"] = 1
+maperino["8FFA"] = 8
+maperino["Solo"] = 1
+maperino["Tournament"] = 100
 
 function saveGameToMongo(game){
 	var Game = mongoose.model('game');
@@ -330,13 +331,13 @@ tule:
 function getPuzzleFromDB(difficulty){
 	var model = null;
 	switch(difficulty){
-		case "easy":
+		case "Easy":
 			model = mongoose.model('easySudoku');
 			break;
-		case "medium":
+		case "Medium":
 			model = mongoose.model('mediumSudoku');
 			break;
-		case "hard":
+		case "Hard":
 			model = mongoose.model('hardSudoku');
 			break;
 		default:
@@ -403,26 +404,26 @@ function gameInit(lobby){
 		//if med -> e m m h h
 		//If hard -> m m h h h
 
-		if(game.difficulty == "easy"){
-			game.sudokus[0] = getSudoku("easy")
-			game.sudokus[1] = getSudoku("easy")
-			game.sudokus[2] = getSudoku("easy")
-			game.sudokus[3] = getSudoku("medium")
-			game.sudokus[4] = getSudoku("medium")
+		if(game.difficulty == "Easy"){
+			game.sudokus[0] = getSudoku("Easy")
+			game.sudokus[1] = getSudoku("Easy")
+			game.sudokus[2] = getSudoku("Easy")
+			game.sudokus[3] = getSudoku("Medium")
+			game.sudokus[4] = getSudoku("Medium")
 		}
-		if(game.difficulty == "medium"){
-			game.sudokus[0] = getSudoku("easy")
-			game.sudokus[1] = getSudoku("medium")
-			game.sudokus[2] = getSudoku("medium")
-			game.sudokus[3] = getSudoku("hard")
-			game.sudokus[4] = getSudoku("hard")
+		if(game.difficulty == "Medium"){
+			game.sudokus[0] = getSudoku("Easy")
+			game.sudokus[1] = getSudoku("Medium")
+			game.sudokus[2] = getSudoku("Medium")
+			game.sudokus[3] = getSudoku("Hard")
+			game.sudokus[4] = getSudoku("Hard")
 		}
-		if(game.difficulty == "hard"){
-			game.sudokus[0] = getSudoku("medium")
-			game.sudokus[1] = getSudoku("medium")
-			game.sudokus[2] = getSudoku("hard")
-			game.sudokus[3] = getSudoku("hard")
-			game.sudokus[4] = getSudoku("hard")
+		if(game.difficulty == "Hard"){
+			game.sudokus[0] = getSudoku("Medium")
+			game.sudokus[1] = getSudoku("Medium")
+			game.sudokus[2] = getSudoku("Hard")
+			game.sudokus[3] = getSudoku("Hard")
+			game.sudokus[4] = getSudoku("Hard")
 		}
 
 	}
