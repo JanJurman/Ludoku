@@ -4,7 +4,11 @@ require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
-var tmp;
+var tmp = [];
+var games;
+var gamesWon;
+var tournamentGames;
+var tournamentsWon;
 
 // ------ Shranim logged usera, oziroma null če ni logged------
 Ajax.GET("user/isLoggedIn/", null, function(data)
@@ -127,55 +131,41 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 
 	Ajax.GET("leaderboard/games", null, function(data)
 	{
-		tmp = JSON.parse(data);
+		games = JSON.parse(data);
 
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("leaderboard");
-		window.MainPage.Content.init();
-		window.MainPage.Content.LeaderBoard.init(tmp);
+		Ajax.GET("leaderboard/gamesWon", null, function(data)
+		{
+			gamesWon = JSON.parse(data);
 
-		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+			Ajax.GET("leaderboard/tournamentGames", null, function(dat)
+			{
+				tournamentGames = JSON.parse(data);
+
+				Ajax.GET("leaderboard/tournamentsWon", null, function(data)
+				{
+					tournamentsWon = JSON.parse(data);
+
+					console.log(games+"GAMES");
+					tmp.push(games);
+					tmp.push(gamesWon);
+					tmp.push(tournamentGames);
+					tmp.push(tournamentsWon);
+
+					console.log(tmp+"preden gre dalje");
+
+					window.MainPage.init();
+					window.MainPage.NavBar.init();
+					window.MainPage.NavBar.select("leaderboard");
+					window.MainPage.Content.init();
+					window.MainPage.Content.LeaderBoard.init(tmp);
+
+					document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+				});
+			});
+
+		});
+
 	});	
-
-	/*Ajax.GET("leaderboard/tournamentGames", null, function(data)
-	{
-		tmp = JSON.parse(data);
-
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("leaderboard");
-		window.MainPage.Content.init();
-		window.MainPage.Content.LeaderBoard.init(tmp);
-
-		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
-	});
-
-	Ajax.GET("leaderboard/gamesWon", null, function(data)
-	{
-		tmp = JSON.parse(data);
-
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("leaderboard");
-		window.MainPage.Content.init();
-		window.MainPage.Content.LeaderBoard.init(tmp);
-
-		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
-	});	
-
-	Ajax.GET("leaderboard/tournamentsWon", null, function(data)
-	{
-		tmp = JSON.parse(data);
-
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("leaderboard");
-		window.MainPage.Content.init();
-		window.MainPage.Content.LeaderBoard.init(tmp);
-
-		document.querySelector("#app").innerHTML += toHtml(window.MainPage.data);
-	});	*/	
 
 });
 

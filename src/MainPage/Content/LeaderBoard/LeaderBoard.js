@@ -11,24 +11,78 @@ function LeaderBoard()
 		var temp = JSON.stringify(user);
 		console.log(temp);
 		var numberOfUsers = 5;				//user.length;
-		for(var i = 0; i < numberOfUsers; ++i)
-		{
-			var uporabnik = {tag:"tr",nest:
-								[
-									/*{tag:"td", nest:[{tag:"a", attributes: [["href", "#/profile"]],text:user[i].firstName + " " +user[i].lastName}]},
-									//{tag:"td", attributes:["onclick", "window.MainPage.Content.LeaderBoard.viewProfile(user[i].id)"],text:user[i].firstName},
-									{tag:"td",text:user[i].games},
-									{tag:"td",text:user[i].gamesWon},
-									{tag:"td",text:user[i].tournamentGames},
-									{tag:"td",text:user[i].tournamentsWon}*/
-									{tag:"li", nest:[{tag:"em", text:user[i].firstName + " " + user[i].lastName},{tag:"strong",text:user[i].games}]}
-								]
-							};
-			//this.nest[1].nest.push(uporabnik);
-			this.nest[1].nest[0].nest[1].nest.push(uporabnik);
-		}
-	}
 
+		for(var i = 0; i < 4; ++i)
+		{
+			var naslovH1;
+			var uporabniki;
+
+			if(i == 0)
+			{
+				naslovH1 = {tag: "h1", nest: 
+				[
+					{tag: "svg", attributes: [["class", "ico-cup"]]},
+					{tag: "use", attributes: [["xlink:href:", "#cup"]]}
+				], text: "Most games played"};
+			}
+			else if(i == 1)
+			{
+				naslovH1 = {tag: "h1", nest: 
+				[
+					{tag: "svg", attributes: [["class", "ico-cup"]]},
+					{tag: "use", attributes: [["xlink:href:", "#cup"]]}
+				], text: "Most games won"};
+			}
+			else if(i == 2)
+			{
+				naslovH1 = {tag: "h1", nest: 
+				[
+					{tag: "svg", attributes: [["class", "ico-cup"]]},
+					{tag: "use", attributes: [["xlink:href:", "#cup"]]}
+				], text: "Most tournaments played"};				
+			}
+			else if(i == 3)
+			{
+				naslovH1 = {tag: "h1", nest: 
+				[
+					{tag: "svg", attributes: [["class", "ico-cup"]]},
+					{tag: "use", attributes: [["xlink:href:", "#cup"]]}
+				], text: "Most tournaments won"};				
+			}
+
+			uporabniki = {tag:"ol", nest: []};
+
+			for(var j = 0; j < 5; ++j)
+			{
+				console.log(user[i][j].lastName+"imeeeeeeMoje");
+				var uporabnik;
+
+				if(i == 0)
+				{
+					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text:user[i][j].games}]};
+				}
+				else if(i == 1)
+				{
+					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text:user[i][j].gamesWon}]};
+				}
+				else if(i == 2)
+				{
+					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text:user[i][j].tournamentGames}]};
+				}
+				else if(i == 3)
+				{
+					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text:user[i][j].tournamentsWon}]};
+				}
+				uporabniki.nest.push(uporabnik);
+			}
+
+
+			var section = {tag:"section", attributes:[["class", "players"]], nest:[naslovH1, uporabniki]};
+			this.nest[1].nest.push(section);
+		}
+
+	}
+	
 	this.init = function(user)
 	{
 		//design naredi
@@ -42,71 +96,12 @@ function LeaderBoard()
 					tag: "h1", attributes: [["class", "banner"]], text: "LeaderBoard"	
 				}
 			]},
-			/*{
-				tag: "table",
-				attributes: [["class", "tabela"]],
-				nest:
-				[
-					{
-						tag: "tr",
-						nest:
-						[
-							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "Player" }]},
-							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "Games" }]},
-							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "GamesWon" }]},
-							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "TournamentGames" }]},
-							{tag: "th", nest:[{tag:"a", attributes: [["href", ""]],text: "TournamentsWon" }]}
-						]
-					},
 
-				]
-			}*/
 			{tag: "div", nest:
 			[
 				{tag:"section", attributes: [["class", "players"]], nest:
 					[
 						
-						{tag:"h1", nest:[ 
-							{tag: "svg", attributes: [["class", "ico-cup"]]},
-							{tag: "use", attributes: [["xlink:href", "#cup"]]}
-						], text:"Most active players"},
-						
-					
-						{tag:"ol", nest:
-							[
-								/*{tag:"li", nest:
-									[
-										{tag:"em", text: "Burrito Peligroso"},
-										{tag:"strong", text: "315"}
-									]
-								},
-								{tag:"li", nest:
-									[
-										{tag:"em", text: "Nacho Casa"},
-										{tag:"strong", text: "1112"}
-									]
-								},
-								{tag:"li", nest:
-									[
-										{tag:"em", text: "John Doe"},
-										{tag:"strong", text: "122"}
-									]
-								},
-								{tag:"li", nest:
-									[
-										{tag:"em", text: "Sergej aus Siberia"},
-										{tag:"strong", text: "111"}
-									]
-								},
-								{tag:"li", nest:
-									[
-										{tag:"em", text: "Hans aus Tirol"},
-										{tag:"strong", text: "100"}
-									]
-								}*/
-
-							]
-						}
 					]
 				}
 			]}

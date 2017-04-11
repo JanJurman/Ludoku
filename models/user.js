@@ -41,7 +41,7 @@ userSchema.methods.leaderboardTournamentGames = function leaderboardTournamentGa
 };
 userSchema.methods.leaderboardGamesWon = function leaderboardGamesWon()
 {
-	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "games": this.games};
+	return {"_id":this.id, "firstName":this.firstName, "lastName":this.lastName, "gamesWon": this.gamesWon};
 };
 userSchema.methods.leaderboardTournamentsWon = function leaderboardTournamentsWon()
 {

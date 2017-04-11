@@ -150,12 +150,14 @@ $list-width: 17.813rem;
 
 
   .players 
-{
+  {
   position: relative;
   margin: ($list-space * 2) $list-space;
   box-shadow: 0px 17px 32px -5px rgba(0,0,0,0.4);
   border-radius: .6rem;
   width: 17.813rem;
+  display: inline-block;
+  float: left;
   
   h1 
   {
