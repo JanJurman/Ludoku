@@ -291,8 +291,8 @@ router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, re
 
 });
 
-
-router.get('/achievmentsAtPos/:userId/:index/:fetchCount', checkAuth, function(req,res,next)
+//no works, fixaj
+router.get('achievmentsAtPos/:userId/:index/:fetchCount', checkAuth, function(req,res,next)
 {
 	var userId = req.params.userId;
 	var index = parseInt(req.params.index);

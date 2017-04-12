@@ -125,11 +125,13 @@ Router.routeTo("/profile", { require: "login" }, function()
 
 		gamesProfile = data;
 
-		/*Ajax.GET("user/achievmentsAtPos/"+window.loggedUser._id + "/0/30", null, function(data)
+		/*Ajax.GET("achievmentsAtPos/"+window.loggedUser._id + "/0/30", null, function(data)		NE DELA, FIXAJ
 		{
 			achievmentsProfile = data;		
 			tmpProfile.push(gamesProfile);
-			tmpProfile.push(achievmentsProfile);*/
+			tmpProfile.push(achievmentsProfile);
+
+			console.log(achievmentsProfile);*/
 
 			window.MainPage.init();
 			window.MainPage.NavBar.init();

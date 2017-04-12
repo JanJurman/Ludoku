@@ -45,12 +45,27 @@ function Profile()
 
 	this.genAchievmentsList = function(atIndex, nm)
 	{
+		var data = [];
 
+		for(var i = atIndex; i < (atIndex + nm); ++i)
+		{
+			if(this.achievments[i])
+			{
+				data.push({tag: "li", nest: [{tag: "div", nest: [{tag: "div", text: this.achievments[i].name + " - " + this.achievments[i].points + "points: "}, {tag: "div", text: this.achievments[i].description}]}]});
+			}
+			else
+			{
+				return data;
+			}
+		}
+
+		return data;
 	}
 
-	this.init = function(user, games)
+	this.init = function(user, data)
 	{
-		this.games = games;
+		this.games = data;
+		//this.achievments = data[1];
 
 		// console.log(games.length)
 
@@ -240,7 +255,7 @@ function Profile()
 	{
 		console.log("showAchievments");
 		document.querySelector("h1").innerHTML = "Achievments";
-		document.querySelector(".secondaryContent .info > ul").innerHTML = "<p>Achievments</p>";
+		document.querySelector(".secondaryContent .info > ul").innerHTML = this.toHtml(this.genAchievmentsList(0,5));
 		//this.toHtml(this.genAchievmentsList(0,5));
 	}
 
