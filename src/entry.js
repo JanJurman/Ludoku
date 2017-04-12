@@ -5,10 +5,13 @@ Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
 var tmp = [];
+var tmpProfile = [];
 var games;
 var gamesWon;
 var tournamentGames;
 var tournamentsWon;
+var gamesProfile;
+var achievmentsProfile;
 
 // ------ Shranim logged usera, oziroma null če ni logged------
 Ajax.GET("user/isLoggedIn/", null, function(data)
@@ -111,12 +114,23 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.Content.Lobbies.cleanUp();
 		window.MainPage.Content.Game.cleanUp();
 
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("profile");
-		window.MainPage.Content.init();
-		window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
-		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+		gamesProfile = data;
+
+		/*Ajax.GET("user/achievmentsAtPos/"+window.loggedUser._id + "/0/30", null, function(data)
+		{
+			achievmentsProfile = data;		
+			tmpProfile.push(gamesProfile);
+			tmpProfile.push(achievmentsProfile);*/
+
+			window.MainPage.init();
+			window.MainPage.NavBar.init();
+			window.MainPage.NavBar.select("profile");
+			window.MainPage.Content.init();
+			window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
+			document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+		//});
+
+
 	});
 });
 
