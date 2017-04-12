@@ -1,5 +1,7 @@
 window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
+window.Facebook = require('./Utils/Facebook.js')
+
 require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
@@ -86,6 +88,13 @@ Router.routeToHome("/", { require: "login" }, function()
 Router.routeToLogin("/login", { require: "logout" }, function()
 {
 	window.EntryPage.initLogin();
+	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
+});
+
+Router.routeTo("/externalLogin", { require: "logout" }, function()
+{
+	window.EntryPage.initExternalLogin();
+	window.Facebook.init();
 	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 

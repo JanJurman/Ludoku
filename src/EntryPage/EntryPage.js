@@ -18,7 +18,7 @@ function EntryPage()
 							tag: "ul",
 							nest:
 							[
-								{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register selected"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
+								{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "externalLogin"]], nest: [{tag: "a", attributes:[["href", "#/externalLogin"]], text:"External login"}]},{tag:"li", attributes:[["class", "register selected"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
 							]
 						}
 					]
@@ -68,7 +68,7 @@ function EntryPage()
 						tag: "ul",
 						nest:
 						[
-							{tag:"li", attributes:[["class", "login selected"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
+							{tag:"li", attributes:[["class", "login selected"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "externalLogin"]], nest: [{tag: "a", attributes:[["href", "#/externalLogin"]], text:"External login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
 						]
 					}
 				]
@@ -98,6 +98,42 @@ function EntryPage()
 		attributes: [["class", "info"]]
 	}];
 
+	this.externalLoginState = 
+	[{
+		tag: "div",
+		attributes: [["class", "form"]],
+		nest:
+		[
+			{
+				tag:"div",
+				attributes:[["class", "switch"]],
+				nest:
+				[
+					{
+						tag: "ul",
+						nest:
+						[
+							{tag:"li", attributes:[["class", "login"]], nest: [{tag: "a", attributes:[["href", "#/login"]], text:"Login"}]},{tag:"li", attributes:[["class", "externalLogi selected"]], nest: [{tag: "a", attributes:[["href", "#/externalLogin"]], text:"External login"}]},{tag:"li", attributes:[["class", "register"]], nest: [{tag: "a", attributes:[["href", "#/signUp"]], text:"SignUp"}]}
+						]
+					}
+				]
+			},
+			{
+				tag:"div",
+				attributes:[["class", "title"]],
+				text:"Welcome back"
+			},
+			{
+				tag:"div",
+				text: '<fb:login-button scope="public_profile,email" onlogin="window.Facebook.checkLoginState();"></fb:login-button>'
+			}
+		]
+	},
+	{
+		tag: "div",
+		attributes: [["class", "info"]]
+	}];
+
 	this.logMeIn = function(data)
 	{
 		var send = {eMail: document.querySelector("#app .form .inputField:nth-child(2n + 1) input").value ,password: document.querySelector("#app .form .inputField:nth-child(2n) input").value};
@@ -115,6 +151,11 @@ function EntryPage()
 	this.initLogin = function()
 	{
 		this.data = this.loginState;
+	}
+
+	this.initExternalLogin = function()
+	{
+		this.data = this.externalLoginState;
 	}
 
 	this.initSignUp = function()
