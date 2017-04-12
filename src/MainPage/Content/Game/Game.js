@@ -3,6 +3,10 @@ var socketClient = require('../../../Utils/socketClient.js')
 
 function NavBar()
 {
+
+	
+
+
 	//this.gameId = null;
 	var playersMap = new Array();
 	var instance = this;
@@ -32,6 +36,7 @@ function NavBar()
 
 	this.fillSudokuGrid = function(id = this.gameId)
 	{
+		var toti = this;
 		Ajax.GET("/game/getSudoku/"+id, null, function(res)
 	    {
 	    	var res = JSON.parse(res)
@@ -62,6 +67,23 @@ function NavBar()
 				}
 			}else if(res.finished){
 				//res.finished je zaporedna številka, kateri si bil
+
+				console.log(res.finished);
+
+				var grayScreenMap = 
+				[
+					{svgSrc: "svg/1st.svg", text: "You Win!"},
+					{svgSrc: "svg/2nd.svg", text: "Decent"},
+					{svgSrc: "svg/3rd.svg", text: "Meh"},
+					{svgSrc: "svg/poop.svg", text: "You Suck"}
+				]
+
+				document.querySelector(".grayScreen").className += " visibleGrayScreen";
+				document.querySelector(".grayScreen > div:nth-child(1) > img").setAttribute("src", grayScreenMap[res.finished - 1].svgSrc);
+				document.querySelector(".grayScreen > div:nth-child(2)").innerHTML = grayScreenMap[res.finished - 1].text;
+
+
+
 				console.log("YAY, bil si " + res.finished)
 			}
 	    });

@@ -1,0 +1,76 @@
+@mixin stroke($width, $color) {
+    $width: $width + 0;
+    $shadow: 0 0 0 transparent;
+    $i: 0;
+    $w: 1;
+
+    @while ($i < $width) {
+        $i: $i + 1;
+        $j: 0;
+        $w: $w + 2;
+
+        @for $r from 1 through $w {
+            @for $c from 1 through $w {
+                $x: $c - ceil($w / 2);
+                $y: $r - ceil($w / 2);
+
+                $shadow: #{$shadow}, #{$x}px #{$y}px 0 $color;
+            }
+        }
+    }
+
+    text-shadow: $shadow;
+}
+
+.grayScreen
+{
+	pointer-events: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	background: rgba(0,0,0,0.5);
+
+	opacity: 0;
+	 transition: opacity 0.4s ease-in;
+    -ms-transition: opacity 0.4s ease-in;
+    -moz-transition: opacity 0.4s ease-in;
+    -webkit-transition: opacity 0.4s ease-in;
+
+	> div:nth-child(1)
+	{
+		height: 60%;
+		 position: relative;
+
+		> img
+		{
+			position: absolute;
+			height: 80%;
+			top: 60%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+
+	> div:nth-child(2)
+	{
+		height: 40%;
+
+		font-family: 'Alfa Slab One', cursive;
+		@include stroke(3px, #000000);
+		font-size: 10rem;
+		color: #388BC5;
+		text-align: center;
+	}
+}
+
+.visibleGrayScreen
+{
+	opacity: 1;
+    transition: opacity 0.4s ease-out;
+    -ms-transition: opacity 0.4s ease-out;
+    -moz-transition: opacity 0.4s ease-out;
+    -webkit-transition: opacity 0.4s ease-out;
+}

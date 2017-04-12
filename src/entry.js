@@ -124,7 +124,16 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.NavBar.init();
 		window.MainPage.NavBar.select("profile");
 		window.MainPage.Content.init();
-		window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
+
+		if (data)
+		{
+			window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
+		}
+		else
+		{
+			window.MainPage.Content.Profile.init(window.loggedUser, []);
+		}
+
 		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 	});
 });

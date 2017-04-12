@@ -15,28 +15,32 @@ function Profile()
 	{
 		var data = [];
 
-		for (var i = atIndex; i < (atIndex + nm) ; i++)
+		if (this.games) 
 		{
-
-			if (this.games[i])
+			
+			for (var i = atIndex; i < (atIndex + nm) ; i++)
 			{
-
-				var date = new Date(this.games[i].start);
-
-
-				// console.log(this.games[i].players[0]);
-				if (this.games[i].players[0] == window.loggedUser._id) 
+				// console.log(this.games[i]);
+				if (this.games[i])
 				{
-					data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]})
+
+					var date = new Date(this.games[i].start);
+
+
+					// console.log(this.games[i].players[0]);
+					if (this.games[i].players[0] == window.loggedUser._id) 
+					{
+						data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Won"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/win.svg"]]}]}]}]})
+					}
+					else
+					{
+						data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]})
+					} 
 				}
-				else
+				else 
 				{
-					data.push({tag: "li" , nest: [{tag: "div", nest: [{tag: "div", text: date.toLocaleDateString() + " - Lost"}, {tag: "div", nest: [{tag: "img", attributes: [["src", "svg/cross.svg"]]}]}]}]})
-				} 
-			}
-			else 
-			{
-				return data;
+					return data;
+				}
 			}
 		}
 

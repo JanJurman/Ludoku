@@ -284,7 +284,7 @@ router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, re
 			}
 			else
 			{
-				res.send(404); //no games found with this userId
+				res.send(null); //no games found with this userId
 			}
 		}
 	});
