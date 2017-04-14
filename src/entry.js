@@ -128,12 +128,16 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.NavBar.select("profile");
 		window.MainPage.Content.init();
 
+
+		// console.log(data);
 		if (data)
 		{
+			console.log("neka");
 			window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
 		}
 		else
 		{
+			console.log("neka1");
 			window.MainPage.Content.Profile.init(window.loggedUser, []);
 		}
 

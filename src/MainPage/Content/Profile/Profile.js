@@ -17,12 +17,12 @@ function Profile()
 
 		if (this.games) 
 		{
-			
 			for (var i = atIndex; i < (atIndex + nm) ; i++)
 			{
 				// console.log(this.games[i]);
 				if (this.games[i])
 				{
+			// console.log("nekaj");
 
 					var date = new Date(this.games[i].start);
 
@@ -44,6 +44,7 @@ function Profile()
 			}
 		}
 
+		console.log(data);
 		return data;
 	}
 
@@ -147,7 +148,7 @@ function Profile()
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 
 					[
-						{tag: "ul", nest: []},
+						{tag: "ul", nest: this.genGameList(0,5)},
 						// {tag: "div", attributes: [["class", "loader2"]]}
 
 					]},
