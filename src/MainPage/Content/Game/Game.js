@@ -147,6 +147,8 @@ function NavBar()
 	    	instance.getPlayersThenCallFunction(members, instance.renderProgressBars);
 			console.log("finished recursive madness:")
 	    	console.log(playersMap);
+
+	    	var timer = setInterval(instance.timerTick, 1000);
 	    });
 
 	}
@@ -230,6 +232,16 @@ function NavBar()
 			progressDiv.childNodes[0].style.width = progress + "%";
 			progressDiv.childNodes[1].innerHTML = progress + "%";
 		})
+	}
+
+	var timePlayed = 0;
+	this.timerTick = function()
+	{
+		++timePlayed;
+		var timerDiv = document.querySelector(".timer")
+		var minutes = Math.floor(timePlayed / 60);
+		var seconds = timePlayed - minutes*60;
+		timerDiv.innerHTML = (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
 	}
 
 
