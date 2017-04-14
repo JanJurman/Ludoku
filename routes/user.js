@@ -289,6 +289,49 @@ router.get('/gamesAtPos/:userId/:index/:fetchCount', checkAuth, function(req, re
 		}
 	});
 
-})
+});
+
+//no works, fixaj
+router.get('achievmentsAtPos/:userId/:index/:fetchCount', checkAuth, function(req,res,next)
+{
+	var userId = req.params.userId;
+	var index = parseInt(req.params.index);
+	var fetchCount = parseInt(req.params.fetchCount);
+
+	if(index < 0)
+	{
+		index = 0;
+	}
+
+	if(fetchCount < 0)
+	{
+		fetchCount = 1;
+	}
+	else if(fetchCount > 30)
+	{
+		fetchCount = 30;
+	}
+
+	mongoose.model('achievments').find({players: userId}).sort('-points').skip(index).limit(fetchCount).exec(function(err, achievments)
+	{
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			if(achievments.length > 0)
+			{
+				res.send(achievments);
+			}
+			else
+			{
+				res.send(404);
+			}
+		}
+			
+	});
+		
+});
 
 module.exports = router;

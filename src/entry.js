@@ -1,14 +1,19 @@
 window.EntryPage = require('./EntryPage/EntryPage.js');
 window.MainPage = require('./MainPage/MainPage.js');
+window.Facebook = require('./Utils/Facebook.js')
+
 require("./master.scss");
 Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
 var tmp = [];
+var tmpProfile = [];
 var games;
 var gamesWon;
 var tournamentGames;
 var tournamentsWon;
+var gamesProfile;
+var achievmentsProfile;
 
 // ------ Shranim logged usera, oziroma null če ni logged------
 Ajax.GET("user/isLoggedIn/", null, function(data)
@@ -86,6 +91,13 @@ Router.routeToLogin("/login", { require: "logout" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
 });
 
+Router.routeTo("/externalLogin", { require: "logout" }, function()
+{
+	window.EntryPage.initExternalLogin();
+	window.Facebook.init();
+	document.querySelector("#app").innerHTML = toHtml(window.EntryPage.data);
+});
+
 Router.routeTo404( function()
 {
 	// document.querySelector("#app").innerHTML = "Damjan je cigan";
@@ -111,12 +123,25 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.Content.Lobbies.cleanUp();
 		window.MainPage.Content.Game.cleanUp();
 
-		window.MainPage.init();
-		window.MainPage.NavBar.init();
-		window.MainPage.NavBar.select("profile");
-		window.MainPage.Content.init();
-		window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
-		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+		gamesProfile = data;
+
+		/*Ajax.GET("achievmentsAtPos/"+window.loggedUser._id + "/0/30", null, function(data)		NE DELA, FIXAJ
+		{
+			achievmentsProfile = data;		
+			tmpProfile.push(gamesProfile);
+			tmpProfile.push(achievmentsProfile);
+
+			console.log(achievmentsProfile);*/
+
+			window.MainPage.init();
+			window.MainPage.NavBar.init();
+			window.MainPage.NavBar.select("profile");
+			window.MainPage.Content.init();
+			window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
+			document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+		//});
+
+
 	});
 });
 
@@ -145,13 +170,10 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 				{
 					tournamentsWon = JSON.parse(data);
 
-					console.log(games+"GAMES");
 					tmp.push(games);
 					tmp.push(gamesWon);
 					tmp.push(tournamentGames);
 					tmp.push(tournamentsWon);
-
-					console.log(tmp+"preden gre dalje");
 
 					window.MainPage.init();
 					window.MainPage.NavBar.init();
