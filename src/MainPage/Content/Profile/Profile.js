@@ -47,9 +47,29 @@ function Profile()
 		return data;
 	}
 
-	this.init = function(user, games)
+	this.genAchievmentsList = function(atIndex, nm)
 	{
-		this.games = games;
+		var data = [];
+
+		for(var i = atIndex; i < (atIndex + nm); ++i)
+		{
+			if(this.achievments[i])
+			{
+				data.push({tag: "li", nest: [{tag: "div", nest: [{tag: "div", text: this.achievments[i].name + " - " + this.achievments[i].points + "points: "}, {tag: "div", text: this.achievments[i].description}]}]});
+			}
+			else
+			{
+				return data;
+			}
+		}
+
+		return data;
+	}
+
+	this.init = function(user, data)
+	{
+		this.games = data;
+		//this.achievments = data[1];
 
 		// console.log(games.length)
 
@@ -92,7 +112,7 @@ function Profile()
 							nest: 
 							[
 								{tag: "img", attributes: [["src", "svg/game.svg"]]},
-								{tag: "div", text: "Game history"}
+								{tag: "div", attributes: [["onclick", "window.MainPage.Content.Profile.showGames(this)"]], text: "Game history"}
 							]
 						},
 						{
@@ -101,7 +121,7 @@ function Profile()
 							nest: 
 							[
 								{tag: "img", attributes: [["src", "svg/trophy.svg"]]},
-								{tag: "div", text: "Achievments"}
+								{tag: "div", attributes: [["onclick","window.MainPage.Content.Profile.showAchievments(this)"]],text: "Achievments"}
 							]
 						},
 						{
@@ -122,12 +142,12 @@ function Profile()
 					{tag: "div", attributes: [["class", "bannerWrapper"]], nest:
 					[
 						{
-							tag: "h1", attributes: [["class", "banner"]], text: "Game list"	
+							tag: "h1", attributes: [["class", "banner"]], text: "Welcome"	
 						}
 					]},
 					{tag: "div",  attributes: [["class", "info"]], nest: 
 					[
-						{tag: "ul", nest: this.genGameList(0,5)},
+						{tag: "ul", nest: []},
 						// {tag: "div", attributes: [["class", "loader2"]]}
 
 					]},
@@ -226,6 +246,21 @@ function Profile()
 			}
 		}
 		// console.log("nekaj");
+	}
+
+	this.showGames = function()
+	{
+		console.log("showGames");
+		document.querySelector("h1").innerHTML = "Game list";
+		document.querySelector(".secondaryContent .info > ul").innerHTML = this.toHtml(this.genGameList(0,5));
+	}
+
+	this.showAchievments = function()
+	{
+		console.log("showAchievments");
+		document.querySelector("h1").innerHTML = "Achievments";
+		document.querySelector(".secondaryContent .info > ul").innerHTML = this.toHtml(this.genAchievmentsList(0,5));
+		//this.toHtml(this.genAchievmentsList(0,5));
 	}
 
 	this.cleanUp = function()

@@ -7,10 +7,13 @@ Router = require('./Router.js');
 socketClient = require('./Utils/socketClient.js');
 var Ajax = require("./Utils/Ajax.js");
 var tmp = [];
+var tmpProfile = [];
 var games;
 var gamesWon;
 var tournamentGames;
 var tournamentsWon;
+var gamesProfile;
+var achievmentsProfile;
 
 // ------ Shranim logged usera, oziroma null če ni logged------
 Ajax.GET("user/isLoggedIn/", null, function(data)
