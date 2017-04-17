@@ -143,7 +143,7 @@ function EntryPage()
 			Ajax.GET("user/", null, function(data)
 			{
 				window.loggedUser = JSON.parse(data); 
-				location.hash = "#/";
+				location.hash = "#/welcome";
 			});
 		});
 	}

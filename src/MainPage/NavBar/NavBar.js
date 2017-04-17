@@ -12,7 +12,7 @@ function NavBar()
 				tag: "ul",
 				nest: 
 				[
-					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/"]], text: "Home" }]},
+					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/welcome"]], text: "Home" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", ""]], text: "Chat" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/LeaderBoard"]], text: "Leaderboard" }]},
 					{tag: "li", attributes: [["class", "floatLeft"]], nest: [{ tag: "a", attributes: [["href", "#/lobbies"]], text: "Play" }]},

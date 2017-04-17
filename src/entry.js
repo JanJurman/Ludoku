@@ -227,5 +227,22 @@ Router.routeTo("/lobbies", { require: "login" }, function()
 	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
 });
 
+Router.routeTo("/welcome", {require: "login"}, function()
+{
+	window.MainPage.init();
+	window.MainPage.NavBar.init();
+	window.MainPage.NavBar.select("home");
+	window.MainPage.Content.init();	
+	
+	window.MainPage.Content.Profile.cleanUp();
+	window.MainPage.Content.LeaderBoard.cleanUp();
+	window.MainPage.Content.Game.cleanUp();
+	window.MainPage.Content.Lobbies.cleanUp();
+
+	window.MainPage.Content.Welcome.init();
+
+	document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+});
+
 
 Router.init();

@@ -3,7 +3,7 @@ Ajax = require('./Utils/Ajax.js');
 function Router()
 {
 	this.routesData = {};
-	this.homeLocation = "#/";
+	this.homeLocation = "#/welcome";
 	this.loginLocation = "#/login";
 	this.location404 = "#/404";
 	this.currentLoaction = "";

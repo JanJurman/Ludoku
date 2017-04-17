@@ -99,7 +99,7 @@ function LeaderBoard()
 				[
 
 				]}
-			]},
+			]}/*,
 
 			{tag: "div", attributes: [["class", "okvir"]], nest:
 			[
@@ -109,7 +109,7 @@ function LeaderBoard()
 						tag: "h1", attributes: [["class", "banner"]], text: "Coming soon"	
 					}
 				]}
-			]}
+			]}*/
 
 		];
 		this.setLeaderBoard(user);
