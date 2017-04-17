@@ -20,24 +20,20 @@ $temp: calc(100% - #{$defaultElementMargin*2});
 
   .boxfather
   {
-    width:90%;
-    height: 80%;
     position:relative;
     text-align: center;
 
     > .box
     {
-      height: auto;
-      width: auto;
       background: #2B5F8B;
       border-radius:20px; 
       padding: 5%;
-      //margin: 0 auto;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19); 
-      
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);       
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, 50%);
+      display: inline-block;
     }
 
 

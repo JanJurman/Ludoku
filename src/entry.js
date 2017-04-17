@@ -175,6 +175,11 @@ Router.routeTo("/LeaderBoard", { require: "login" }, function()
 					tmp.push(tournamentGames);
 					tmp.push(tournamentsWon);
 
+					window.MainPage.Content.Profile.cleanUp();
+					window.MainPage.Content.LeaderBoard.cleanUp();
+					window.MainPage.Content.Lobbies.cleanUp();
+					window.MainPage.Content.Welcome.cleanUp();
+
 					window.MainPage.init();
 					window.MainPage.NavBar.init();
 					window.MainPage.NavBar.select("leaderboard");

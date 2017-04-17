@@ -80,26 +80,26 @@ $list-width: 17.813rem;
   height: calc(100% - #{$defaultElementMargin*2});
 
 
-  .okvir
+  > .okvir
   {
     background: #FFFFFF;
-    margin: $defaultElementMargin + 0.5rem;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);    
+    margin-top: $defaultElementMargin;
+    margin-bottom: $defaultElementMargin;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);  
+    position: relative; 
+    width: 100%;
+    height: calc(100% - 8.4rem);
 
-    > .boardWrapper
-    {
-      background: #FFFFFF;
-      position: relative;
-      margin: 0 auto 0 auto;
+      > .boardWrapper
+      {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        display: inline-block;
+        width: 1200px;
+      }
 
-      //NOČE CENTRIRAT, FIX
-    }
   }
-
-
-
-
-
 
   .bannerWrapper
   {
@@ -167,13 +167,12 @@ $list-width: 17.813rem;
 
   .players 
   {
-      //position: relative;
       margin: ($list-space * 2) $list-space;
       box-shadow: 0px 17px 32px -5px rgba(0,0,0,0.4);
       border-radius: .6rem;
       width: 17.813rem;
+      vertical-align: middle;
       display: inline-block;
-      //float: center;
     
     h1 
     {

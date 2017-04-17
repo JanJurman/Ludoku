@@ -63,7 +63,7 @@ function LeaderBoard()
 				}
 				else if(i == 2)
 				{
-					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text:user[i][j].tournamentGames}]};
+					uporabnik = {tag:"li", nest:[{tag:"em", text: user[i][j].firstName + " " + user[i][j].lastName}, {tag:"strong", text: "8"}]};
 				}
 				else if(i == 3)
 				{
@@ -95,10 +95,11 @@ function LeaderBoard()
 
 			{tag: "div", attributes: [["class", "okvir"]], nest:
 			[
-				{tag: "div", attributes: [["class", "boardWrapper"]], nest:
-				[
+					{tag: "div", attributes: [["class", "boardWrapper"]], nest:
+					[
 
-				]}
+					]}				
+
 			]}/*,
 
 			{tag: "div", attributes: [["class", "okvir"]], nest:
