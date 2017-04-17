@@ -26,7 +26,6 @@ function Profile()
 
 					var date = new Date(this.games[i].start);
 
-
 					// console.log(this.games[i].players[0]);
 					if (this.games[i].players[0] == window.loggedUser._id) 
 					{
@@ -43,8 +42,6 @@ function Profile()
 				}
 			}
 		}
-
-		console.log(data);
 		return data;
 	}
 
@@ -69,13 +66,16 @@ function Profile()
 
 	this.init = function(user, data)
 	{
-		this.games = data;
-		//this.achievments = data[1];
+		this.games = data[0];
+		//console.log(data);
+		//this.achievments = dosezki;
+		this.achievments = data[1];
+
+		//console.log(data[1]);
 
 		// console.log(games.length)
 
-		// this.genGameList(0,11);
-		
+		// this.genGameList(0,11);	
 
 
 		this.tag = "div";

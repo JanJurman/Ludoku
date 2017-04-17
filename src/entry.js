@@ -122,6 +122,7 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.Content.LeaderBoard.cleanUp();
 		window.MainPage.Content.Lobbies.cleanUp();
 		window.MainPage.Content.Game.cleanUp();
+		window.MainPage.Content.Welcome.cleanUp();
 
 		window.MainPage.init();
 		window.MainPage.NavBar.init();
@@ -129,27 +130,44 @@ Router.routeTo("/profile", { require: "login" }, function()
 		window.MainPage.Content.init();
 
 
-		// console.log(data);
-		if (data)
+		
+		
+		Ajax.GET("user/achievements", null, function(dataa)
 		{
-			console.log("neka");
-			window.MainPage.Content.Profile.init(window.loggedUser, JSON.parse(data));
-		}
-		else
-		{
-			console.log("neka1");
-			window.MainPage.Content.Profile.init(window.loggedUser, []);
-		}
+			var a = JSON.parse(data);
+			var b = JSON.parse(dataa);
 
-		document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+			tmpProfile.push(a);
+			tmpProfile.push(b); 
+
+			window.MainPage.Content.Profile.init(window.loggedUser, tmpProfile);
+
+			document.querySelector("#app").innerHTML = toHtml(window.MainPage.data);
+			
+			/*if(dataa)
+			{
+				var response = JSON.parse(dataa); //to bi moglo ti vrnit zaj array achievmeento ko lahko skozi loopaš
+			}
+
+			if (data) //ti nena ze ajax call sam po sebi JSON_parse nareji? probajmo brez te
+			{
+				//console.log(tmpProfile[1]+"dksapdosakpo"); //sej toti vrne, glej
+				//window.MainPage.Content.Profile.init(window.loggedUser, data);
+			}	
+			else
+			{
+				console.log("nekeeeeee");
+				window.MainPage.Content.Profile.init(window.loggedUser, [], []);
+			}*/
+
+			
+		});
+
 	});
 });
 
 Router.routeTo("/LeaderBoard", { require: "login" }, function()
 {
-
-	// ------ Dobi usere: Games ------		treba fixat to------------------------------------------------------
-	//quick fix
 
 	window.MainPage.Content.Profile.cleanUp();
 	window.MainPage.Content.Game.cleanUp();
